@@ -101,23 +101,26 @@ class HelperBackend
 
 
     //Create Message
-    public static function createMessage($message)
+    public static function createMessage()
     {
+        $message = Session::get('message');
         $xhtml = '';
         if (!empty($message)) {
             $xhtml = '
-            <div class="alert alert-success alert-dismissible">
+            <div class="alert alert-success alert-dismissible" id="success-message">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <ul class="list-unstyled mb-0">
-                    <li class="text-white">' . $message . '</li>
+                <li class="text-white">' . $message . '</li>
                 </ul>
             </div>';
         }
+        // $_SESSION['timeout']         = time();
+        Session::delete('message');
         return $xhtml;
     }
 
     //Create SelectBox
-    public static function createSelectbox($name, $class, $arrValue, $keySelected = 'default', $flag = true, $dataUrl = null)
+    public static function createSelectbox($name, $arrValue, $keySelected = 'default', $attributes = '', $class='')
     {
         $xhtmlOption = '';
         foreach ($arrValue as $key => $value) {
@@ -126,18 +129,14 @@ class HelperBackend
             if ($key === $keySelected) $selected = 'selected';
             $xhtmlOption .= sprintf('<option value="%s" %s>%s</option>', $key, $selected, $value);
         }
-        if ($flag == true) {
-            $xhtml = sprintf('<select name="%s" class="%s">%s</select>', $name, $class, $xhtmlOption);
-        } else {
-            $xhtml = sprintf('<select name="%s" class="%s" data-url="%s">%s</select>', $name, $class, $dataUrl, $xhtmlOption);
-        }
+        $xhtml = sprintf('<select name="%s" class="custom-select %s" %s>%s</select>', $name, $class, $attributes, $xhtmlOption);
         return $xhtml;
     }
 
     //Create InputFOrm
-    public static function createInput($type, $class, $name, $value = null)
+    public static function createInput($type, $name, $value = null,$class='')
     {
-        $xhtml = sprintf('<input type="%s" class="%s" name="%s" value=%s>', $type, $class, $name, $value);
+        $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s">', $type, $class, $name, $value);
         return $xhtml;
     }
 
@@ -156,7 +155,7 @@ class HelperBackend
     }
 
     //Create button form
-    public static function createButtonForm($type, $class, $title)
+    public static function createButtonForm($type,$title ,$class='')
     {
         $xhtml = sprintf('<button type="%s" class="%s">%s</button>', $type, $class, $title);
         return $xhtml;

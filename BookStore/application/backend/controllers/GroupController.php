@@ -12,7 +12,7 @@ class GroupController extends Controller
 
 	public function indexAction()
 	{
-		$this->_view->_title 				= 'Group Controller :: List';
+		$this->_view->_title 				= ucfirst($this->_arrParam['controller']) ." Controller :: List";
 		//Total Items
 		$this->_view->itemsStatusCount 		= $this->_model->countItems($this->_arrParam, ['task' => 'count-items-status']);
 		$itemCount 	= $this->_model->countItems($this->_arrParam, ['task' => 'count-items-status']);
@@ -22,7 +22,7 @@ class GroupController extends Controller
 		$this->_view->pagination 			= new Pagination($itemCount[$status], $this->_pagination);
 		//List Items
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
-		$this->_view->render('group/index');
+		$this->_view->render($this->_arrParam['controller'].'/index');
 	}
 
 	public function changeGroupACPAction()
@@ -63,10 +63,10 @@ class GroupController extends Controller
 
 	public function formAction()
 	{
-		$this->_view->_title 			= 'Group Controller :: Add';
+		$this->_view->_title 			= ucfirst($this->_arrParam['controller']). ' Controller :: Add';
 
 		if (@isset($this->_arrParam['id']) && !@$this->_arrParam['form']['token']) {
-			$this->_view->_title 		= 'Group Controller :: Edit';
+			$this->_view->_title 		= ucfirst($this->_arrParam['controller']). ' Controller :: Edit';
 			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam);
 			if (empty($this->_arrParam['form'])) URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 		}
@@ -87,6 +87,6 @@ class GroupController extends Controller
 			}
 		}
 		$this->_view->arrParam = $this->_arrParam;
-		$this->_view->render('group/form');
+		$this->_view->render($this->_arrParam['controller'].'/form');
 	}
 }

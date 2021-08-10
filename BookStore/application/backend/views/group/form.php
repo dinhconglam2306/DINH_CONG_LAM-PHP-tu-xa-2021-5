@@ -1,16 +1,16 @@
 <?php
 $dataForm = @$this->arrParam['form'];
 //Input
-$inputName          = HelperBackend::createInput('text', 'form-control', 'form[name]', @$dataForm['name']);
-$inputHidden        = HelperBackend::createInput('hidden', 'form-control', 'form[token]', time());
+$inputName          = HelperBackend::createInput('text', 'form[name]', @$dataForm['name']);
+$inputHidden        = HelperBackend::createInput('hidden', 'form[token]', time());
 
 //Select Box GroupACP
 $arrValueGACP       = ['default' => ' - Select Group ACP - ', 1 => 'Active', 0 => 'Inactive'];
-$selectBoxGACP      = HelperBackend::createSelectbox('form[group_acp]', 'custom-select', $arrValueGACP, @$dataForm['group_acp']);
+$selectBoxGACP      = HelperBackend::createSelectbox('form[group_acp]', $arrValueGACP, @$dataForm['group_acp'], '', '');
 
 //Select Box Status
 $arrValueStatus     = ['default' => ' - Select Status - ', 'active' => 'Active', 'inactive' => 'Inactive'];
-$selectBoxStatus    = HelperBackend::createSelectbox('form[status]', 'custom-select', $arrValueStatus, @$dataForm['status']);
+$selectBoxStatus    = HelperBackend::createSelectbox('form[status]', $arrValueStatus, @$dataForm['status'], '', '');
 
 //Row Form
 
@@ -21,7 +21,7 @@ $rows               = $rowName . $rowGroupACP . $rowGroupStatus;
 
 //Button
 
-$saveButton = HelperBackend::createButtonForm('submit', 'btn btn-success', 'Save');
+$saveButton = HelperBackend::createButtonForm('submit', 'Save', 'btn btn-success');
 
 ?>
 <?= $xhtmlError = $this->error ?? ''; ?>

@@ -1,14 +1,13 @@
 <?php
-
 $arrParams = $this->arrParam;
 $linkAddNew = URL::createLink('backend', 'group', 'form');
 $btnAddNew = HelperBackend::buttonLink($linkAddNew, '<i class="fas fa-plus"></i> Add New');
 $urlBulkAction = URL::createLink($arrParams['module'], $arrParams['controller'], 'value_new');
 $btnBulkAction = HelperBackend::buttonLink($urlBulkAction, 'Apply', 'btn-info btn-apply-bulk-action');
-$arrValue = ['' => 'Bulk Action', 'multiDelete' => 'Delete', 'multiActive' => 'Active','multiInactive'=> 'Inactive'];
-$selectBox = HelperBackend::createSelectbox(null,'form-control custom-select slb-bulk-action',$arrValue,'');
+$arrValue = ['' => 'Bulk Action', 'multiDelete' => 'Delete', 'multiActive' => 'Active', 'multiInactive' => 'Inactive'];
+$selectBox = HelperBackend::createSelectbox('list_action', $arrValue, '', '', 'form-control slb-bulk-action');
 ?>
-
+<?= $strMessage = HelperBackend::createMessage(); ?>
 <!-- Search & Filter -->
 <?php require_once 'elements/search_filter.php' ?>
 <!-- List -->
@@ -19,7 +18,7 @@ $selectBox = HelperBackend::createSelectbox(null,'form-control custom-select slb
             <div class="row align-items-center justify-content-between mb-2">
                 <div>
                     <div class="input-group">
-                        <?= $selectBox ;?>
+                        <?= $selectBox; ?>
                         <span class="input-group-append">
                             <?= $btnBulkAction ?>
                         </span>

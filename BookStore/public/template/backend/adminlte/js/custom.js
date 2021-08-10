@@ -41,21 +41,37 @@ $(document).ready(function () {
                     }
                   })
             } else {
-                Swal.fire({
+                const Toast = Swal.mixin({
+                    toast: true,
                     position: 'top-end',
-                    icon: 'warning',
-                    title: 'Vui lòng chọn ít nhất một dòng dữ liệu!',
                     showConfirmButton: false,
-                    timer: 2500
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+                  Toast.fire({
+                    icon: 'warning',
+                    title: 'Vui lòng chọn ít nhất một dòng dữ liệu!'
                   })
             }
         } else {
-            Swal.fire({
+            const Toast = Swal.mixin({
+                toast: true,
                 position: 'top-end',
-                icon: 'warning',
-                title: 'Vui lòng chọn action để thực hiện!',
                 showConfirmButton: false,
-                timer: 2500
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                icon: 'warning',
+                title: 'Vui lòng chọn action thực hiện!'
               })
         }
     });
@@ -68,16 +84,16 @@ $(document).ready(function () {
     //Select Item => select group ACP
 
     $('select[name="group-acp"]').change(function (){
-        let selectValueACP =$(this).val();
         let url  = $(this).attr('data-url');
-        if(selectValueACP != 'default'){
-            url = url.replace('default',selectValueACP);
-            tableForm.attr('action', url);
-            tableForm.submit();
-        }else{
-            url = url.replace(`&group_acp=${selectValueACP}`,'');
-            tableForm.attr('action', url);
-            tableForm.submit();
-        }
+        let selectValueACP =$(this).val();
+        if(selectValueACP == 'default') url = url.replace('&group_acp=value_new','');
+        url = url.replace('value_new',selectValueACP);
+        window.location.href=url;
     })
+
+    //delete message
+    let message = $('#success-message');
+    setTimeout(function(){
+        message.hide('slow', function(){ message.remove(); });
+    },2000);
 });

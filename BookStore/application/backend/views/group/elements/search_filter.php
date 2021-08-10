@@ -5,12 +5,12 @@ $linkClear          = URL::createLink($arrParams['module'], $arrParams['controll
 $btnClear           = HelperBackend::buttonLink($linkClear, 'Clear', 'btn-danger');
 $xhtmlFilterStatus  = HelperBackend::showFilterStatus($arrParams['module'], $arrParams['controller'], $this->itemsStatusCount, $arrParams['status'] ?? 'all', trim(@$arrParams['search']));
 //Input Search
-$ipSearch =  HelperBackend::createInput('text', 'form-control', 'search', @$arrParams['search']);
+$ipSearch =  HelperBackend::createInput('text', 'search', @$arrParams['search']);
 
 //Input Hidden
-$ipHdModule         = HelperBackend::createInput('hidden', '', 'module', $arrParams['module']);
-$ipHdController     = HelperBackend::createInput('hidden', '', 'controller', $arrParams['controller']);
-$ipHdAction         = HelperBackend::createInput('hidden', '', 'action', $arrParams['action']);
+$ipHdModule         = HelperBackend::createInput('hidden', 'module', $arrParams['module']);
+$ipHdController     = HelperBackend::createInput('hidden', 'controller', $arrParams['controller']);
+$ipHdAction         = HelperBackend::createInput('hidden', 'action', $arrParams['action']);
 
 
 $input = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
@@ -18,8 +18,9 @@ $input = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
 
 //Group ACP
 $arrValueACP = ['default' => ' -Select Group ACP- ', 1 => 'Yes', 0 => 'No'];
-$groupACPLink = URL::createLink($arrParams['module'],$arrParams['controller'],'index',['group_acp' => 'default']);
-$selectBoxGrACP = HelperBackend::createSelectbox('group-acp','form-control custom-select slb-bulk-action',$arrValueACP,@$arrParams['group_acp'],false,$groupACPLink);
+$groupACPUrl = URL::createLink($arrParams['module'], $arrParams['controller'], 'index', ['group_acp' => 'value_new']);
+$attr  = sprintf('data-url=%s', $groupACPUrl);
+$selectBoxGrACP = HelperBackend::createSelectbox('group-acp', $arrValueACP, @$arrParams['group_acp'], $attr, 'slb-select-group-acp');
 
 ?>
 

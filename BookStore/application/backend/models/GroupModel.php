@@ -32,7 +32,7 @@ class GroupModel extends Model
 			$query[] = "AND `status` = '{$params['status']}'";
 		}
 
-		if (isset($params['group_acp'])) {
+		if (isset($params['group_acp']) && $params['group_acp'] != 'default') {
 			$query[] = "AND `group_acp` = '{$params['group_acp']}'";
 		}
 
@@ -58,7 +58,7 @@ class GroupModel extends Model
 		$data = ['group_acp' => $groupACP];
 		$where = [['id', $params['id']]];
 		$this->update($data, $where);
-		Session::set('message', "Cập nhật GroupACP thành công!");
+		Session::set('message', SUCCESS_UPDATE_GROUP_ACP);
 	}
 
 	//Thay đổi trạng thái của 1 item
@@ -68,7 +68,7 @@ class GroupModel extends Model
 		$data = ['status' => $status];
 		$where = [['id', $params['id']]];
 		$this->update($data, $where);
-		Session::set('message', "Cập nhật trạng thái thành công!");
+		Session::set('message', SUCCESS_UPDATE_STATUS);
 	}
 
 
@@ -79,7 +79,7 @@ class GroupModel extends Model
 			$ids = implode(', ', $params['cid']);
 			$query = "UPDATE `{$this->table}` SET `status` = '{$options['task']}' WHERE `id` IN ({$ids})";
 			$this->query($query);
-			Session::set('message', "Cập nhật trạng thái thành công!");
+			Session::set('message', SUCCESS_UPDATE_STATUS);
 		}
 	}
 
@@ -88,7 +88,7 @@ class GroupModel extends Model
 	{
 		$ids = isset($params['id']) ? [$params['id']] : $params['cid'];
 		$this->delete($ids);
-		Session::set('message', "Xóa thành công!");
+		Session::set('message', SUCCESS_DELETE);
 	}
 
 	// Tổng số items
@@ -125,14 +125,14 @@ class GroupModel extends Model
 			$params['form']['created_by'] = 1;
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->insert($data);
-			Session::set('message', "Thêm thành công!");
+			Session::set('message', SUCCESS_ADD_ITEM);
 		}
 		if ($options['task'] == 'edit') {
 			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
 			$params['form']['modified_by'] = 10;
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
-			Session::set('message', "Sửa thành công!");
+			Session::set('message', SUCCESS_EDIT_ITEM);
 		}
 	}
 
