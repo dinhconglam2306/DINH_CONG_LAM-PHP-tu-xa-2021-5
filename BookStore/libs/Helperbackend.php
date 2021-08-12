@@ -114,50 +114,9 @@ class HelperBackend
                 </ul>
             </div>';
         }
-        // $_SESSION['timeout']         = time();
         Session::delete('message');
         return $xhtml;
     }
 
-    //Create SelectBox
-    public static function createSelectbox($name, $arrValue, $keySelected = 'default', $attributes = '', $class='')
-    {
-        $xhtmlOption = '';
-        foreach ($arrValue as $key => $value) {
-            $selected = '';
-            if (is_numeric($key)) $key = strval($key);
-            if ($key === $keySelected) $selected = 'selected';
-            $xhtmlOption .= sprintf('<option value="%s" %s>%s</option>', $key, $selected, $value);
-        }
-        $xhtml = sprintf('<select name="%s" class="custom-select %s" %s>%s</select>', $name, $class, $attributes, $xhtmlOption);
-        return $xhtml;
-    }
-
-    //Create InputFOrm
-    public static function createInput($type, $name, $value = null,$class='')
-    {
-        $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s">', $type, $class, $name, $value);
-        return $xhtml;
-    }
-
-    //Create RowForm
-    public static function createRowForm($labelName, $input, $select, $require = true)
-    {
-        $xhtml = '<div class="form-group">  <label>' . $labelName . ' <span class="text-danger">*</span></label>';
-        if ($require == true) {
-            $xhtml .= $input;
-        } else {
-            $xhtml .= $select;
-        }
-        $xhtml .= '</div>';
-
-        return $xhtml;
-    }
-
-    //Create button form
-    public static function createButtonForm($type,$title ,$class='')
-    {
-        $xhtml = sprintf('<button type="%s" class="%s">%s</button>', $type, $class, $title);
-        return $xhtml;
-    }
+    
 }

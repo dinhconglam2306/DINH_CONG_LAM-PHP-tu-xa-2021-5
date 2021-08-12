@@ -16,11 +16,11 @@ $ipHdAction         = FormBackend::input('hidden', 'action', $arrParams['action'
 $input = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
 
 
-//Group ACP
-$arrValueACP = ['default' => ' -Select Group ACP- ', 1 => 'Yes', 0 => 'No'];
-$groupACPUrl = URL::createLink($arrParams['module'], $arrParams['controller'], 'index', ['group_acp' => 'value_new']);
-$attr  = sprintf('data-url=%s', $groupACPUrl);
-$selectBoxGrACP = FormBackend::selectBox('select_group', $arrValueACP, @$arrParams['group_acp'], $attr, 'slb-select-group-acp');
+//Group
+$arrValueGroup = $this->slbGroup;
+$groupUrl = URL::createLink($arrParams['module'], $arrParams['controller'], 'index', ['group_id' => 'value_new']);
+$attr  = sprintf('data-url=%s', $groupUrl);
+$selectBoxGroup = FormBackend::selectBox('select_group', $arrValueGroup, @$arrParams['group_id'], $attr, 'slb-select-group-acp');
 
 ?>
 
@@ -41,7 +41,7 @@ $selectBoxGrACP = FormBackend::selectBox('select_group', $arrValueACP, @$arrPara
                     <?= $xhtmlFilterStatus ?>
                 </div>
                 <div class="area-filter-group-acp mb-2 ">
-                    <?= $selectBoxGrACP ?>
+                    <?= $selectBoxGroup ?>
                 </div>
                 <div class="area-search mb-2">
                     <form action="" method="GET">

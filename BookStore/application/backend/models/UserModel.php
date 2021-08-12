@@ -1,10 +1,12 @@
 <?php
-class GroupModel extends Model
+class UserModel extends Model
 {
 	private $_columns = [
 		'id',
 		'name',
-		'group_acp',
+		'fullname',
+		'email',
+		'group_id',
 		'created',
 		'created_by',
 		'modified',
@@ -15,29 +17,30 @@ class GroupModel extends Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->setTable(TBL_GROUP);
+		$this->setTable(TBL_USER);
 	}
 
 	//Hiện danh sách items
 	public function listItems($params, $options = null)
 	{
-		$query[] 	= "SELECT `id`, `name`, `group_acp`, `created`, `created_by`, `modified`, `modified_by`, `status`";
-		$query[]	= "FROM `{$this->table}` WHERE `id` > 0";
+		$query[] 	= "SELECT `u`.`id`,`u`.`group_id`, `u`.`name`,`u`.`fullname`,`u`.`email` ,`g`.`name` AS `group_name`, `u`.`created`, `u`.`created_by`, `u`.`modified`, `u`.`modified_by`, `u`.`status`";
+		$query[]	= "FROM `{$this->table}` AS `u`,`" . TBL_GROUP . "` AS `g`";
+		$query[]	= "WHERE `u`.`group_id` = `g`.`id`";
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%'.$params['search'].'%"';
-			$query[] = "AND `name` LIKE $keyword";
+			$query[] = "AND (`u`.`name` LIKE $keyword OR `u`.`fullname` LIKE $keyword OR `u`.`email` LIKE $keyword)";
 		}
 
 		if (@$params['status'] && $params['status'] != 'all') {
-			$query[] = "AND `status` = '{$params['status']}'";
+			$query[] = "AND `u`.`status` = '{$params['status']}'";
 		}
 
-		if (isset($params['group_acp']) && $params['group_acp'] != 'default') {
-			$query[] = "AND `group_acp` = '{$params['group_acp']}'";
+		if (isset($params['group_id']) && $params['group_id'] != 'default') {
+			$query[] = "AND `u`.`group_id` = '{$params['group_id']}'";
 		}
 
-		// $query[] = 'ORDER BY `id` DESC';
+		$query[] = 'ORDER BY `id` ASC';
 
 		//PAGINATION
 		$pagination = $params['pagination'];
@@ -52,14 +55,15 @@ class GroupModel extends Model
 		return $result;
 	}
 
-	//Thay đổi trạng thái của groupACP
-	public function changeGroupACP($params, $options = null)
+	//Thay đổi  Group của item
+	public function changeGroup($params, $options = null)
 	{
-		$groupACP = $params['group_acp'] == 1 ? 0 : 1;
-		$data = ['group_acp' => $groupACP];
-		$where = [['id', $params['id']]];
-		$this->update($data, $where);
-		Session::set('message', SUCCESS_UPDATE_GROUP_ACP);
+		if ($options == null) {
+			$data = ['group_id' => $params['group_id']];
+			$where = [['id', $params['id']]];
+			$this->update($data, $where);
+			Session::set('message', SUCCESS_UPDATE_GROUP_USER);
+		}
 	}
 
 	//Thay đổi trạng thái của 1 item
@@ -89,7 +93,7 @@ class GroupModel extends Model
 	{
 		$ids = isset($params['id']) ? [$params['id']] : $params['cid'];
 		$this->delete($ids);
-		Session::set('message', SUCCESS_DELETE_GROUP);
+		Session::set('message', SUCCESS_DELETE_USER);
 	}
 
 	// Tổng số items
@@ -101,12 +105,13 @@ class GroupModel extends Model
 
 			if (!empty(trim(@$params['search']))) {
 				$keyword = '"%'.$params['search'].'%"';
-				$query[] = "AND `name` LIKE $keyword";
+				$query[] = "AND (`name` LIKE $keyword OR `fullname` LIKE $keyword OR `email` LIKE $keyword)";
+				// $query[] = "AND `name` LIKE '%{$params['search']}%'";
 			}
-			if (isset($params['group_acp'])) {
-				$query[] = "AND `group_acp` = '{$params['group_acp']}'";
+			if (isset($params['group_id'])) {
+				$query[] = "AND `group_id` = '{$params['group_id']}'";
 			}
-			
+
 
 			$query[] = "GROUP BY `status`";
 			$query = implode(' ', $query);
@@ -148,6 +153,18 @@ class GroupModel extends Model
 			$query[]	= "WHERE `id` = {$params['id']}";
 			$query = implode(' ', $query);
 			$result = $this->fetchRow($query);
+			return $result;
+		}
+	}
+	//Item in select box
+	public function itemInSelectbox($params, $options = null)
+	{
+		$result = [];
+		if ($options == null) {
+			$query[] 	= "SELECT `id`,`name`";
+			$query[]	= "FROM `" . TBL_GROUP . "`";
+			$query = implode(' ', $query);
+			$result = $this->fetchPairs($query);
 			return $result;
 		}
 	}

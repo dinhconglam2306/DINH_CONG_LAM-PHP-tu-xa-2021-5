@@ -1,6 +1,6 @@
 <?php
 $arrParams = $this->arrParam;
-$linkAddNew = URL::createLink('backend', 'group', 'form');
+$linkAddNew = URL::createLink('backend', 'user', 'form');
 $btnAddNew = HelperBackend::buttonLink($linkAddNew, '<i class="fas fa-plus"></i> Add New');
 $urlBulkAction = URL::createLink($arrParams['module'], $arrParams['controller'], 'value_new');
 $btnBulkAction = HelperBackend::buttonLink($urlBulkAction, 'Apply', 'btn-info btn-apply-bulk-action');

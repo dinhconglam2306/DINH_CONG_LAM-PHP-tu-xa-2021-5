@@ -169,7 +169,7 @@ class Model
 	}
 
 	// LIST RECORD
-	public function listRecord($query)
+	public function fetchAll($query)
 	{
 		$result = array();
 		if (!empty($query)) {
@@ -185,31 +185,25 @@ class Model
 	}
 
 	// LIST RECORD
-	public function createSelectbox($query, $name, $keySelected = null, $class = null)
+	public function fetchPairs($query)
 	{
-		$result = array();
+		$result = [];
 		if (!empty($query)) {
 			$resultQuery = $this->query($query);
 			if (mysqli_num_rows($resultQuery) > 0) {
-				$xhtml = '<select class="' . $class . '" name="' . $name . '">';
-				$xhtml .= '<option value="0">Select a value</option>';
 				while ($row = mysqli_fetch_assoc($resultQuery)) {
-					if ($keySelected == $row['id'] && $keySelected != null) {
-						$xhtml .= '<option value="' . $row['id'] . '" selected="true">' . $row['name'] . '</option>';
-					} else {
-						$xhtml .= '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-					}
+					$result[$row['id']]  = $row['name'];
 				}
-				$xhtml .= '</select>';
 				mysqli_free_result($resultQuery);
 			}
 		}
-
-		return $xhtml;
+		$result['default'] = ' -Select Group ACP- ';
+		ksort($result);
+		return $result;
 	}
 
 	// SINGLE RECORD
-	public function singleRecord($query)
+	public function fetchRow($query)
 	{
 		$result = array();
 		if (!empty($query)) {

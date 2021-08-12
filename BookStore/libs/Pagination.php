@@ -18,14 +18,14 @@ class Pagination
 		$this->totalPage 	= ceil($totalItems / $pagination['totalItemsPerPage']);
 	}
 
-	public function showPagination()
+	public function showPaginationBackend()
 	{
 		$url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 		$query_str = parse_url($url, PHP_URL_QUERY);
 		parse_str($query_str, $queryParams);
-		if(array_key_exists('page',$queryParams))unset($queryParams['page']);
+		if (array_key_exists('page', $queryParams)) unset($queryParams['page']);
 		$link = http_build_query($queryParams);
-		$link='index.php?'.$link;
+		$link = 'index.php?' . $link;
 		$paginationHTML = '';
 		if ($this->totalPage > 1) {
 			$start =  ' <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-angle-double-left"></i></a></li>';
@@ -75,9 +75,7 @@ class Pagination
 				}
 			}
 			$paginationHTML = sprintf('
-			<div class="card-footer clearfix"> 
-				<ul class="pagination m-0 float-right">%s%s%s%s%s</ul>
-			</div>', $start, $prev, $listPage, $next, $end);
+				<ul class="pagination m-0 float-right">%s %s %s %s %s</ul>', $start, $prev, $listPage, $next, $end);
 		}
 
 		return $paginationHTML;

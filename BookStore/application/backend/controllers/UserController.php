@@ -1,5 +1,5 @@
 <?php
-class GroupController extends Controller
+class UserController extends Controller
 {
 	public function __construct($arrParams)
 	{
@@ -13,30 +13,30 @@ class GroupController extends Controller
 	public function indexAction()
 	{
 		$this->_view->_title 				= ucfirst($this->_arrParam['controller']) ." Controller :: List";
+		
 		//Total Items
 		$this->_view->itemsStatusCount 		= $this->_model->countItems($this->_arrParam, ['task' => 'count-items-status']);
-		$itemCount 	= $this->_model->countItems($this->_arrParam, ['task' => 'count-items-status']);
-
-		//set Pagination
-		$configPagination  = ['totalItemsPerPage' => 4, 'pageRange' => 3];
+		$itemCount 							= $this->_model->countItems($this->_arrParam, ['task' => 'count-items-status']);
+		$configPagination  					= ['totalItemsPerPage' => 2, 'pageRange' => 3];
 		$this->setPagination($configPagination);
-
-		$status = $this->_arrParam['status'] ?? 'all';
+		$status 							= $this->_arrParam['status'] ?? 'all';
 		$this->_view->pagination 			= new Pagination($itemCount[$status], $this->_pagination);
+		
 		//List Items
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
+		$this->_view->slbGroup 				= $this->_model->itemInSelectbox($this->_arrParam,null);
 		$this->_view->render($this->_arrParam['controller'].'/index');
-	}
-
-	public function changeGroupACPAction()
-	{
-		$this->_model->changeGroupACP($this->_arrParam);
-		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
 
 	public function changeStatusAction()
 	{
 		$this->_model->changeStatus($this->_arrParam);
+		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+	}
+
+	public function changeGroupAction()
+	{
+		$this->_model->changeGroup($this->_arrParam,null);
 		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
 
@@ -68,28 +68,29 @@ class GroupController extends Controller
 	{
 		$this->_view->_title 			= ucfirst($this->_arrParam['controller']). ' Controller :: Add';
 
-		if (@isset($this->_arrParam['id']) && !@$this->_arrParam['form']['token']) {
-			$this->_view->_title 		= ucfirst($this->_arrParam['controller']). ' Controller :: Edit';
-			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam);
-			if (empty($this->_arrParam['form'])) URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
-		}
-		if (@$this->_arrParam['form']['token'] > 0) {
-			$validate 					= new Validate($this->_arrParam['form']);
-			$validate					->addRule('name', 'string', ['min' => 3, 'max' => 30])
-										->addRule('group_acp', 'group')
-										->addRule('status', 'status');
-			$validate->run();
-			$this->_arrParam['form'] 	= $validate->getResult();
-			if ($validate->isValid() 	== false) {
-				$this->_view->error 	= $validate->showErrors();
-			} else {
-				$task = isset($this->_arrParam['id'])? 'edit' : 'add';
-				// Insert Database
-				$this->_model->saveItem($this->_arrParam,['task'=>$task]);
-				URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
-			}
-		}
-		$this->_view->arrParam = $this->_arrParam;
+		// if (@isset($this->_arrParam['id']) && !@$this->_arrParam['form']['token']) {
+		// 	$this->_view->_title 		= ucfirst($this->_arrParam['controller']). ' Controller :: Edit';
+		// 	$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam);
+		// 	if (empty($this->_arrParam['form'])) URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+		// }
+		// if (@$this->_arrParam['form']['token'] > 0) {
+		// 	$validate 					= new Validate($this->_arrParam['form']);
+		// 	$validate					->addRule('name', 'string', ['min' => 3, 'max' => 30])
+		// 								->addRule('group_acp', 'group')
+		// 								->addRule('status', 'status');
+		// 	$validate->run();
+		// 	$this->_arrParam['form'] 	= $validate->getResult();
+		// 	if ($validate->isValid() 	== false) {
+		// 		$this->_view->error 	= $validate->showErrors();
+		// 	} else {
+		// 		$task = isset($this->_arrParam['id'])? 'edit' : 'add';
+		// 		// Insert Database
+		// 		$this->_model->saveItem($this->_arrParam,['task'=>$task]);
+		// 		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+		// 	}
+		// }
+		// $this->_view->arrParam = $this->_arrParam;
+		$this->_view->slbGroup 				= $this->_model->itemInSelectbox($this->_arrParam,null);
 		$this->_view->render($this->_arrParam['controller'].'/form');
 	}
 }
