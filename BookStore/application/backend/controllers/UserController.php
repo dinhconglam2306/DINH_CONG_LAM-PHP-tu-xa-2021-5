@@ -86,11 +86,11 @@ class UserController extends Controller
 				$queryEmail 	.= " AND `id` <> '" . $this->_arrParam['id'] . "'";
 			}
 			$validate 					= new Validate($this->_arrParam['form']);
-			$validate	->addRule('name', 'string-notExistRecord', ['database' => $this->_model, 'query' => $queryUserName, 'min' => 3, 'max' => 255])
-						->addRule('email', 'email-notExistRecord', ['database' => $this->_model, 'query' => $queryEmail])
-						->addRule('password', 'password', ['action' => $task],$requirePass)
-						->addRule('group_id', 'group')
-						->addRule('status', 'status');
+			$validate->addRule('name', 'string-notExistRecord', ['database' => $this->_model, 'query' => $queryUserName, 'min' => 3, 'max' => 255])
+				->addRule('email', 'email-notExistRecord', ['database' => $this->_model, 'query' => $queryEmail])
+				->addRule('password', 'password', ['action' => $task], $requirePass)
+				->addRule('group_id', 'group')
+				->addRule('status', 'status');
 			$validate->run();
 			$this->_arrParam['form'] 	= $validate->getResult();
 			if ($validate->isValid() 	== false) {
@@ -101,6 +101,31 @@ class UserController extends Controller
 				URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 			}
 		}
+		$this->_view->arrParam = $this->_arrParam;
+		$this->_view->slbGroup 				= $this->_model->itemInSelectbox($this->_arrParam, null);
+		$this->_view->render($this->_arrParam['controller'] . '/form');
+	}
+	public function changePasswordAction()
+	{
+		$this->_view->_title 			= ucfirst($this->_arrParam['controller']) . ' Controller :: Change Password';
+		if (@isset($this->_arrParam['id']) && !@$this->_arrParam['form']['token']) {
+			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam);
+			if (empty($this->_arrParam['form'])) URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+		}
+		if (@$this->_arrParam['form']['token'] > 0) {
+			$validate 					= new Validate($this->_arrParam['form']);
+			$validate->addRule('password', 'password', ['action' => 'edit']);
+			$validate->run();
+			$this->_arrParam['form'] 	= $validate->getResult();
+			if ($validate->isValid() 	== false) {
+				$this->_view->error 	= $validate->showErrors();
+			} else {
+				// Insert Database
+				$this->_model->saveItem($this->_arrParam, ['task' => 'edit']);
+				URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+			}
+		}
+
 		$this->_view->arrParam = $this->_arrParam;
 		$this->_view->slbGroup 				= $this->_model->itemInSelectbox($this->_arrParam, null);
 		$this->_view->render($this->_arrParam['controller'] . '/form');

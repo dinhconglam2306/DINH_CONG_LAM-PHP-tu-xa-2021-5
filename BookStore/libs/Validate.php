@@ -193,9 +193,9 @@ class Validate
 	private function validatePassword($element, $options)
 	{
 		if ($options['action'] == 'add' || ($options['action'] == 'edit' && $this->source[$element])) {
-			$pattern = '#^(?=.*\d)(?=.*[A-Z])(?=.*\W).{8,8}$#';	// Php4567!
+			$pattern = '#^(\w){8,12}$#';	//3HrmokCiB
 			if (!preg_match($pattern, $this->source[$element])) {
-				$this->setError($element, 'Phải có 8 ký tự ít nhất 1 chữ in Hoa, 1 ký tự đặc biết!');
+				$this->setError($element, 'Phải từ 8 đến 12 ký tự và không chứa ký tự đặc biệt! VD: 3HrmokCiB');
 			};
 		}
 	}

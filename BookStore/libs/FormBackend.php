@@ -24,14 +24,15 @@ class FormBackend
     }
 
     //Create RowForm
-    public static function rowForm($labelName, $inputOrselect, $flag = true)
+    public static function rowForm($labelName, $inputOrselect, $flag = true,$plusButton='')
     {
         $require = '*';
         if($flag == false) $require = ' ';
         $xhtml = sprintf(
-            '<div class="form-group">  <label>%s<span class="text-danger">%s</span></label>%s</div>',
+            '<div class="form-group">  <label>%s<span class="text-danger">%s</span></label><div class="password-row" >%s %s</div></div>',
             $labelName,
             $require,
+            $plusButton,
             $inputOrselect
         );
 
@@ -40,9 +41,9 @@ class FormBackend
     }
 
     //Create button form
-    public static function button($type, $title, $class = '')
+    public static function button($type, $title,$class = '',$icon='',$attr='')
     {
-        $xhtml = sprintf('<button type="%s" class="%s">%s</button>', $type, $class, $title);
+        $xhtml = sprintf('<button type="%s" class="%s" data-url="%s"> %s %s</button>', $type, $class,$attr,$icon, $title);
         return $xhtml;
     }
 

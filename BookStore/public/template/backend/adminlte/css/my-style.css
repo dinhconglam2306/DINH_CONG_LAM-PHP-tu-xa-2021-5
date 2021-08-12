@@ -7,3 +7,15 @@
     padding: unset;
     background-color: gold;
 }
+
+.password-row{
+   width: 100%;
+   display: flex;
+   text-align: center;
+   justify-content: space-between;
+}
+.password-row .btn-generate{
+    width: 15%;
+    margin-right: 2px;
+    padding: 0 0 ;
+}

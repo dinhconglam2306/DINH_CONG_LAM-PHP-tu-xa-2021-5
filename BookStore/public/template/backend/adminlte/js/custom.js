@@ -45,6 +45,12 @@ $(document).ready(function () {
         $('input[name="cid[]').prop('checked', checked);
     });
 
+    $('.btn-generate').click(function () {
+      let randomPw    = makePassword();
+      $('input[name="form[password]"]').attr('value',randomPw);
+      
+    });
+
     //Select Item => select group
 
     $('select[name="select_group"]').change(function (){
@@ -109,5 +115,21 @@ $(document).ready(function () {
         icon: icon,
         title: title
       }
+    }
+    //RandomString
+    function makePassword() {
+      let length           = getRndInteger(8,13);
+      console.log(length);
+      let result           = '';
+      let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let charactersLength = characters.length;
+      for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+     }
+     return result;
+  }
+    //Random Int(lenght)
+    function getRndInteger(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
     }
 });

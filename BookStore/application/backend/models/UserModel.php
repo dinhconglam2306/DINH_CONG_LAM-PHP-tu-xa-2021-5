@@ -139,7 +139,9 @@ class UserModel extends Model
 		if ($options['task'] == 'edit') {
 			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
 			$params['form']['modified_by'] = 10;
-			if ($params['form']['password'] == null) {
+			if ($params['form']['password'] != null) {
+				$params['form']['password'] = md5($params['form']['password']);
+			} else {
 				unset($params['form']['password']);
 			}
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
