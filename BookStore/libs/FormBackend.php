@@ -17,19 +17,24 @@ class FormBackend
     }
 
     //Create InputFOrm
-    public static function input($type, $name, $value = null, $class = '')
+    public static function input($type, $name, $value = null, $readonly = '',$class = '')
     {
-        $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s">', $type, $class, $name, $value);
+        $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>', $type, $class, $name, $value,$readonly);
         return $xhtml;
     }
 
     //Create RowForm
-    public static function rowForm($labelName, $inputOrselect)
+    public static function rowForm($labelName, $inputOrselect, $flag = true)
     {
+        $require = '*';
+        if($flag == false) $require = ' ';
         $xhtml = sprintf(
-            '<div class="form-group">  <label>%s<span class="text-danger">*</span></label>%s</div>',
-            $labelName,$inputOrselect
+            '<div class="form-group">  <label>%s<span class="text-danger">%s</span></label>%s</div>',
+            $labelName,
+            $require,
+            $inputOrselect
         );
+
 
         return $xhtml;
     }
@@ -41,10 +46,10 @@ class FormBackend
         return $xhtml;
     }
 
-     //Create button Cancel
-     public static function cancel($href='')
-     {
-         $xhtml = sprintf('<a href="%s" class="btn btn-danger">Cancel</a>', $href);
-         return $xhtml;
-     }
+    //Create button Cancel
+    public static function cancel($href = '')
+    {
+        $xhtml = sprintf('<a href="%s" class="btn btn-danger">Cancel</a>', $href);
+        return $xhtml;
+    }
 }

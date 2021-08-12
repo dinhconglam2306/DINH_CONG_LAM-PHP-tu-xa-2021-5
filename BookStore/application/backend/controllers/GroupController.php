@@ -73,6 +73,7 @@ class GroupController extends Controller
 			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam);
 			if (empty($this->_arrParam['form'])) URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 		}
+		
 		if (@$this->_arrParam['form']['token'] > 0) {
 			$validate 					= new Validate($this->_arrParam['form']);
 			$validate					->addRule('name', 'string', ['min' => 3, 'max' => 30])

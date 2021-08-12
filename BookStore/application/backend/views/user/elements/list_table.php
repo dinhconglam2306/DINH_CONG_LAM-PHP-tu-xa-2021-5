@@ -7,7 +7,7 @@ foreach ($this->items as $key => $item) {
     $name               = HelperBackend::highlight(@$arrParams['search'], $item['name']);
     $fullName           = HelperBackend::highlight(@$arrParams['search'], $item['fullname']);
     $email              = HelperBackend::highlight(@$arrParams['search'], $item['email']);
-    $groupLink          = URL::createLink($arrParams['module'], $arrParams['controller'], 'changeGroup', ['group_id' => 'value_new','id'=>$id]);
+    $groupLink          = URL::createLink($arrParams['module'], $arrParams['controller'], 'changeGroup', ['group_id' => 'value_new', 'id' => $id]);
     $attr               = sprintf('data-url=%s', $groupLink);
     $selectGroup        = FormBackend::selectBox('change_group', $this->slbGroup, $item['group_id'], $attr, 'form-control w-auto');
     $status             = HelperBackend::itemStatus($arrParams['module'], $arrParams['controller'], $id, $item['status']);
@@ -19,6 +19,8 @@ foreach ($this->items as $key => $item) {
     $btnEdit            = HelperBackend::buttonLink($linkEdit, '<i class="fas fa-pen"></i>', 'btn-info', $optionsBtnAction);
     $linkDelete         = URL::createLink($arrParams['module'], $arrParams['controller'], 'delete', ['id' => $id]);
     $btnDelete          = HelperBackend::buttonLink($linkDelete, '<i class="fas fa-trash"></i>', 'btn-danger btn-delete', $optionsBtnAction);
+    $linkChangePw       = URL::createLink($arrParams['module'], $arrParams['controller'], 'changePassword', ['id' => $id]);
+    $btnChangePw        = HelperBackend::buttonLink($linkChangePw, '<i class="fas fa-key"></i>', 'btn-secondary btn-changepw', $optionsBtnAction);
 
 
 
@@ -35,7 +37,8 @@ foreach ($this->items as $key => $item) {
         <td>' . $status . '</td>
         <td>' . $created . '</td>
         <td>' . $modified . '</td>
-        <td>' . $btnEdit . '
+        <td>' . $btnChangePw . '
+            ' . $btnEdit . '
             ' . $btnDelete . '
         </td>
     </tr>

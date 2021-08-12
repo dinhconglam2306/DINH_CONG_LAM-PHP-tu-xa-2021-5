@@ -6,6 +6,7 @@ class UserModel extends Model
 		'name',
 		'fullname',
 		'email',
+		'password',
 		'group_id',
 		'created',
 		'created_by',
@@ -28,7 +29,7 @@ class UserModel extends Model
 		$query[]	= "WHERE `u`.`group_id` = `g`.`id`";
 
 		if (!empty(trim(@$params['search']))) {
-			$keyword = '"%'.$params['search'].'%"';
+			$keyword = '"%' . $params['search'] . '%"';
 			$query[] = "AND (`u`.`name` LIKE $keyword OR `u`.`fullname` LIKE $keyword OR `u`.`email` LIKE $keyword)";
 		}
 
@@ -104,7 +105,7 @@ class UserModel extends Model
 			$query[] = "FROM `{$this->table}` WHERE `id` > 0";
 
 			if (!empty(trim(@$params['search']))) {
-				$keyword = '"%'.$params['search'].'%"';
+				$keyword = '"%' . $params['search'] . '%"';
 				$query[] = "AND (`name` LIKE $keyword OR `fullname` LIKE $keyword OR `email` LIKE $keyword)";
 				// $query[] = "AND `name` LIKE '%{$params['search']}%'";
 			}
@@ -130,6 +131,7 @@ class UserModel extends Model
 		if ($options['task'] == 'add') {
 			$params['form']['created'] = date('Y-m-d G.i:s<br>', time());
 			$params['form']['created_by'] = 1;
+			$params['form']['password']	= md5($params['form']['password']);
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->insert($data);
 			Session::set('message', SUCCESS_ADD_ITEM);
@@ -137,6 +139,9 @@ class UserModel extends Model
 		if ($options['task'] == 'edit') {
 			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
 			$params['form']['modified_by'] = 10;
+			if ($params['form']['password'] == null) {
+				unset($params['form']['password']);
+			}
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
 			Session::set('message', SUCCESS_EDIT_ITEM);
@@ -148,7 +153,7 @@ class UserModel extends Model
 	{
 
 		if ($options == null) {
-			$query[] 	= "SELECT  `id`, `name`, `group_acp`, `status`";
+			$query[] 	= "SELECT  `id`, `name`,`email`, `fullname`,`group_id`, `status`";
 			$query[]	= "FROM `{$this->table}`";
 			$query[]	= "WHERE `id` = {$params['id']}";
 			$query = implode(' ', $query);
