@@ -61,8 +61,11 @@ class UserModel extends Model
 	{
 		if ($options == null) {
 			$data = ['group_id' => $params['group_id']];
-			$where = [['id', $params['id']]];
+			$id   = $params['id'];
+			$where = [['id', $id]];
 			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'group_id' => $params['group_id']]);
+			return [$id, $link];
 			Session::set('message', SUCCESS_UPDATE_GROUP_USER);
 		}
 	}
@@ -70,11 +73,16 @@ class UserModel extends Model
 	//Thay đổi trạng thái của 1 item
 	public function changeStatus($params, $options = null)
 	{
-		$status = $params['status'] == 'active' ? 'inactive' : 'active';
-		$data = ['status' => $status];
-		$where = [['id', $params['id']]];
-		$this->update($data, $where);
-		Session::set('message', SUCCESS_UPDATE_STATUS);
+		if ($options['task'] == 'change-ajax-status') {
+			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
+			$data = ['status' => $status];
+			$id   = $params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
+			return [$id, $status, $link];
+			Session::set('message', SUCCESS_UPDATE_STATUS);
+		}
 	}
 
 

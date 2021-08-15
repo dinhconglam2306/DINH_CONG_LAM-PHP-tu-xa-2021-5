@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
 
   //Delete Item
@@ -11,6 +12,37 @@ $(document).ready(function () {
           })
     });
 
+    //AJAX CHANGE GROUP ACP - STATUS
+    $('.btn-change').click(function(e){
+      let attrID = $(this).attr('id');
+      let dataUrl = $(this).attr('data-url');
+      $(this).attr('href',dataUrl);
+      $(this).notify("Thay đổi status thành công", "success",{ position:"right" })
+      e.preventDefault();
+      $.get(dataUrl,function(data){
+          let elm       = 'a#'+ attrID;
+          let classRemove = 'btn-success';
+          let iconRemove  = 'fa-check';
+          let classAdd = 'btn-danger';
+          let iconAdd  = 'fa-minus';
+        if(data[1] == 'active'){
+          classRemove = 'btn-danger';
+          iconRemove  = 'fa-minus';
+          classAdd = 'btn-success';
+          iconAdd  = 'fa-check';
+        }
+        if(data[1] == 1){
+          classRemove = 'btn-danger';
+          iconRemove  = 'fa-minus';
+          classAdd = 'btn-success';
+          iconAdd  = 'fa-check';
+        }
+        $(elm).attr('data-url',data[2]);
+        $(elm).removeClass(classRemove).addClass(classAdd);
+        $(elm + ' i').removeClass(iconRemove).addClass(iconAdd);
+      },'json')
+    })
+    
     //Change mutiAction (Status, Group ACP, delete)
     $('.btn-apply-bulk-action').click(function (e) {
         e.preventDefault();
@@ -67,11 +99,11 @@ $(document).ready(function () {
       let selectValueACP =$(this).val();
       url = url.replace('value_new',selectValueACP);
       e.preventDefault();
-      Swal.fire(createSwalFire('Xác nhận thay đổi group!')).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href=url;
-        }
+      $(this).notify("Thay đổi group thành công","success",{ position:"top" })
+      $.get(url,function(data){
+      console.log(data)
       })
+
     })
 
 
@@ -84,6 +116,8 @@ $(document).ready(function () {
 
 
     //Function
+
+
 
     function createSwalFire(title,icon='warning')
     {

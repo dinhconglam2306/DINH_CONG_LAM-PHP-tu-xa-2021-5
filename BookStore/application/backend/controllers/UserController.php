@@ -30,14 +30,15 @@ class UserController extends Controller
 
 	public function changeStatusAction()
 	{
-		$this->_model->changeStatus($this->_arrParam);
-		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+		$result = $this->_model->changeStatus($this->_arrParam, ['task' => 'change-ajax-status']);
+		echo json_encode($result);
 	}
 
 	public function changeGroupAction()
 	{
-		$this->_model->changeGroup($this->_arrParam, null);
-		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
+		$result = $this->_model->changeGroup($this->_arrParam, null);
+		// echo json_encode($result);
+		// URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
 
 	public function deleteAction()

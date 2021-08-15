@@ -23,7 +23,7 @@ class HelperBackend
     //Create Icon Group ACP
     public static function itemGroupACP($module, $controller, $id, $value)
     {
-        $link = URL::createLink($module, $controller, 'changeGroupACP', ['id' => $id, 'group_acp' => $value]);
+        $datUrl = URL::createLink($module, $controller, 'changeGroupACP', ['id' => $id, 'group_acp' => $value]);
         $colorClass = 'btn-success';
         $icon = 'fa-check';
 
@@ -32,13 +32,13 @@ class HelperBackend
             $icon = 'fa-minus';
         }
 
-        return sprintf('<a href="%s" class="btn %s rounded-circle btn-sm"><i class="fas %s"></i></a>', $link, $colorClass, $icon);
+        return sprintf('<a href="#" data-url="%s" id="group-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl,$id, $colorClass, $icon);
     }
 
     //Create Icon Status
     public static function itemStatus($module, $controller, $id, $value)
     {
-        $link = URL::createLink($module, $controller, 'changeStatus', ['id' => $id, 'status' => $value]);
+        $datUrl = URL::createLink($module, $controller, 'changeStatus', ['id' => $id, 'status' => $value]);
         $colorClass = 'btn-success';
         $icon = 'fa-check';
 
@@ -47,7 +47,7 @@ class HelperBackend
             $icon = 'fa-minus';
         }
 
-        return sprintf('<a href="%s" class="btn %s rounded-circle btn-sm"><i class="fas %s"></i></a>', $link, $colorClass, $icon);
+        return sprintf('<a href="#" data-url="%s" id="status-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl,$id, $colorClass, $icon);
     }
 
     //Create history item

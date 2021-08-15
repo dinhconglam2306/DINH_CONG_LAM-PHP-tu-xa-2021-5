@@ -25,7 +25,7 @@ class GroupModel extends Model
 		$query[]	= "FROM `{$this->table}` WHERE `id` > 0";
 
 		if (!empty(trim(@$params['search']))) {
-			$keyword = '"%'.$params['search'].'%"';
+			$keyword = '"%' . $params['search'] . '%"';
 			$query[] = "AND `name` LIKE $keyword";
 		}
 
@@ -55,21 +55,31 @@ class GroupModel extends Model
 	//Thay đổi trạng thái của groupACP
 	public function changeGroupACP($params, $options = null)
 	{
-		$groupACP = $params['group_acp'] == 1 ? 0 : 1;
-		$data = ['group_acp' => $groupACP];
-		$where = [['id', $params['id']]];
-		$this->update($data, $where);
-		Session::set('message', SUCCESS_UPDATE_GROUP_ACP);
+		if ($options['task'] == 'change-ajax-group-acp') {
+			$groupACP = ($params['group_acp'] == 1) ? 0 : 1;
+			$data = ['group_acp' => $groupACP];
+			$id   = $params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeGroupACP', ['id' => $id, 'group_acp' => $groupACP]);
+			return [$id, $groupACP, $link];
+			Session::set('message', SUCCESS_UPDATE_GROUP_ACP);
+		}
 	}
 
 	//Thay đổi trạng thái của 1 item
 	public function changeStatus($params, $options = null)
 	{
-		$status = $params['status'] == 'active' ? 'inactive' : 'active';
-		$data = ['status' => $status];
-		$where = [['id', $params['id']]];
-		$this->update($data, $where);
-		Session::set('message', SUCCESS_UPDATE_STATUS);
+		if ($options['task'] == 'change-ajax-status') {
+			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
+			$data = ['status' => $status];
+			$id   = $params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
+			return [$id, $status, $link];
+			Session::set('message', SUCCESS_UPDATE_STATUS);
+		}
 	}
 
 
@@ -100,13 +110,13 @@ class GroupModel extends Model
 			$query[] = "FROM `{$this->table}` WHERE `id` > 0";
 
 			if (!empty(trim(@$params['search']))) {
-				$keyword = '"%'.$params['search'].'%"';
+				$keyword = '"%' . $params['search'] . '%"';
 				$query[] = "AND `name` LIKE $keyword";
 			}
 			if (isset($params['group_acp'])) {
 				$query[] = "AND `group_acp` = '{$params['group_acp']}'";
 			}
-			
+
 
 			$query[] = "GROUP BY `status`";
 			$query = implode(' ', $query);

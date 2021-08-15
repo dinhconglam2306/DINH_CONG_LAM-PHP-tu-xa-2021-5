@@ -20,8 +20,8 @@ foreach ($this->items as $key => $item) {
         <td>' . $ckb . '</td>
         <td>' . $id . '</td>
         <td>' . $name . '</td>
-        <td>' . $groupACP . '</td>
-        <td>' . $status . '</td>
+        <td class="position-relative">' . $groupACP . '</td>
+        <td class="position-relative">' . $status . '</td>
         <td>' . $created . '</td>
         <td>' . $modified . '</td>
         <td>

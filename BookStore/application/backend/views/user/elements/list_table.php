@@ -33,8 +33,8 @@ foreach ($this->items as $key => $item) {
             <p class="mb-0"><b>FullName</b>: ' . $fullName . '</p>
             <p class="mb-0"><b>Email</b>: ' . $email . '</p>
         </td>
-        <td>' . $selectGroup . '</td>
-        <td>' . $status . '</td>
+        <td class="position-relative">' . $selectGroup . '</td>
+        <td class="position-relative">' . $status . '</td>
         <td>' . $created . '</td>
         <td>' . $modified . '</td>
         <td>' . $btnChangePw . '

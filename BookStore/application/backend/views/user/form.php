@@ -39,7 +39,7 @@ if (isset($this->arrParam['id']) && $this->arrParam['action'] == 'form') {
 }
 
 //Action Change PassWord
-$dataUrl = URL::createLink($this->arrParam['module'],$this->arrParam['controller'],'changePassword',['id'=>$this->arrParam['id']]);
+$dataUrl = URL::createLink($this->arrParam['module'],$this->arrParam['controller'],'changePassword',['id'=>@$this->arrParam['id']]);
 $plusButton = FormBackend::button('button', 'Generate', 'btn btn-info btn-sm btn-generate', '<i class="fas fa-sync-alt"></i>',$dataUrl);
 if (isset($this->arrParam['id']) && $this->arrParam['action'] == 'changePassword') {
     $inputFullName     = FormBackend::input('text', 'form[fullname]', @$dataForm['fullname'], $readonly);
