@@ -1,18 +1,25 @@
 <?php
+$xhtmlDefault = '';
+if(empty($this->items)){
+    $xhtmlDefault = '<p class="form-control text-center">Dữ liệu đang được cập nhật</p>';
+}
 $xhtml = '';
 unset($this->slbGroup['default']);
+
 foreach ($this->items as $key => $item) {
+    
     $id                 = $item['id'];
     $ckb                = sprintf('<input type="checkbox" name="cid[]" value="%s">', $id);
-    $name               = HelperBackend::highlight(@$arrParams['search'], $item['name']);
+    $userName           = HelperBackend::highlight(@$arrParams['search'], $item['username']);
     $fullName           = HelperBackend::highlight(@$arrParams['search'], $item['fullname']);
-    $email              = HelperBackend::highlight(@$arrParams['search'], $item['email']);
+    // $email              = HelperBackend::highlight(@$arrParams['search'], $item['email']);
+    $email              =   $item['email'];
     $groupLink          = URL::createLink($arrParams['module'], $arrParams['controller'], 'changeGroup', ['group_id' => 'value_new', 'id' => $id]);
     $attr               = sprintf('data-url=%s', $groupLink);
     $selectGroup        = FormBackend::selectBox('change_group', $this->slbGroup, $item['group_id'], $attr, 'form-control w-auto');
     $status             = HelperBackend::itemStatus($arrParams['module'], $arrParams['controller'], $id, $item['status']);
     $created            = HelperBackend::itemHistory($item['created_by'], $item['created']);
-    $modified           = HelperBackend::itemHistory($item['modified_by'], $item['modified']);
+    $modified           = HelperBackend::itemHistory($item['modified_by'], $item['modified'],$id);
 
     $optionsBtnAction   = ['small' => true, 'circle' => true];
     $linkEdit           = URL::createLink($arrParams['module'], $arrParams['controller'], 'form', ['id' => $id]);
@@ -29,7 +36,7 @@ foreach ($this->items as $key => $item) {
         <td>' . $ckb . '</td>
         <td>' . $id . '</td>
         <td class="text-left">
-            <p class="mb-0"><b>Username</b>: ' . $name . '</p>
+            <p class="mb-0"><b>Username</b>: ' . $userName . '</p>
             <p class="mb-0"><b>FullName</b>: ' . $fullName . '</p>
             <p class="mb-0"><b>Email</b>: ' . $email . '</p>
         </td>
@@ -62,8 +69,9 @@ foreach ($this->items as $key => $item) {
                 </tr>
             </thead>
             <tbody>
-                <?= $xhtml ?>
+                <?= $xhtml ?>         
             </tbody>
         </table>
+        <?= $xhtmlDefault ?>
     </div>
 </form>

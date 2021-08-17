@@ -17,10 +17,11 @@ $(document).ready(function () {
       let attrID = $(this).attr('id');
       let dataUrl = $(this).attr('data-url');
       $(this).attr('href',dataUrl);
-      $(this).notify("Thay đổi status thành công", "success",{ position:"right" })
+      $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
       e.preventDefault();
       $.get(dataUrl,function(data){
           let elm       = 'a#'+ attrID;
+          console.log(elm)
           let classRemove = 'btn-success';
           let iconRemove  = 'fa-check';
           let classAdd = 'btn-danger';
@@ -37,6 +38,9 @@ $(document).ready(function () {
           classAdd = 'btn-success';
           iconAdd  = 'fa-check';
         }
+        let created = 'span.' + attrID;
+        
+        $(created).text(data[3]);
         $(elm).attr('data-url',data[2]);
         $(elm).removeClass(classRemove).addClass(classAdd);
         $(elm + ' i').removeClass(iconRemove).addClass(iconAdd);
@@ -85,11 +89,8 @@ $(document).ready(function () {
 
     //Select Item => select group
 
-    $('select[name="select_group"]').change(function (){
-        let url  = $(this).attr('data-url');
-        let selectValueACP =$(this).val();
-        url = url.replace('value_new',selectValueACP);
-        window.location.href=url;
+    $('select[name="group_id"]').change(function (){
+        $("#select-user").submit();
     })
 
 
@@ -98,11 +99,13 @@ $(document).ready(function () {
       let url  = $(this).attr('data-url');
       let selectValueACP =$(this).val();
       url = url.replace('value_new',selectValueACP);
+      console.log(url)
       e.preventDefault();
-      $(this).notify("Thay đổi group thành công","success",{ position:"top" })
+      $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
       $.get(url,function(data){
-      console.log(data)
-      })
+        let created = 'span.status-'+data[0];
+        $(created).text(data[1]);
+    },'json')
 
     })
 
@@ -153,7 +156,6 @@ $(document).ready(function () {
     //RandomString
     function makePassword() {
       let length           = getRndInteger(8,13);
-      console.log(length);
       let result           = '';
       let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let charactersLength = characters.length;

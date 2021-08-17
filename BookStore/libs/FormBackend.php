@@ -17,33 +17,37 @@ class FormBackend
     }
 
     //Create InputFOrm
-    public static function input($type, $name, $value = null, $readonly = '',$class = '')
+    // public static function input($type, $name, $value = null, $readonly = '',$class = '')
+    // {
+    //     $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>', $type, $class, $name, $value,$readonly);
+    //     return $xhtml;
+    // }
+    public static function input($type, $name, $value = '', $readonly = '', $plusBotton = '', $class = '')
     {
-        $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>', $type, $class, $name, $value,$readonly);
+        $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>%s', $type, $class, $name, $value, $readonly,$plusBotton);
         return $xhtml;
     }
-
     //Create RowForm
-    public static function rowForm($labelName, $inputOrselect, $flag = true,$plusButton='')
+    public static function rowForm($labelName, $inputOrselect)
     {
-        $require = '*';
-        if($flag == false) $require = ' ';
+        $start = '*';
+        if ($labelName == 'FullName') $start = ' ';
         $xhtml = sprintf(
-            '<div class="form-group">  <label>%s<span class="text-danger">%s</span></label><div class="password-row" >%s %s</div></div>',
+            '<div class="form-group">
+                <label>%s<span class="text-danger">%s</span></label>
+                %s
+              </div>',
             $labelName,
-            $require,
-            $plusButton,
+            $start,
             $inputOrselect
         );
-
-
         return $xhtml;
     }
 
     //Create button form
-    public static function button($type, $title,$class = '',$icon='',$attr='')
+    public static function button($type, $title, $class = '', $icon = '', $attr = '')
     {
-        $xhtml = sprintf('<button type="%s" class="%s" data-url="%s"> %s %s</button>', $type, $class,$attr,$icon, $title);
+        $xhtml = sprintf('<button type="%s" class="%s" data-url="%s"> %s %s</button>', $type, $class, $attr, $icon, $title);
         return $xhtml;
     }
 

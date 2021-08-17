@@ -51,13 +51,13 @@ class HelperBackend
     }
 
     //Create history item
-    public static function itemHistory($by, $time)
+    public static function itemHistory($by, $time,$id='')
     {
-        if ($time) $time = date('H:i:s d/m/Y', strtotime($time));
+        // if ($time) $time = date('H:i:s d/m/Y', strtotime($time));
         $xhtml = sprintf('
         <p class="mb-0"><i class="far fa-user"></i> %s</p>
-        <p class="mb-0"><i class="far fa-clock"></i> %s</p>
-        ', $by, $time);
+        <p class="mb-0"><i class="far fa-clock"></i> <span class="status-%s">%s</span></p>
+        ', $by, $id,$time);
         return $xhtml;
     }
 
@@ -127,5 +127,19 @@ class HelperBackend
 
         $result        = substr($arrCharacter, 0, $length);
         return $result;
+    }
+
+
+    public static function fieldSearchAccepted($paramSearch,$keyword,$table=''){
+        $str ="";
+        foreach($paramSearch as  $value){
+            if($table != ''){
+                $str.= sprintf("`%s`.`%s`LIKE %s OR",$table,$value,$keyword);
+            } else{
+                $str.= sprintf("`%s`LIKE %s OR",$value,$keyword);
+            }
+            //`u`.`username` LIKE $keyword OR `u`.`fullname` LIKE $keyword OR `u`.`email` LIKE $keyword)
+        }
+        return substr($str,0,-2);;
     }
 }

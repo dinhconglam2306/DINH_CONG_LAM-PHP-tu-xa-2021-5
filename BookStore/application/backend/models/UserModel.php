@@ -3,7 +3,7 @@ class UserModel extends Model
 {
 	private $_columns = [
 		'id',
-		'name',
+		'username',
 		'fullname',
 		'email',
 		'password',
@@ -15,6 +15,10 @@ class UserModel extends Model
 		'status',
 		'ordering'
 	];
+
+
+	private $_fieldSearchAccpted  = ['username', 'fullname'];
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -24,13 +28,14 @@ class UserModel extends Model
 	//Hiện danh sách items
 	public function listItems($params, $options = null)
 	{
-		$query[] 	= "SELECT `u`.`id`,`u`.`group_id`, `u`.`name`,`u`.`fullname`,`u`.`email` ,`g`.`name` AS `group_name`, `u`.`created`, `u`.`created_by`, `u`.`modified`, `u`.`modified_by`, `u`.`status`";
+		$query[] 	= "SELECT `u`.`id`,`u`.`group_id`, `u`.`username`,`u`.`fullname`,`u`.`email` ,`g`.`name` AS `group_name`, `u`.`created`, `u`.`created_by`, `u`.`modified`, `u`.`modified_by`, `u`.`status`";
 		$query[]	= "FROM `{$this->table}` AS `u`,`" . TBL_GROUP . "` AS `g`";
 		$query[]	= "WHERE `u`.`group_id` = `g`.`id`";
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%' . $params['search'] . '%"';
-			$query[] = "AND (`u`.`name` LIKE $keyword OR `u`.`fullname` LIKE $keyword OR `u`.`email` LIKE $keyword)";
+			$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword,'u');
+			$query[] = "AND ($fieldSearchAccpted)";
 		}
 
 		if (@$params['status'] && $params['status'] != 'all') {
@@ -60,13 +65,13 @@ class UserModel extends Model
 	public function changeGroup($params, $options = null)
 	{
 		if ($options == null) {
-			$data = ['group_id' => $params['group_id']];
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$data = ['group_id' => $params['group_id'],'modified' => $modified];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
-			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'group_id' => $params['group_id']]);
-			return [$id, $link];
-			Session::set('message', SUCCESS_UPDATE_GROUP_USER);
+			return [$id, $modified];
+			// Session::set('message', SUCCESS_UPDATE_GROUP_USER);
 		}
 	}
 
@@ -75,13 +80,14 @@ class UserModel extends Model
 	{
 		if ($options['task'] == 'change-ajax-status') {
 			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
-			$data = ['status' => $status];
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$data = ['status' => $status,'modified' => $modified];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
-			return [$id, $status, $link];
-			Session::set('message', SUCCESS_UPDATE_STATUS);
+			return [$id, $status, $link,$modified];
+			// Session::set('message', SUCCESS_UPDATE_STATUS);
 		}
 	}
 
@@ -114,8 +120,8 @@ class UserModel extends Model
 
 			if (!empty(trim(@$params['search']))) {
 				$keyword = '"%' . $params['search'] . '%"';
-				$query[] = "AND (`name` LIKE $keyword OR `fullname` LIKE $keyword OR `email` LIKE $keyword)";
-				// $query[] = "AND `name` LIKE '%{$params['search']}%'";
+				$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword);
+				$query[] = "AND ($fieldSearchAccpted)";
 			}
 			if (isset($params['group_id'])) {
 				$query[] = "AND `group_id` = '{$params['group_id']}'";
@@ -137,7 +143,7 @@ class UserModel extends Model
 	public function saveItem($params, $options = null)
 	{
 		if ($options['task'] == 'add') {
-			$params['form']['created'] = date('Y-m-d G.i:s<br>', time());
+			$params['form']['created'] = date('Y-m-d H:i:s', time());
 			$params['form']['created_by'] = 1;
 			$params['form']['password']	= md5($params['form']['password']);
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
@@ -145,12 +151,22 @@ class UserModel extends Model
 			Session::set('message', SUCCESS_ADD_ITEM);
 		}
 		if ($options['task'] == 'edit') {
-			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
+			unset($params['form']['username']);
+			unset($params['form']['email']);
+			$params['form']['modified'] = date('Y-m-d H:i:s', time());
+			$params['form']['modified_by'] = 10;
+			if ($params['form']['password'] == null)unset($params['form']['password']);
+			$data = array_intersect_key($params['form'], array_flip($this->_columns));
+			$this->update($data, [['id', $params['id']]]);
+			Session::set('message', SUCCESS_EDIT_ITEM);
+		}
+		if ($options['task'] == 'change-status') {
+			unset($params['form']['username']);
+			unset($params['form']['email']);
+			$params['form']['modified'] = date('Y-m-d H:i:s', time());
 			$params['form']['modified_by'] = 10;
 			if ($params['form']['password'] != null) {
 				$params['form']['password'] = md5($params['form']['password']);
-			} else {
-				unset($params['form']['password']);
 			}
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
@@ -163,7 +179,7 @@ class UserModel extends Model
 	{
 
 		if ($options == null) {
-			$query[] 	= "SELECT  `id`, `name`,`email`, `fullname`,`group_id`, `status`";
+			$query[] 	= "SELECT  `id`, `username`,`email`, `fullname`,`group_id`, `status`";
 			$query[]	= "FROM `{$this->table}`";
 			$query[]	= "WHERE `id` = {$params['id']}";
 			$query = implode(' ', $query);

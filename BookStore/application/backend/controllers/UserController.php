@@ -24,7 +24,7 @@ class UserController extends Controller
 
 		//List Items
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
-		$this->_view->slbGroup 				= $this->_model->itemInSelectbox($this->_arrParam, null);
+		$this->_view->slbGroup 				= ['default'=>' -Select Group ACP- '] + $this->_model->itemInSelectbox($this->_arrParam, null);
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
 
@@ -37,7 +37,7 @@ class UserController extends Controller
 	public function changeGroupAction()
 	{
 		$result = $this->_model->changeGroup($this->_arrParam, null);
-		// echo json_encode($result);
+		echo json_encode($result);
 		// URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
 
@@ -78,7 +78,7 @@ class UserController extends Controller
 		if (@$this->_arrParam['form']['token'] > 0) {
 			$task = 'add';
 			$requirePass = true;
-			$queryUserName 	= "SELECT `id` FROM `" . TBL_USER . "` WHERE `name` = '" . $this->_arrParam['form']['name'] . "'";
+			$queryUserName 	= "SELECT `id` FROM `" . TBL_USER . "` WHERE `username` = '" . $this->_arrParam['form']['username'] . "'";
 			$queryEmail		= "SELECT `id` FROM `" . TBL_USER . "` WHERE `email` = '" . $this->_arrParam['form']['email'] . "'";
 			if (isset($this->_arrParam['id'])) {
 				$task = 'edit';
@@ -87,7 +87,7 @@ class UserController extends Controller
 				$queryEmail 	.= " AND `id` <> '" . $this->_arrParam['id'] . "'";
 			}
 			$validate 					= new Validate($this->_arrParam['form']);
-			$validate->addRule('name', 'string-notExistRecord', ['database' => $this->_model, 'query' => $queryUserName, 'min' => 3, 'max' => 255])
+			$validate->addRule('username', 'string-notExistRecord', ['database' => $this->_model, 'query' => $queryUserName, 'min' => 3, 'max' => 255])
 				->addRule('email', 'email-notExistRecord', ['database' => $this->_model, 'query' => $queryEmail])
 				->addRule('password', 'password', ['action' => $task], $requirePass)
 				->addRule('group_id', 'group')
@@ -103,7 +103,7 @@ class UserController extends Controller
 			}
 		}
 		$this->_view->arrParam = $this->_arrParam;
-		$this->_view->slbGroup 				= $this->_model->itemInSelectbox($this->_arrParam, null);
+		$this->_view->slbGroup 				= ['default'=>' -Select Group ACP- '] + $this->_model->itemInSelectbox($this->_arrParam, null);
 		$this->_view->render($this->_arrParam['controller'] . '/form');
 	}
 	public function changePasswordAction()
@@ -122,7 +122,7 @@ class UserController extends Controller
 				$this->_view->error 	= $validate->showErrors();
 			} else {
 				// Insert Database
-				$this->_model->saveItem($this->_arrParam, ['task' => 'edit']);
+				$this->_model->saveItem($this->_arrParam, ['task' => 'change-status']);
 				URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 			}
 		}

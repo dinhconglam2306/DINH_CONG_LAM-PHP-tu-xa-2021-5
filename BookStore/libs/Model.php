@@ -197,8 +197,6 @@ class Model
 				mysqli_free_result($resultQuery);
 			}
 		}
-		$result['default'] = ' -Select Group ACP- ';
-		ksort($result);
 		return $result;
 	}
 

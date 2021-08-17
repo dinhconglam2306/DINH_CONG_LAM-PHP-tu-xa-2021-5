@@ -12,16 +12,18 @@ $ipHdModule         = FormBackend::input('hidden', 'module', $arrParams['module'
 $ipHdController     = FormBackend::input('hidden', 'controller', $arrParams['controller']);
 $ipHdAction         = FormBackend::input('hidden', 'action', $arrParams['action']);
 
-
-$input = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
+//Search item
+$formSearch = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
 
 
 //Group
 $arrValueGroup = $this->slbGroup;
 $groupUrl = URL::createLink($arrParams['module'], $arrParams['controller'], 'index', ['group_id' => 'value_new']);
 $attr  = sprintf('data-url=%s', $groupUrl);
-$selectBoxGroup = FormBackend::selectBox('select_group', $arrValueGroup, @$arrParams['group_id'], $attr, 'slb-select-group-acp');
+$selectBoxGroup = FormBackend::selectBox('group_id', $arrValueGroup, @$arrParams['group_id'], $attr, 'slb-select-group-acp');
 
+//Select item -> group
+$formSlGroup = $ipHdModule . $ipHdController . $ipHdAction . $selectBoxGroup ;
 ?>
 
 <div class="card card-outline card-info">
@@ -41,12 +43,14 @@ $selectBoxGroup = FormBackend::selectBox('select_group', $arrValueGroup, @$arrPa
                     <?= $xhtmlFilterStatus ?>
                 </div>
                 <div class="area-filter-group-acp mb-2 ">
-                    <?= $selectBoxGroup ?>
+                <form action="" method="GET" id="select-user">
+                    <?= $formSlGroup ?>
+                </form>
                 </div>
                 <div class="area-search mb-2">
                     <form action="" method="GET">
                         <div class="input-group">
-                            <?= $input ?>
+                            <?= $formSearch ?>
                             <span class="input-group-append">
                                 <?= $btnSearch . $btnClear ?>
                             </span>
