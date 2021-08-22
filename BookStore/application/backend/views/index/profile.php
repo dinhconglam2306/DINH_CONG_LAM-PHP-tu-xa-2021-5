@@ -1,24 +1,16 @@
 <?php
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
 $dataForm = @$this->arrParam['form'];
-$readonly = '';
-if (isset($this->arrParam['id']))$readonly = 'readonly';
-require_once 'elements/form_add.php';
+$inputUserName  = FormBackend::input('text', 'form[username]', @$dataForm['username']);
+$inputMail      = FormBackend::input('email', 'form[email]', @$dataForm['email']);
+$inputFullName  = FormBackend::input('text', 'form[fullname]', @$dataForm['fullname']);
 
-//Action Edit
-if (isset($this->arrParam['id']) && $this->arrParam['action'] == 'form') {
-    require_once 'elements/form_edit.php';
-    $rowTotal          = $rowUserName . $rowMail . $inputPassword . $rowFullName . $rowslbStatus . $rowslbGroup;
-}
+$rowUserName       = FormBackend::rowForm('Username', $inputUserName);
+$rowMail           = FormBackend::rowForm('Email', $inputMail);
+$rowFullName       = FormBackend::rowForm('FullName', $inputFullName);
 
-//Action Change PassWord
-if (isset($this->arrParam['id']) && $this->arrParam['action'] == 'changePassword') {
-    require_once 'elements/form_change_password.php';
-    $rowTotal          =  $rowUserName . $rowMail .$rowPassword;
-}
+$inputHidden    = FormBackend::input('hidden', 'form[token]', time());
 
+$rowTotal = $rowUserName . $rowMail . $rowFullName;
 //button Save
 $saveButton = FormBackend::button('submit', 'Save', 'btn btn-success');
 

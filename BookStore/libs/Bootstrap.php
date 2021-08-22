@@ -15,6 +15,8 @@ class Bootstrap
 		if (file_exists($filePath)) {
 			$this->loadExistingController($filePath, $controllerName);
 			$this->callMethod();
+		} else {
+			URL::redirect('frontend', 'index', 'notice', ['type' => 'not-url']);
 		}
 	}
 
@@ -23,9 +25,34 @@ class Bootstrap
 	{
 		$actionName = $this->_params['action'] . 'Action';
 		if (method_exists($this->_controllerObject, $actionName) == true) {
-			$this->_controllerObject->$actionName();
+			$module = $this->_params['module'];
+			$controller = $this->_params['controller'];
+			$action = $this->_params['action'];
+
+			$userInfo = Session::get('user');
+
+			$logger = ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time());
+			//MODULE BACKEND
+			if ($module == 'backend') {
+				if ($logger == true) {
+					if ($userInfo['group_acp'] == 1) {
+						$this->_controllerObject->$actionName();
+					} else {
+						URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission']);
+					}
+				} else {
+					Session::delete('user');
+					require_once(APPLICATION_PATH . $module . DS . 'controllers' . DS . 'IndexController.php');
+					$indexController = new IndexController($this->_params);
+					$indexController->loginAction();
+				}
+
+				//MODULE FRONTEND
+			} else if ($module == 'frontend') {
+				$this->_controllerObject->$actionName();
+			}
 		} else {
-			$this->_error();
+			URL::redirect('frontend', 'index', 'notice', ['type' => 'not-url']);
 		}
 	}
 

@@ -1,6 +1,7 @@
 <?php
 $linkHome = URL::createLink($this->arrParam['module'], 'index', 'index');
 $linkRegister = URL::createLink($this->arrParam['module'], 'user', 'register');
+$linkLogin = URL::createLink($this->arrParam['module'], 'user', 'login');
 
 ?>
 <div class="loader_skeleton">
@@ -53,7 +54,7 @@ $linkRegister = URL::createLink($this->arrParam['module'], 'user', 'register');
                                 <li class="onhover-dropdown mobile-account">
                                     <img src="<?= $this->_dirImg ?>avatar.png" alt="avatar">
                                     <ul class="onhover-show-div">
-                                        <li><a href="login.html">Đăng nhập</a></li>
+                                        <li><a href="<?= $linkLogin ?>">Đăng nhập</a></li>
                                         <li><a href="<?= $linkRegister ?>">Đăng ký</a></li>
                                     </ul>
                                 </li>

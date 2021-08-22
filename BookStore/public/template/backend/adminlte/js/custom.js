@@ -114,10 +114,8 @@ $(document).ready(function () {
     //delete message after 2s
     let message = $('#success-message');
     setTimeout(function(){
-        message.hide('slow', function(){ message.remove(); });
+        message.hide('slow', function(){ message.remove();});
     },2000);
-
-
     //Function
 
 

@@ -240,7 +240,7 @@ class Validate
 
 		$query	  = $options['query'];
 		if ($database->isExist($query) == false) {
-			$this->setError($element, 'Giá trị không tồn tại!');
+			$this->setError($element, 'Tài khoản hoặc mật khẩu không đúng!');
 		}
 	}
 	// Validate Exist record

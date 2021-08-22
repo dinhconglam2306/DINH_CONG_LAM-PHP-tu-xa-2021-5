@@ -28,4 +28,7 @@ define('DB_TABLE', 'group');
 define('TBL_GROUP', 'group');
 define('TBL_USER', 'user');
 
+// ====================== CONFIG ===========================
+define('TIME_LOGIN', 3600);
+
 

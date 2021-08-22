@@ -11,16 +11,26 @@ class IndexController extends Controller
 	}
 	public function indexAction()
 	{
-		echo '<pre>';
-		print_r ($_SESSION);
-		echo '</pre>';
 		$this->_view->_title 				= "Admin :: Dashboard";
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
+
+
+	public function profileAction()
+	{
+		$this->_view->_title 				= "Profile";
+		$this->_view->render($this->_arrParam['controller'] . '/profile');
+	}
+
+	
 	public function loginAction()
 	{
-
-		//Total Items
+		
+		$userInfo = Session::get('user');
+		if($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time()){
+			URL::redirect('backend', 'index', 'index');
+		};
+	
 		$this->_templateObj->setFolderTemplate('backend/adminlte/');
 		$this->_templateObj->setFileTemplate('login.php');
 		$this->_templateObj->setFileConfig('template.ini');
@@ -54,5 +64,10 @@ class IndexController extends Controller
 		}
 
 		$this->_view->render($this->_arrParam['controller'] . '/login');
+	}
+	public function logoutAction()
+	{
+		Session::delete('user');
+		URL::redirect('backend', 'index', 'login');
 	}
 }
