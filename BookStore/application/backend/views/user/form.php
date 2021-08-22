@@ -1,11 +1,8 @@
 <?php
-
 $dataForm = @$this->arrParam['form'];
 $readonly = '';
 if (isset($this->arrParam['id']))$readonly = 'readonly';
 require_once 'elements/form_add.php';
-
-
 
 //Action Edit
 if (isset($this->arrParam['id']) && $this->arrParam['action'] == 'form') {
@@ -19,18 +16,12 @@ if (isset($this->arrParam['id']) && $this->arrParam['action'] == 'changePassword
     $rowTotal          =  $rowUserName . $rowMail .$rowPassword;
 }
 
-
-
-
 //button Save
 $saveButton = FormBackend::button('submit', 'Save', 'btn btn-success');
 
 //button cancel
 $cancelHref         =   URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'index');
 $cancelButton       = FormBackend::cancel($cancelHref);
-
-
-//Random
 
 ?>
 <?= $xhtmlError = $this->error ?? ''; ?>

@@ -16,12 +16,6 @@ class FormBackend
         return $xhtml;
     }
 
-    //Create InputFOrm
-    // public static function input($type, $name, $value = null, $readonly = '',$class = '')
-    // {
-    //     $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>', $type, $class, $name, $value,$readonly);
-    //     return $xhtml;
-    // }
     public static function input($type, $name, $value = '', $readonly = '', $plusBotton = '', $class = '')
     {
         $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>%s', $type, $class, $name, $value, $readonly,$plusBotton);
@@ -57,4 +51,25 @@ class FormBackend
         $xhtml = sprintf('<a href="%s" class="btn btn-danger">Cancel</a>', $href);
         return $xhtml;
     }
+
+     //Create FormLogin
+     public static function createInputFormLogin($type,$name, $id , $placeholder,$iconClass)
+     {
+         $xhtml = sprintf('
+         <div class="input-group mb-3">
+            <input type="%s" name="%s" id="%s" class="form-control" placeholder="%s">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="%s"></span>
+                </div>
+            </div>
+        </div>', $type,$name, $id , $placeholder,$iconClass);
+         return $xhtml;
+     }
+     public static function createButtonFormLogin($type,$title)
+     {
+         $xhtml = sprintf('
+         <button type="%s" class="btn btn-info btn-block">%s</button>', $type,$title);
+         return $xhtml;
+     }
 }

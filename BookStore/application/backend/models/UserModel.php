@@ -29,8 +29,8 @@ class UserModel extends Model
 	public function listItems($params, $options = null)
 	{
 		$query[] 	= "SELECT `u`.`id`,`u`.`group_id`, `u`.`username`,`u`.`fullname`,`u`.`email` ,`g`.`name` AS `group_name`, `u`.`created`, `u`.`created_by`, `u`.`modified`, `u`.`modified_by`, `u`.`status`";
-		$query[]	= "FROM `{$this->table}` AS `u`,`" . TBL_GROUP . "` AS `g`";
-		$query[]	= "WHERE `u`.`group_id` = `g`.`id`";
+		$query[]	= "FROM `{$this->table}` AS `u`LEFT JOIN `" . TBL_GROUP . "` AS `g` ON `u`.`group_id` = `g`.`id`";
+		$query[]	= "WHERE `u`.`id` > 0";
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%' . $params['search'] . '%"';
@@ -87,7 +87,6 @@ class UserModel extends Model
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
 			return [$id, $status, $link,$modified];
-			// Session::set('message', SUCCESS_UPDATE_STATUS);
 		}
 	}
 

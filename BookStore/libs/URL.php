@@ -26,4 +26,14 @@ class URL
         header("location: {$url}");
         exit();
     }
+
+    public static function checkRefreshPage($value, $module, $controller, $action, $params = null)
+    {
+        if (Session::get('token') == $value) {
+            Session::delete('token');
+            URL::redirect($module, $controller, $action, $params);
+        } else {
+            Session::set('token', $value);
+        }
+    }
 }

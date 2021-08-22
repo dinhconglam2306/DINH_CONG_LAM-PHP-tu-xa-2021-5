@@ -1,0 +1,14 @@
+.alert.alert-danger.alert-dismissible.alert-frontend-form {
+  background-color: white;
+  border-color: red;
+}
+.alert.alert-danger.alert-dismissible.alert-frontend-form h5 {
+  color: red;
+}
+ul.list-unstyled.mb-0 {
+  display: flex;
+  flex-direction: column;
+}
+ul.list-unstyled.mb-0 li.text-color {
+  color: red;
+}

@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-    <?php echo $this->_metaHTTP; ?>
-    <?php echo $this->_metaName; ?>
+    <?= $this->_metaHTTP; ?>
+    <?= $this->_metaName; ?>
     <title><?= $this->_title; ?></title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
-    <?php echo $this->_pluginsCssFiles; ?>
-    <?php echo $this->_cssFiles; ?>
+    <?= $this->_pluginsCssFiles; ?>
+    <?= $this->_cssFiles; ?>
 
 </head>
 

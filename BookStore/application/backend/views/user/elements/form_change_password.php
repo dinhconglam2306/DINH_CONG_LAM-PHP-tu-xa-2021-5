@@ -1,5 +1,4 @@
 <?php
-// $dataUrl = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'changePassword', ['id' => @$this->arrParam['id']]);
 $plusButton = FormBackend::button('button', 'Generate', 'btn btn-info btn-sm btn-generate', '<i class="fas fa-sync-alt"></i>');
 
 $inputPassword     = FormBackend::input('text', 'form[password]', HelperBackend::randomString(),'',$plusButton);

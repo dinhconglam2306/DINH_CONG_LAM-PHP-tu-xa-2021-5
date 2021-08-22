@@ -166,6 +166,19 @@ class Validate
 		}
 		return $xhtml;
 	}
+	public function showErrorsFrontEnd()
+	{
+		$xhtml = '<div class="alert alert-danger alert-dismissible alert-frontend-form">';
+		$xhtml .= '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';
+		if (!empty($this->errors)) {
+			$xhtml .= '<ul class="list-unstyled mb-0">';
+			foreach ($this->errors as $key => $value) {
+				$xhtml .= '<li class="text-color">' . $value . ' </li>';
+			}
+			$xhtml .=  '</ul></div>';
+		}
+		return $xhtml;
+	}
 
 	public function isValid()
 	{
@@ -227,7 +240,7 @@ class Validate
 
 		$query	  = $options['query'];
 		if ($database->isExist($query) == false) {
-			$this->setError($element, 'record is not exist');
+			$this->setError($element, 'Giá trị không tồn tại!');
 		}
 	}
 	// Validate Exist record
