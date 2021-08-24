@@ -9,13 +9,14 @@ class FormFrontend
         return $xhtml;
     }
     //Create RowForm
-    public static function rowForm($for, $labelName, $input)
+    public static function rowForm($for, $labelName, $input,$class)
     {
         $xhtml = sprintf(
-            '<div class="col-md-6">
+            '<div class="%s">
                 <label for="%s" class="required">%s</label>
                 %s
             </div>',
+            $class,
             $for,
             $labelName,
             $input

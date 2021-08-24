@@ -1,3 +1,7 @@
+function getUrlVar(key){
+  var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+  return result && unescape(result[1]) || "";
+}
 
 $(document).ready(function () {
 
@@ -15,13 +19,16 @@ $(document).ready(function () {
     //AJAX CHANGE GROUP ACP - STATUS
     $('.btn-change').click(function(e){
       let attrID = $(this).attr('id');
+      console.log(attrID);
       let dataUrl = $(this).attr('data-url');
+      console.log(dataUrl)
       $(this).attr('href',dataUrl);
+      console.log($(this).attr('href'));
       $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
       e.preventDefault();
       $.get(dataUrl,function(data){
+        console.log(data)
           let elm       = 'a#'+ attrID;
-          console.log(elm)
           let classRemove = 'btn-success';
           let iconRemove  = 'fa-check';
           let classAdd = 'btn-danger';
@@ -39,6 +46,8 @@ $(document).ready(function () {
           iconAdd  = 'fa-check';
         }
         let created = 'span.' + attrID;
+        
+        // console.log(created)
         
         $(created).text(data[3]);
         $(elm).attr('data-url',data[2]);
@@ -93,6 +102,11 @@ $(document).ready(function () {
         $("#select-user").submit();
     })
 
+    // Select group -> select fillter
+    $('select[name="select_group"]').change(function (){
+      let url = $(this).attr('data-url').replace('value_new', $(this).val());
+      window.location.href = url;
+  })
 
     //Change group of item in Controller User
     $('select[name="change_group"]').change(function (e){
@@ -103,11 +117,17 @@ $(document).ready(function () {
       e.preventDefault();
       $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
       $.get(url,function(data){
+        console.log(data)
         let created = 'span.status-'+data[0];
         $(created).text(data[1]);
     },'json')
 
     })
+
+    //Active
+    let controller = getUrlVar('controller');
+    $(`li.nav-item a[data-name=${controller}]`).addClass('active');
+    
 
 
 
@@ -118,8 +138,8 @@ $(document).ready(function () {
     },2000);
     //Function
 
-
-
+    
+    
     function createSwalFire(title,icon='warning')
     {
       return  {

@@ -1,7 +1,5 @@
 <?php
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
+
 $dataForm = @$this->arrParam['form'];
 $readonly = '';
 if (isset($this->arrParam['id']))$readonly = 'readonly';

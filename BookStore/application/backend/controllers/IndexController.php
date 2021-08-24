@@ -11,6 +11,12 @@ class IndexController extends Controller
 	}
 	public function indexAction()
 	{
+		$userInfo = Session::get('user');
+		echo '<pre>';
+		print_r($userInfo);
+		echo '</pre>';
+		$this->_view->totalGroups			= $this->_model->count($this->_arrParam, ['task' => 'count-groups']);
+		$this->_view->totalItems			= $this->_model->count($this->_arrParam, ['task' => 'count-items']);
 		$this->_view->_title 				= "Admin :: Dashboard";
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
@@ -19,18 +25,25 @@ class IndexController extends Controller
 	public function profileAction()
 	{
 		$this->_view->_title 				= "Profile";
+		$userInfo = Session::get('user');
+		$this->_view->arrParam['form'] = $userInfo['info'];
+		if (isset($this->_arrParam['form']['token']) == true) {
+			$this->_model->saveItem($this->_arrParam, $option = null);
+			$this->_view->arrParam['form'] = $userInfo['info'];
+			URL::redirect('backend', 'index', 'index');
+		}
 		$this->_view->render($this->_arrParam['controller'] . '/profile');
 	}
 
-	
+
 	public function loginAction()
 	{
-		
+
 		$userInfo = Session::get('user');
-		if($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time()){
+		if ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time()) {
 			URL::redirect('backend', 'index', 'index');
 		};
-	
+
 		$this->_templateObj->setFolderTemplate('backend/adminlte/');
 		$this->_templateObj->setFileTemplate('login.php');
 		$this->_templateObj->setFileConfig('template.ini');
@@ -47,19 +60,18 @@ class IndexController extends Controller
 
 			$validate->addRule('username', 'existRecord', ['database' => $this->_model, 'query' => $query]);
 			$validate->run();
-
 			if ($validate->isValid() == true) {
-				$infoUser 	= $this->_model->infoItem($this->_arrParam,$option=null);
+				$infoUser 	= $this->_model->infoItem($this->_arrParam, $option = null);
 				$arrSession = [
-								'login' => true,
-								'info'	=>$infoUser,
-								'time'	=>time(),
-								'group_acp' => $infoUser['group_acp']
+					'login' => true,
+					'info'	=> $infoUser,
+					'time'	=> time(),
+					'group_acp' => $infoUser['group_acp']
 				];
-				Session::set('user',$arrSession);
-				URL::redirect($this->_arrParam['module'],$this->_arrParam['controller'],'index');
+				Session::set('user', $arrSession);
+				URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 			} else {
-				$this->_view->errors = $validate->showErrors();
+				$this->_view->errors = $validate->showErrorsFrontEnd();
 			}
 		}
 

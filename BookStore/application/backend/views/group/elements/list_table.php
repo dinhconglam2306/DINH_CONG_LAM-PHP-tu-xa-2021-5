@@ -7,7 +7,7 @@ foreach ($this->items as $key => $item) {
     $groupACP           = HelperBackend::itemGroupACP($arrParams['module'], $arrParams['controller'], $id, $item['group_acp']);
     $status             = HelperBackend::itemStatus($arrParams['module'], $arrParams['controller'], $id, $item['status']);
     $created            = HelperBackend::itemHistory($item['created_by'], $item['created']);
-    $modified           = HelperBackend::itemHistory($item['modified_by'], $item['modified']);
+    $modified           = HelperBackend::itemHistory($item['modified_by'], $item['modified'],$id);
 
     $optionsBtnAction   = ['small' => true, 'circle' => true];
     $linkEdit           = URL::createLink($arrParams['module'], $arrParams['controller'], 'form', ['id' => $id]);

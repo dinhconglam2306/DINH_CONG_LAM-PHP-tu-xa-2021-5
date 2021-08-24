@@ -27,19 +27,17 @@ class GroupController extends Controller
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
-
+	/*
 	public function changeGroupACPAction()
 	{
 		$result = $this->_model->changeGroupACP($this->_arrParam, ['task' => 'change-ajax-group-acp']);
 		echo json_encode($result);
-		// URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
 
 	public function changeStatusAction()
 	{
 		$result = $this->_model->changeStatus($this->_arrParam, ['task' => 'change-ajax-status']);
 		echo json_encode($result);
-		// URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
 
 	public function deleteAction()
@@ -65,7 +63,7 @@ class GroupController extends Controller
 		$this->_model->deleteItem($this->_arrParam);
 		URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
-
+	*/
 	public function formAction()
 	{
 		$this->_view->_title 			= ucfirst($this->_arrParam['controller']) . ' Controller :: Add';

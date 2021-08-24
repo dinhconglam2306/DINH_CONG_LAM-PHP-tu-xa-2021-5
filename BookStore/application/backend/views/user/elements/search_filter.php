@@ -5,6 +5,7 @@ $linkClear          = URL::createLink($arrParams['module'], $arrParams['controll
 $btnClear           = HelperBackend::buttonLink($linkClear, 'Clear', 'btn-danger');
 $xhtmlFilterStatus  = HelperBackend::showFilterStatus($arrParams['module'], $arrParams['controller'], $this->itemsStatusCount, $arrParams['status'] ?? 'all', trim(@$arrParams['search']));
 //Input Search
+
 $ipSearch =  FormBackend::input('text', 'search', @$arrParams['search']);
 
 //Input Hidden

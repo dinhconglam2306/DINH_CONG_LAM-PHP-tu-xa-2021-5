@@ -55,14 +55,17 @@ class GroupModel extends Model
 	//Thay đổi trạng thái của groupACP
 	public function changeGroupACP($params, $options = null)
 	{
+	
+
 		if ($options['task'] == 'change-ajax-group-acp') {
 			$groupACP = ($params['group_acp'] == 1) ? 0 : 1;
-			$data = ['group_acp' => $groupACP];
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$data = ['group_acp' => $groupACP,'modified' => $modified];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeGroupACP', ['id' => $id, 'group_acp' => $groupACP]);
-			return [$id, $groupACP, $link];
+			return [$id, $groupACP, $link,$modified];
 			Session::set('message', SUCCESS_UPDATE_GROUP_ACP);
 		}
 	}
@@ -72,13 +75,13 @@ class GroupModel extends Model
 	{
 		if ($options['task'] == 'change-ajax-status') {
 			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
-			$data = ['status' => $status];
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$data = ['status' => $status,'modified' => $modified];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
-			return [$id, $status, $link];
-			Session::set('message', SUCCESS_UPDATE_STATUS);
+			return [$id, $status, $link,$modified];
 		}
 	}
 
@@ -132,16 +135,18 @@ class GroupModel extends Model
 	//Lưu Item
 	public function saveItem($params, $options = null)
 	{
+		$userObj = Session::get('user');
+		$userInfo = $userObj['info'];
 		if ($options['task'] == 'add') {
 			$params['form']['created'] = date('Y-m-d G.i:s<br>', time());
-			$params['form']['created_by'] = 1;
+			$params['form']['created_by'] = $userInfo['username'];
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->insert($data);
 			Session::set('message', SUCCESS_ADD_ITEM);
 		}
 		if ($options['task'] == 'edit') {
 			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
-			$params['form']['modified_by'] = 10;
+			$params['form']['modified_by'] = $userInfo['username'];
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
 			Session::set('message', SUCCESS_EDIT_ITEM);

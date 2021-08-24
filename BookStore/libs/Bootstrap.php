@@ -28,7 +28,7 @@ class Bootstrap
 			$module = $this->_params['module'];
 			$controller = $this->_params['controller'];
 			$action = $this->_params['action'];
-
+			$requestUrl = "$module-$controller-$action";
 			$userInfo = Session::get('user');
 
 			$logger = ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time());
@@ -36,7 +36,11 @@ class Bootstrap
 			if ($module == 'backend') {
 				if ($logger == true) {
 					if ($userInfo['group_acp'] == 1) {
-						$this->_controllerObject->$actionName();
+						if (in_array($requestUrl, $userInfo['info']['privilege']) == true) {
+							$this->_controllerObject->$actionName();
+						} else {
+							URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission-group']);
+						}
 					} else {
 						URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission']);
 					}
@@ -49,7 +53,19 @@ class Bootstrap
 
 				//MODULE FRONTEND
 			} else if ($module == 'frontend') {
-				$this->_controllerObject->$actionName();
+				if ($controller == 'user') {
+					if ($logger == true) {
+						$this->_controllerObject->$actionName();
+					} else {
+						// Session::delete('user');
+						// require_once(APPLICATION_PATH . $module . DS . 'controllers' . DS . 'IndexController.php');
+						// $indexController = new IndexController($this->_params);
+						// $indexController->loginAction();
+						URL::redirect('frontend', 'index', 'login');
+					}
+				} else {
+					$this->_controllerObject->$actionName();
+				}
 			}
 		} else {
 			URL::redirect('frontend', 'index', 'notice', ['type' => 'not-url']);

@@ -5,17 +5,17 @@ $dataForm = @$this->arrParam['form'];
 $formLink = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'register');
 
 //Input
-$inputUserName = FormFrontend::input('text', 'form[username]', 'form[username]',$dataForm['username']);
-$inputFullName = FormFrontend::input('text', 'form[fullname]', 'form[fullname]',$dataForm['fullname']);
-$inputEmail = FormFrontend::input('email', 'form[email]', 'form[email]',$dataForm['email']);
-$inputPassword = FormFrontend::input('text', 'form[password]', 'form[password]',$dataForm['password']);
+$inputUserName = FormFrontend::input('text', 'form[username]', 'form[username]', $dataForm['username']);
+$inputFullName = FormFrontend::input('text', 'form[fullname]', 'form[fullname]', $dataForm['fullname']);
+$inputEmail = FormFrontend::input('email', 'form[email]', 'form[email]', $dataForm['email']);
+$inputPassword = FormFrontend::input('text', 'form[password]', 'form[password]', $dataForm['password']);
 $inputHidden = FormFrontend::input('hidden', 'form[token]', 'form[token]', time());
 
 //Row
-$rowUserName = FormFrontend::rowForm('username', 'Tên tài khoản', $inputUserName);
-$rowFullName = FormFrontend::rowForm('username', 'Họ và tên', $inputFullName);
-$rowEmail = FormFrontend::rowForm('username', 'Email', $inputEmail);
-$rowPassword = FormFrontend::rowForm('username', 'Mật khẩu', $inputPassword);
+$rowUserName = FormFrontend::rowForm('username', 'Tên tài khoản', $inputUserName, 'col-lg-6');
+$rowFullName = FormFrontend::rowForm('username', 'Họ và tên', $inputFullName, 'col-lg-6');
+$rowEmail = FormFrontend::rowForm('username', 'Email', $inputEmail, 'col-lg-6');
+$rowPassword = FormFrontend::rowForm('username', 'Mật khẩu', $inputPassword, 'col-lg-6');
 
 //button
 

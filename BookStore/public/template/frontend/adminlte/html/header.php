@@ -1,8 +1,31 @@
 <?php
+$userObj = Session::get('user');
 $linkHome = URL::createLink($this->arrParam['module'], 'index', 'index');
-$linkRegister = URL::createLink($this->arrParam['module'], 'user', 'register');
-$linkLogin = URL::createLink($this->arrParam['module'], 'user', 'login');
+$linkRegister = URL::createLink($this->arrParam['module'], 'index', 'register');
+$linkLogin = URL::createLink($this->arrParam['module'], 'index', 'login');
+$linkLogout = URL::createLink($this->arrParam['module'], 'index', 'logout');
+$linkAdminControllPanel = URL::createLink('backend', 'index', 'index');
+$linkMyProfile = URL::createLink('frontend', 'user', 'index');
 
+
+//Menu Đăng nhập -  Đăng ký - Admin Control Panel
+$controlMenu = [];
+
+if ($userObj['group_acp'] == 1) {
+    $controlMenu[] = ['link' => $linkAdminControllPanel, 'name' => 'Quản lý web'];
+}
+if ($userObj['login'] == 1) {
+    $controlMenu[] = ['link' => $linkMyProfile, 'name' => 'My Profile'];
+    $controlMenu[] = ['link' => $linkLogout, 'name' => 'Thoát'];
+} else {
+    $controlMenu[] = ['link' => $linkLogin, 'name' => 'Đăng nhập'];
+    $controlMenu[] = ['link' => $linkRegister, 'name' => 'Đăng ký'];
+}
+
+
+foreach ($controlMenu as $key => $value) {
+    @$xhtml .= sprintf(' <li><a href="%s">%s</a></li>', $value['link'], $value['name']);
+}
 ?>
 <div class="loader_skeleton">
     <div class="typography_section">
@@ -54,8 +77,7 @@ $linkLogin = URL::createLink($this->arrParam['module'], 'user', 'login');
                                 <li class="onhover-dropdown mobile-account">
                                     <img src="<?= $this->_dirImg ?>avatar.png" alt="avatar">
                                     <ul class="onhover-show-div">
-                                        <li><a href="<?= $linkLogin ?>">Đăng nhập</a></li>
-                                        <li><a href="<?= $linkRegister ?>">Đăng ký</a></li>
+                                        <?= $xhtml; ?>
                                     </ul>
                                 </li>
                             </ul>

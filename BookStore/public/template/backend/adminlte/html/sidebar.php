@@ -1,3 +1,6 @@
+<?php 
+    $linkDashboard = URL::createLink('backend','index','index');
+?>
 <aside class="main-sidebar sidebar-dark-info elevation-4">
     <!-- Brand Logo -->
     <a href="index.php" class="brand-link">
@@ -21,13 +24,13 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="<?= URL::createLink('backend','index','index');?>" class="nav-link active">
+                    <a href="<?= $linkDashboard;?>" data-name ="index" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#" data-name ="group" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Group
@@ -36,7 +39,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= URL::createLink('backend','group','index'); ?>" class="nav-link">
+                            <a href="<?= URL::createLink('backend','group','index'); ?>" class="nav-link ">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
@@ -50,7 +53,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#" data-name="user" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             User

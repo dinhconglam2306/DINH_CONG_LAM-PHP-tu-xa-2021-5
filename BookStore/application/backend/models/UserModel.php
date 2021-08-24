@@ -34,7 +34,7 @@ class UserModel extends Model
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%' . $params['search'] . '%"';
-			$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword,'u');
+			$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword, 'u');
 			$query[] = "AND ($fieldSearchAccpted)";
 		}
 
@@ -65,8 +65,8 @@ class UserModel extends Model
 	public function changeGroup($params, $options = null)
 	{
 		if ($options == null) {
-			$modified = $params['modified']= date('Y-m-d H:i:s', time());
-			$data = ['group_id' => $params['group_id'],'modified' => $modified];
+			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
+			$data = ['group_id' => $params['group_id'], 'modified' => $modified];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
@@ -80,13 +80,13 @@ class UserModel extends Model
 	{
 		if ($options['task'] == 'change-ajax-status') {
 			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
-			$modified = $params['modified']= date('Y-m-d H:i:s', time());
-			$data = ['status' => $status,'modified' => $modified];
+			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
+			$data = ['status' => $status, 'modified' => $modified];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
-			return [$id, $status, $link,$modified];
+			return [$id, $status, $link, $modified];
 		}
 	}
 
@@ -131,9 +131,11 @@ class UserModel extends Model
 			$query = implode(' ', $query);
 			$items = $this->fetchAll($query);
 			$result = array_combine(array_column($items, 'status'), array_column($items, 'count'));
+
 			if (empty($result['inactive'])) $result = $result + ['inactive' => 0];
 			if (empty($result['active'])) $result = ['active' => 0] + $result;
 			$result = ['all' => array_sum($result)] + $result;
+
 			return $result;
 		}
 	}
@@ -141,6 +143,9 @@ class UserModel extends Model
 	//Lưu Item
 	public function saveItem($params, $options = null)
 	{
+		$userObj = Session::get('user');
+		$userInfo = $userObj['info'];
+
 		if ($options['task'] == 'add') {
 			$params['form']['created'] = date('Y-m-d H:i:s', time());
 			$params['form']['created_by'] = 1;
@@ -153,8 +158,8 @@ class UserModel extends Model
 			unset($params['form']['username']);
 			unset($params['form']['email']);
 			$params['form']['modified'] = date('Y-m-d H:i:s', time());
-			$params['form']['modified_by'] = 10;
-			if ($params['form']['password'] == null)unset($params['form']['password']);
+			$params['form']['modified_by'] = $userInfo['username'];
+			if ($params['form']['password'] == null) unset($params['form']['password']);
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
 			Session::set('message', SUCCESS_EDIT_ITEM);
@@ -163,7 +168,7 @@ class UserModel extends Model
 			unset($params['form']['username']);
 			unset($params['form']['email']);
 			$params['form']['modified'] = date('Y-m-d H:i:s', time());
-			$params['form']['modified_by'] = 10;
+			$params['form']['modified_by'] = $userInfo['username'];
 			if ($params['form']['password'] != null) {
 				$params['form']['password'] = md5($params['form']['password']);
 			}
