@@ -36,11 +36,11 @@ class Bootstrap
 			if ($module == 'backend') {
 				if ($logger == true) {
 					if ($userInfo['group_acp'] == 1) {
-						if (in_array($requestUrl, $userInfo['info']['privilege']) == true) {
-							$this->_controllerObject->$actionName();
-						} else {
-							URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission-group']);
-						}
+						// if (in_array($requestUrl, $userInfo['info']['privilege']) == true) {
+						$this->_controllerObject->$actionName();
+						// } else {
+						// 	URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission-group']);
+						// }
 					} else {
 						URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission']);
 					}

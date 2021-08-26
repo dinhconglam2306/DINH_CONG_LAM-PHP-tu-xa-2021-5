@@ -32,7 +32,7 @@ class HelperBackend
             $icon = 'fa-minus';
         }
 
-        return sprintf('<a href="#" data-url="%s" id="group-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl,$id, $colorClass, $icon);
+        return sprintf('<a href="#" data-url="%s" id="group-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl, $id, $colorClass, $icon);
     }
 
     //Create Icon Status
@@ -47,17 +47,17 @@ class HelperBackend
             $icon = 'fa-minus';
         }
 
-        return sprintf('<a href="#" data-url="%s" id="status-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl,$id, $colorClass, $icon);
+        return sprintf('<a href="#" data-url="%s" id="status-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl, $id, $colorClass, $icon);
     }
 
     //Create history item
-    public static function itemHistory($by, $time,$id='')
+    public static function itemHistory($by, $time, $id = '')
     {
         // if ($time) $time = date('H:i:s d/m/Y', strtotime($time));
         $xhtml = sprintf('
         <p class="mb-0"><i class="far fa-user"></i> %s</p>
         <p class="mb-0"><i class="far fa-clock"></i> <span class="status-%s">%s</span></p>
-        ', $by, $id,$time);
+        ', $by, $id, $time);
         return $xhtml;
     }
 
@@ -120,7 +120,7 @@ class HelperBackend
 
     public static function randomString()
     {
-        $length       = random_int(9,12);
+        $length       = random_int(9, 12);
         $arrCharacter = array_merge(range('A', 'Z'), range('a', 'z'), range(0, 9));
         $arrCharacter = implode('', $arrCharacter);
         $arrCharacter = str_shuffle($arrCharacter);
@@ -130,16 +130,60 @@ class HelperBackend
     }
 
 
-    public static function fieldSearchAccepted($paramSearch,$keyword,$table=''){
-        $str ="";
-        foreach($paramSearch as  $value){
-            if($table != ''){
-                $str.= sprintf("`%s`.`%s`LIKE %s OR",$table,$value,$keyword);
-            } else{
-                $str.= sprintf("`%s`LIKE %s OR",$value,$keyword);
+    public static function fieldSearchAccepted($paramSearch, $keyword, $table = '')
+    {
+        $str = "";
+        foreach ($paramSearch as  $value) {
+            if ($table != '') {
+                $str .= sprintf("`%s`.`%s`LIKE %s OR", $table, $value, $keyword);
+            } else {
+                $str .= sprintf("`%s`LIKE %s OR", $value, $keyword);
             }
             //`u`.`username` LIKE $keyword OR `u`.`fullname` LIKE $keyword OR `u`.`email` LIKE $keyword)
         }
-        return substr($str,0,-2);;
+        return substr($str, 0, -2);;
+    }
+
+
+    public static function BackEndMenuDashBoard($href)
+    {
+        $xhtml = sprintf('
+        <li class="nav-item">
+            <a href="%s" data-name ="index" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Dashboard</p>
+            </a>
+        </li>
+        ', $href);
+        return $xhtml;
+    }
+    public static function BackEndMenu($dataName, $iconClass, $title, $linkList,$linkForm)
+    {
+        $xhtml = sprintf('
+        <li class="nav-item">
+            <a href="#" data-name ="%s" class="nav-link">
+                <i class="nav-icon %s"></i>
+                <p>
+                   %s
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="%s" class="nav-link ">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="%s" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Add</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        ', $dataName, $iconClass, $title, $linkList,$linkForm);
+        return $xhtml;
     }
 }

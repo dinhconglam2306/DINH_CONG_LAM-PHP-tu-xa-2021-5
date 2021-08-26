@@ -55,7 +55,7 @@ foreach ($this->items as $key => $item) {
 
 <form action="" method="post" id="table-form">
     <div class="table-responsive">
-        <table class="table align-middle text-center table-bordered">
+        <table class="table align-middle text-center table-bordered table-hover">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="check-all-cid"></th>

@@ -1,5 +1,25 @@
 <?php 
     $linkDashboard = URL::createLink('backend','index','index');
+
+    $linkGroupList     = URL::createLink('backend','group','index');
+    $linkGroupForm = URL::createLink('backend','group','form');
+
+    $linkUserList = URL::createLink('backend','user','index');
+    $linkUserForm = URL::createLink('backend','user','form');
+
+    $linkCategoryList = URL::createLink('backend','category','index');
+    $linkCategoryForm = URL::createLink('backend','category','form');
+
+    $linkBookList = URL::createLink('backend','book','index');
+    $linkBookForm = URL::createLink('backend','book','form');
+
+
+    $dashBoard   =HelperBackend::BackEndMenuDashBoard($linkDashboard);
+    
+    $group     = HelperBackend::BackEndMenu('group','fas fa-users','Group',$linkGroupList,$linkGroupForm);
+    $user     = HelperBackend::BackEndMenu('user','fas fa-user','User',$linkUserList,$linkUserForm);
+    $category     = HelperBackend::BackEndMenu('category','fas fa-thumbtack','Category',$linkCategoryList,$linkCategoryForm);
+    $book     = HelperBackend::BackEndMenu(' ','fas fa-book-open','Book',$linkBookList,$linkBookForm);
 ?>
 <aside class="main-sidebar sidebar-dark-info elevation-4">
     <!-- Brand Logo -->
@@ -23,104 +43,7 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="<?= $linkDashboard;?>" data-name ="index" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" data-name ="group" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Group
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?= URL::createLink('backend','group','index'); ?>" class="nav-link ">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= URL::createLink('backend','group','form'); ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" data-name="user" class="nav-link">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            User
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?= URL::createLink('backend','user','index'); ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= URL::createLink('backend','user','form'); ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-thumbtack"></i>
-                        <p>
-                            Category
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="category-list.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="category-form.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book-open"></i>
-                        <p>
-                            Book
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="book-list.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="book-form.php" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <?= $dashBoard . $group . $user . $category . $book; ?>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
