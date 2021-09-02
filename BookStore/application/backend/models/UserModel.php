@@ -15,7 +15,7 @@ class UserModel extends Model
 		'status',
 		'ordering'
 	];
-
+	private $_userInfo;
 
 	private $_fieldSearchAccpted  = ['username', 'fullname'];
 
@@ -23,6 +23,8 @@ class UserModel extends Model
 	{
 		parent::__construct();
 		$this->setTable(TBL_USER);
+		$userObj = Session::get('user');
+		$this->_userInfo = $userObj['info'];
 	}
 
 	//Hiện danh sách items
@@ -66,7 +68,9 @@ class UserModel extends Model
 	{
 		if ($options == null) {
 			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
-			$data = ['group_id' => $params['group_id'], 'modified' => $modified];
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['group_id' => $params['group_id'], 'modified' => $modified,'modified_by' => $modified_by];
+			
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
@@ -80,13 +84,14 @@ class UserModel extends Model
 	{
 		if ($options['task'] == 'change-ajax-status') {
 			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
-			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
-			$data = ['status' => $status, 'modified' => $modified];
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['status' => $status,'modified' => $modified,'modified_by' => $modified_by];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
-			return [$id, $status, $link, $modified];
+			return [$id, $status, $link,$modified,$modified_by];
 		}
 	}
 
@@ -148,7 +153,7 @@ class UserModel extends Model
 
 		if ($options['task'] == 'add') {
 			$params['form']['created'] = date('Y-m-d H:i:s', time());
-			$params['form']['created_by'] = 1;
+			$params['form']['created_by'] = $userInfo['username'];
 			$params['form']['password']	= md5($params['form']['password']);
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->insert($data);

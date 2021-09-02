@@ -4,7 +4,8 @@ foreach ($this->items as $key => $item) {
     $id                 = $item['id'];
     $ckb                = sprintf('<input type="checkbox" name="cid[]" value="%s">', $id);
     $name               = HelperBackend::highlight(@$arrParams['search'], $item['name']);
-    $picture            = '#';
+    $picture            = sprintf('<img src="%s"style ="max-width :150px;"/>', UPLOAD_URL . 'category' . DS . $item['picture']);
+    // $picture            = '#';
     $status             = HelperBackend::itemStatus($arrParams['module'], $arrParams['controller'], $id, $item['status']);
     $ordering           = sprintf('<input type="number" name="ordering" value="%s" style = "width: 40px; padding-left:11px;border-radius:5px;border:1px solid grey;">', $item['ordering']);
     $created            = HelperBackend::itemHistory($item['created_by'], $item['created']);
@@ -42,13 +43,13 @@ foreach ($this->items as $key => $item) {
                 <tr>
                     <th style="width: 3%"><input type="checkbox" id="check-all-cid"></th>
                     <th style="width: 3%">ID</th>
-                    <th style="width: 20%">Name</th>
-                    <th style="width: 20%">Picture</th>
+                    <th style="width: 15%">Name</th>
+                    <th style="width: 15%">Picture</th>
                     <th style="width: 3%">Status</th>
                     <th style="width: 5%">Ordering</th>
                     <th style="width: 10%">Created</th>
                     <th style="width: 10%">Modified</th>
-                    <th style="width: 5%">Action</th>
+                    <th style="width: 10%">Action</th>
                 </tr>
             </thead>
             <tbody>

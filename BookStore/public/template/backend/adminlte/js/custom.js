@@ -19,11 +19,8 @@ $(document).ready(function () {
     //AJAX CHANGE GROUP ACP - STATUS
     $('.btn-change').click(function(e){
       let attrID = $(this).attr('id');
-      console.log(attrID);
       let dataUrl = $(this).attr('data-url');
-      console.log(dataUrl)
       $(this).attr('href',dataUrl);
-      console.log($(this).attr('href'));
       $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
       e.preventDefault();
       $.get(dataUrl,function(data){
@@ -46,11 +43,20 @@ $(document).ready(function () {
           iconAdd  = 'fa-check';
         }
         let created = 'span.' + attrID;
+
+        //Ajax modified_by
+
+        let modified_by = '.modified-by-' + data[0];
+        $(modified_by).text(data[4]);
         
-        // console.log(created)
         
+        //Ajax Time
         $(created).text(data[3]);
+
+
         $(elm).attr('data-url',data[2]);
+
+        //Ajax icon Status 
         $(elm).removeClass(classRemove).addClass(classAdd);
         $(elm + ' i').removeClass(iconRemove).addClass(iconAdd);
       },'json')

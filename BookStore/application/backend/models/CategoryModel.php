@@ -12,10 +12,13 @@ class CategoryModel extends Model
 		'status',
 		'ordering'
 	];
+	private $_userInfo;
 	public function __construct()
 	{
 		parent::__construct();
 		$this->setTable(TBL_CATEGORY);
+		$userObj = Session::get('user');
+		$this->_userInfo = $userObj['info'];
 	}
 
 	//Hiện danh sách items
@@ -53,13 +56,14 @@ class CategoryModel extends Model
 	{
 		if ($options['task'] == 'change-ajax-status') {
 			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
-			$modified = $params['modified']= date('Y-m-d H:i:s', time());
-			$data = ['status' => $status,'modified' => $modified];
+			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['status' => $status, 'modified' => $modified, 'modified_by' => $modified_by];
 			$id   = $params['id'];
 			$where = [['id', $id]];
-			$this->update($data, $where);
+			$query = $this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
-			return [$id, $status, $link,$modified];
+			return [$id, $status, $link, $modified, $modified_by];
 		}
 	}
 
@@ -78,9 +82,29 @@ class CategoryModel extends Model
 	//Xóa item
 	public function deleteItem($params, $options = null)
 	{
-		$ids = isset($params['id']) ? [$params['id']] : $params['cid'];
-		$this->delete($ids);
-		Session::set('message', SUCCESS_DELETE_GROUP);
+		if ($options == null) {
+			$ids = isset($params['id']) ? [$params['id']] : $params['cid'];
+			$ids = $this->createWhereDeleteSQL($ids);
+
+			//remove Image
+			$query[]	= "SELECT `id` ,`picture` AS `name`";
+			$query[]	= "FROM `{$this->table}`";
+			$query[]	= "WHERE `id` IN ($ids) ";
+			$query = implode(' ', $query);
+
+			$arrImage = $this->fetchPairs($query);
+
+			require_once LIBRARY_EXT_PATH . 'Upload.php';
+			$uploadObj = new Upload();
+			foreach ($arrImage as $value) {
+				$uploadObj->removeFile('category', $value);
+			}
+
+			//Remove Database
+			$queryDB = "DELETE FROM `{$this->table}` WHERE `id` IN ($ids)";
+			$this->query($queryDB);
+			Session::set('message', SUCCESS_DELETE_GROUP);
+		}
 	}
 
 	// Tổng số items
@@ -109,18 +133,30 @@ class CategoryModel extends Model
 	//Lưu Item
 	public function saveItem($params, $options = null)
 	{
-		$userObj = Session::get('user');
-		$userInfo = $userObj['info'];
+		require_once LIBRARY_EXT_PATH . 'Upload.php';
+		$uploadObj = new Upload();
 		if ($options['task'] == 'add') {
+
+			$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'category');
 			$params['form']['created'] = date('Y-m-d G.i:s<br>', time());
-			$params['form']['created_by'] = $userInfo['username'];
+			$params['form']['created_by'] = $this->_userInfo['username'];
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->insert($data);
 			Session::set('message', SUCCESS_ADD_ITEM);
 		}
 		if ($options['task'] == 'edit') {
 			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
-			$params['form']['modified_by'] = $userInfo['username'];
+			$params['form']['modified_by'] = $this->_userInfo['username'];
+			echo '<pre>';
+			print_r($params['form']);
+			echo '</pre>';
+			if ($params['form']['picture']['name'] == null) {
+				unset($params['form']['picture']);
+			} else {
+				$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'category');
+				$uploadObj->removeFile('category', $params['form']['picture_hidden']);
+			}
+
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
 			Session::set('message', SUCCESS_EDIT_ITEM);
@@ -130,7 +166,6 @@ class CategoryModel extends Model
 	//Item Info
 	public function infoItem($params, $options = null)
 	{
-
 		if ($options == null) {
 			$query[] 	= "SELECT  `id`, `name`, `picture`, `status`,`ordering`";
 			$query[]	= "FROM `{$this->table}`";

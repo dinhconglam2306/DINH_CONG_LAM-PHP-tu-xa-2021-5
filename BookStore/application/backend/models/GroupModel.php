@@ -12,10 +12,13 @@ class GroupModel extends Model
 		'status',
 		'ordering'
 	];
+	private $_userInfo;
 	public function __construct()
 	{
 		parent::__construct();
 		$this->setTable(TBL_GROUP);
+		$userObj = Session::get('user');
+		$this->_userInfo = $userObj['info'];
 	}
 
 	//Hiện danh sách items
@@ -76,12 +79,13 @@ class GroupModel extends Model
 		if ($options['task'] == 'change-ajax-status') {
 			$status = ($params['status'] == 'active') ? 'inactive' : 'active';
 			$modified = $params['modified']= date('Y-m-d H:i:s', time());
-			$data = ['status' => $status,'modified' => $modified];
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['status' => $status,'modified' => $modified,'modified_by' => $modified_by];
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
-			return [$id, $status, $link,$modified];
+			return [$id, $status, $link,$modified,$modified_by];
 		}
 	}
 

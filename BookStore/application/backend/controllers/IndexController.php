@@ -12,9 +12,9 @@ class IndexController extends Controller
 	public function indexAction()
 	{
 		$userInfo = Session::get('user');
-		echo '<pre>';
-		print_r($userInfo);
-		echo '</pre>';
+		// echo '<pre>';
+		// print_r($userInfo);
+		// echo '</pre>';
 		$this->_view->totalGroups			= $this->_model->count($this->_arrParam, ['task' => 'count-groups']);
 		$this->_view->totalItems			= $this->_model->count($this->_arrParam, ['task' => 'count-items']);
 		$this->_view->_title 				= "Admin :: Dashboard";

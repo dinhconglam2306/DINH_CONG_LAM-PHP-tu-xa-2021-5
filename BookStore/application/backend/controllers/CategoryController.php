@@ -63,6 +63,8 @@ class CategoryController extends Controller
 	{
 		$this->_view->_title 			= ucfirst($this->_arrParam['controller']) . ' Controller :: Add';
 
+		if(!empty($_FILES))$this->_arrParam['form']['picture'] = $_FILES['picture'];
+
 		if (@isset($this->_arrParam['id']) && !@$this->_arrParam['form']['token']) {
 			$this->_view->_title 		= ucfirst($this->_arrParam['controller']) . ' Controller :: Edit';
 			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam);
@@ -73,7 +75,8 @@ class CategoryController extends Controller
 			$validate 					= new Validate($this->_arrParam['form']);
 			$validate->addRule('name', 'string', ['min' => 3, 'max' => 30])
 					->addRule('status', 'status')
-					->addRule('ordering', 'int',['min' => 1, 'max' =>3 ]);
+					->addRule('ordering', 'int',['min' => 1, 'max' =>3 ])
+					->addRule('picture', 'file',['min' => 100, 'max' =>1000000,'entension' =>['jpg','png']],false);
 			$validate->run();
 			$this->_arrParam['form'] 	= $validate->getResult();
 			if ($validate->isValid() 	== false) {

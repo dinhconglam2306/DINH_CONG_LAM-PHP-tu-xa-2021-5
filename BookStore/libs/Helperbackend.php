@@ -55,9 +55,9 @@ class HelperBackend
     {
         // if ($time) $time = date('H:i:s d/m/Y', strtotime($time));
         $xhtml = sprintf('
-        <p class="mb-0"><i class="far fa-user"></i> %s</p>
+        <p class="mb-0"><i class="far fa-user"></i> <span class="modified-by-%s">%s</span></p>
         <p class="mb-0"><i class="far fa-clock"></i> <span class="status-%s">%s</span></p>
-        ', $by, $id, $time);
+        ', $id,$by, $id, $time);
         return $xhtml;
     }
 
