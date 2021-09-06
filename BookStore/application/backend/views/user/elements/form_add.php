@@ -22,7 +22,7 @@ $rowID             = FormBackend::rowForm('ID', $inputID);
 $rowUserName       = FormBackend::rowForm('Username', $inputUserName);
 $rowPassword       = FormBackend::rowForm('Password', $inputPassword);
 $rowMail           = FormBackend::rowForm('Email', $inputMail);
-$rowFullName       = FormBackend::rowForm('FullName', $inputFullName);
+$rowFullName       = FormBackend::rowForm('FullName', $inputFullName,false);
 $rowslbStatus      = FormBackend::rowForm('Status', $selectBoxStatus);
 $rowslbGroup       = FormBackend::rowForm('Group', $selectBoxGroup);
 

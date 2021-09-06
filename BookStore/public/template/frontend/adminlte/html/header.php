@@ -1,23 +1,37 @@
 <?php
 $userObj = Session::get('user');
+
+$categoryList = $this->category;
+$categoryXhtml = '<ul>';
+foreach ($categoryList as $value) {
+    $categoryXhtml .= sprintf('<li><a href="#">%s</a></li>', $value['name']);
+}
+$categoryXhtml .= '</ul>';
+
 $linkHome = URL::createLink($this->arrParam['module'], 'index', 'index');
 $linkRegister = URL::createLink($this->arrParam['module'], 'index', 'register');
 $linkLogin = URL::createLink($this->arrParam['module'], 'index', 'login');
 $linkLogout = URL::createLink($this->arrParam['module'], 'index', 'logout');
-$linkAdminControllPanel = URL::createLink('backend', 'index', 'index');
+$linkAdminControllPanel = URL::createLink('backend', 'dashboard', 'index');
 $linkMyProfile = URL::createLink('frontend', 'user', 'index');
 
+$userName = '';
 
 //Menu Đăng nhập -  Đăng ký - Admin Control Panel
 $controlMenu = [];
 
-if ($userObj['group_acp'] == 1) {
+if (@$userObj['login'] == 1 && @$userObj['info']['group_acp'] == 1) {
     $controlMenu[] = ['link' => $linkAdminControllPanel, 'name' => 'Quản lý web'];
-}
-if ($userObj['login'] == 1) {
     $controlMenu[] = ['link' => $linkMyProfile, 'name' => 'My Profile'];
     $controlMenu[] = ['link' => $linkLogout, 'name' => 'Thoát'];
-} else {
+    $userName = sprintf('<span>%s</span>', @$userObj['info']['fullname']);
+}
+if (@$userObj['group_acp'] == 0 && @$userObj['status'] == 'active') {
+    $controlMenu[] = ['link' => $linkMyProfile, 'name' => 'My Profile'];
+    $controlMenu[] = ['link' => $linkLogout, 'name' => 'Thoát'];
+    $userName = sprintf('<span>%s</span>', @$userObj['info']['fullname']);
+}
+if (@$userObj['login'] != 1) {
     $controlMenu[] = ['link' => $linkLogin, 'name' => 'Đăng nhập'];
     $controlMenu[] = ['link' => $linkRegister, 'name' => 'Đăng ký'];
 }
@@ -44,7 +58,7 @@ foreach ($controlMenu as $key => $value) {
                 <div class="main-menu">
                     <div class="menu-left">
                         <div class="brand-logo">
-                            <a href="index.html">
+                            <a href="<?= $linkHome; ?>">
                                 <h2 class="mb-0" style="color: #5fcbc4">BookStore</h2>
                             </a>
                         </div>
@@ -61,13 +75,7 @@ foreach ($controlMenu as $key => $value) {
                                     <li><a href="list.html">Sách</a></li>
                                     <li>
                                         <a href="category.html">Danh mục</a>
-                                        <ul>
-                                            <li><a href="list.html">Bà mẹ - Em bé</a></li>
-                                            <li><a href="list.html">Chính Trị - Pháp Lý</a></li>
-                                            <li><a href="list.html">Học Ngoại Ngữ</a></li>
-                                            <li><a href="list.html">Công Nghệ Thông Tin</a></li>
-                                            <li><a href="list.html">Giáo Khoa - Giáo Trình</a>
-                                        </ul>
+                                        <?= $categoryXhtml; ?>
                                     </li>
                                 </ul>
                             </nav>
@@ -76,6 +84,7 @@ foreach ($controlMenu as $key => $value) {
                             <ul class="header-dropdown">
                                 <li class="onhover-dropdown mobile-account">
                                     <img src="<?= $this->_dirImg ?>avatar.png" alt="avatar">
+                                    <?= $userName; ?>
                                     <ul class="onhover-show-div">
                                         <?= $xhtml; ?>
                                     </ul>

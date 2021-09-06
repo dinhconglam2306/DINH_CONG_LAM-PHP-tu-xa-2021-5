@@ -1,7 +1,10 @@
 <?php
-$linkLogOut = URL::createLink($this->arrParam['module'], 'index', 'logout');
+$userObj = Session::get('user');
+$navbarName = $userObj['info']['fullname'];
+
+$linkLogOut = URL::createLink('backend', 'dashboard', 'logout');
 $linkViewSite = URL::createLink('frontend', 'index', 'index');
-$linkProfile  = URL::createLink('backend', 'index', 'profile');
+$linkProfile  = URL::createLink('backend', 'dashboard', 'profile');
 ?>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -22,7 +25,7 @@ $linkProfile  = URL::createLink('backend', 'index', 'profile');
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 <img src="<?= $this->_dirImg ?>avatar.jpg" class="user-image img-circle elevation-2" alt="User Image">
-                <span class="d-none d-md-inline">ZendVN</span>
+                <span class="d-none d-md-inline"><?= $navbarName ;?></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
                 <!-- User image -->

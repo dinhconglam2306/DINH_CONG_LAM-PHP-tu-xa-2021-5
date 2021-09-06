@@ -12,9 +12,9 @@ class UserController extends Controller
 
 	public function indexAction()
 	{
-		echo '<pre>';
-		print_r('HELLO');
-		echo '</pre>';
+
+		$this->_view->_title 				= "Thông tin tài khoản";
+		$this->_view->category = $this->_model->CategoryList($this->_arrParam, $option = null);
 		$this->_view->render('user/index');
 	}
 }

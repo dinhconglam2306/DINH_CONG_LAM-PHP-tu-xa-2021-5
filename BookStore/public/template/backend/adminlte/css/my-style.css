@@ -1,22 +1,29 @@
 .table.align-middle td,
 .table.align-middle th {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
-.mark, mark {
-    padding: unset;
-    background-color: gold;
+.mark,
+mark {
+  padding: unset;
+  background-color: gold;
 }
 
-.password-row{
-   width: 100%;
-   display: flex;
-   text-align: center;
-   justify-content: space-between;
+.password-row {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
 }
-.password-row .btn-generate{
-    width: 15%;
-    margin-right: 2px;
-    padding: 0 0 ;
+.password-row .btn-generate {
+  width: 15%;
+  margin-right: 2px;
+  padding: 0 0;
 }
 
+form#select-book {
+  display: flex;
+}
+select.custom-select.slb-select-category {
+  margin-right: 10px;
+}

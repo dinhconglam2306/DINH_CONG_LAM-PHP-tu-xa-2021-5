@@ -24,8 +24,8 @@ $selectBoxGrACP = FormBackend::selectBox('select_group', $arrValueACP, @$arrPara
 
 ?>
 
-<div class="card card-outline card-info">
-    <div class="card-header">
+<!-- <div class="card card-outline card-info"> -->
+    <!-- <div class="card-header">
         <h3 class="card-title">Search & Filter</h3>
 
         <div class="card-tools">
@@ -55,6 +55,6 @@ $selectBoxGrACP = FormBackend::selectBox('select_group', $arrValueACP, @$arrPara
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- /.card-body -->
-</div>
+<!-- </div> -->

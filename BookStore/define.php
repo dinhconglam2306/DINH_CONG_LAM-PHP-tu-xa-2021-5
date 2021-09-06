@@ -16,9 +16,9 @@ define('PUBLIC_URL', ROOT_URL . 'public' . DS);
 define('UPLOAD_URL', PUBLIC_URL . 'files' . DS);
 define('TEMPLATE_URL', PUBLIC_URL . 'template' . DS);
 
-define('DEFAULT_MODULE', 'default');
+define('DEFAULT_MODULE', 'backend');
 define('DEFAULT_CONTROLLER', 'index');
-define('DEFAULT_ACTION', 'index');
+define('DEFAULT_ACTION', 'login');
 
 // ====================== DATABASE ===========================
 define('DB_HOST', 'localhost');
@@ -32,6 +32,7 @@ define('TBL_GROUP', 'group');
 define('TBL_USER', 'user');
 define('TBL_PRIVILEGE', 'privilege');
 define('TBL_CATEGORY', 'category');
+define('TBL_BOOK', 'book');
 
 // ====================== CONFIG ===========================
 define('TIME_LOGIN', 3600);

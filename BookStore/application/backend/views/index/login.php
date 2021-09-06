@@ -13,7 +13,7 @@ $inputHidden = FormBackend::input('hidden','form[token]',time());
         <div class="card-body login-card-body">
             <p class="login-box-msg">Sign in to start your session</p>
             <?= $xhtmlError = $this->errors ?? ''; ?>
-            <form action="<?= $linkAction; ?>" method="post">
+            <form action="<?= $linkAction; ?>" method="post" id="form-login">
                 <?= $userName . $passWord; ?>
                 <div class="row">
                     <div class="col-12">

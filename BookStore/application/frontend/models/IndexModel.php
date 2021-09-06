@@ -13,6 +13,7 @@ class IndexModel extends Model
 		'modified',
 		'modified_by',
 		'register_date',
+		'register_ip',
 		'status',
 		'ordering'
 	];
@@ -33,9 +34,10 @@ class IndexModel extends Model
 		if ($options['task'] == 'register-user') {
 			$params['form']['password']	= md5($params['form']['password']);
 			$params['form']['register_date'] = date('Y-m-d H:m:s', time());
+			$params['form']['register_ip'] = $_SERVER['REMOTE_ADDR'];
+			$params['form']['created'] = date('Y-m-d H:m:s', time());
 			$params['form']['status'] = 'inactive';
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
-
 			$this->insert($data);
 
 			return $this->lastID();
@@ -47,13 +49,22 @@ class IndexModel extends Model
 			$email = $params['form']['email'];
 			$password = md5($params['form']['password']);
 
-			$query[] = "SELECT `u`.`id`,`u`.`email`,`u`.`fullname`,`u`.`email`,`u`.`group_id`,`g`.`group_acp`";
+			$query[] = "SELECT `u`.`id`,`u`.`email`,`u`.`fullname`,`u`.`email`,`u`.`status`,`g`.`group_acp`";
 			$query[] = "FROM `user` AS `u` LEFT JOIN `group` AS `g` ON `u`.`group_id` = `g`.`id`";
 			$query[] = "WHERE `email` = '$email' AND `password` = '$password'";
 
 			$query   = implode(" ", $query);
 			$result  = $this->fetchRow($query);
 
+			return $result;
+		}
+	}
+	public function CategoryList($params, $option)
+	{
+		if ($option == null) {
+			
+			$query = "SELECT `name` FROM `category` WHERE `status` = 'active'";
+			$result  = $this->fetchAll($query);
 			return $result;
 		}
 	}

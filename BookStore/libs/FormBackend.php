@@ -22,10 +22,10 @@ class FormBackend
         return $xhtml;
     }
     //Create RowForm
-    public static function rowForm($labelName, $inputOrselect)
+    public static function rowForm($labelName, $inputOrselect,$flag =true)
     {
         $start = '*';
-        if ($labelName == 'FullName') $start = ' ';
+        if ($flag == false) $start = '';
         $xhtml = sprintf(
             '<div class="form-group">
                 <label>%s<span class="text-danger">%s</span></label>

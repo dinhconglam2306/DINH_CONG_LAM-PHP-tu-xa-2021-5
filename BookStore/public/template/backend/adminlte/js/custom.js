@@ -4,7 +4,6 @@ function getUrlVar(key){
 }
 
 $(document).ready(function () {
-
   //Delete Item
     let tableForm = $('#table-form');
     $('.btn-delete').click(function (e) {
@@ -15,53 +14,6 @@ $(document).ready(function () {
             }
           })
     });
-
-    //AJAX CHANGE GROUP ACP - STATUS
-    $('.btn-change').click(function(e){
-      let attrID = $(this).attr('id');
-      let dataUrl = $(this).attr('data-url');
-      $(this).attr('href',dataUrl);
-      $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
-      e.preventDefault();
-      $.get(dataUrl,function(data){
-        console.log(data)
-          let elm       = 'a#'+ attrID;
-          let classRemove = 'btn-success';
-          let iconRemove  = 'fa-check';
-          let classAdd = 'btn-danger';
-          let iconAdd  = 'fa-minus';
-        if(data[1] == 'active'){
-          classRemove = 'btn-danger';
-          iconRemove  = 'fa-minus';
-          classAdd = 'btn-success';
-          iconAdd  = 'fa-check';
-        }
-        if(data[1] == 1){
-          classRemove = 'btn-danger';
-          iconRemove  = 'fa-minus';
-          classAdd = 'btn-success';
-          iconAdd  = 'fa-check';
-        }
-        let created = 'span.' + attrID;
-
-        //Ajax modified_by
-
-        let modified_by = '.modified-by-' + data[0];
-        $(modified_by).text(data[4]);
-        
-        
-        //Ajax Time
-        $(created).text(data[3]);
-
-
-        $(elm).attr('data-url',data[2]);
-
-        //Ajax icon Status 
-        $(elm).removeClass(classRemove).addClass(classAdd);
-        $(elm + ' i').removeClass(iconRemove).addClass(iconAdd);
-      },'json')
-    })
-    
     //Change mutiAction (Status, Group ACP, delete)
     $('.btn-apply-bulk-action').click(function (e) {
         e.preventDefault();
@@ -102,38 +54,77 @@ $(document).ready(function () {
       
     });
 
-    //Select Item => select group
+    //Select Item => select group (Controller User)
 
     $('select[name="group_id"]').change(function (){
         $("#select-user").submit();
-    })
+    });
+
+    //Select item => select category (Controller Book)
+    let book = $('.slb-select-category');
 
     // Select group -> select fillter
     $('select[name="select_group"]').change(function (){
-      let url = $(this).attr('data-url').replace('value_new', $(this).val());
-      window.location.href = url;
-  })
+        let url = $(this).attr('data-url').replace('value_new', $(this).val());
+        window.location.href = url;
+    });
 
     //Change group of item in Controller User
     $('select[name="change_group"]').change(function (e){
-      let url  = $(this).attr('data-url');
-      let selectValueACP =$(this).val();
-      url = url.replace('value_new',selectValueACP);
-      console.log(url)
-      e.preventDefault();
+        let url  = $(this).attr('data-url');
+        let selectValueACP =$(this).val();
+        url = url.replace('value_new',selectValueACP);
+        console.log(url)
+        e.preventDefault();
+        $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
+        $.get(url,function(data){
+          console.log(data)
+          let created = 'span.status-'+data[0];
+          $(created).text(data[1]);
+        },'json')
+
+    });
+    //Change Ordering of Category
+    $('input[name="ordering"]').on('input', function(e){
+      let url = $(this).attr('data-ordering');
+      url = url.replace('value_new',$(this).val());
       $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
+      console.log(url)
       $.get(url,function(data){
         console.log(data)
-        let created = 'span.status-'+data[0];
-        $(created).text(data[1]);
-    },'json')
+        let modified = 'span.modified-by-'+data[0];
+        let time = 'span.status-'+data[0];
+        $(modified).text(data[2]);
+        $(time).text(data[1]);
+        console.log(time)
+      },'json')
+    });
+  
 
-    })
 
     //Active
-    let controller = getUrlVar('controller');
+    let controller = (getUrlVar('controller') == '') ? 'index' :getUrlVar('controller') ;
+    let action = (getUrlVar('action') == '') ? 'index' :getUrlVar('action') ;
     $(`li.nav-item a[data-name=${controller}]`).addClass('active');
-    
+    $(`a[data-action=${action}]`).addClass('active');
+    $(`li.nav-item a[data-name=${controller}]`).parent().addClass('menu-is-opening menu-open');
+
+    //Img
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              $('#blah').attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+      }
+    };
+  
+  $("#imgInp").change(function(){
+    $('div #picture img').remove();
+    $('div #picture').append('<img id="blah" src="#" alt="your image" style="max-width:200px; margin-top:10px;" />')
+      readURL(this);
+  });
 
 
 
@@ -155,8 +146,8 @@ $(document).ready(function () {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Đồng ý'
-      }
-    }
+      };
+    };
 
     function createSwalMixin(){
       return {
@@ -169,14 +160,14 @@ $(document).ready(function () {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
-      }
-    }
+      };
+    };
     function createToastFire(title,icon='warning'){
       return {
         icon: icon,
         title: title
       }
-    }
+    };
     //RandomString
     function makePassword() {
       let length           = getRndInteger(8,13);
@@ -187,9 +178,9 @@ $(document).ready(function () {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
      }
      return result;
-  }
+  };
     //Random Int(lenght)
     function getRndInteger(min, max) {
       return Math.floor(Math.random() * (max - min) ) + min;
-    }
+    };
 });

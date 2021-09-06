@@ -24,7 +24,7 @@ class UserController extends Controller
 
 		//List Items
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
-		$this->_view->slbGroup 				= ['default'=>' -Select Group ACP- '] + $this->_model->itemInSelectbox($this->_arrParam, null);
+		$this->_view->slbGroup 				= [0=>' - Select Group - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
 
@@ -122,7 +122,7 @@ class UserController extends Controller
 				$this->_view->error 	= $validate->showErrors();
 			} else {
 				// Insert Database
-				$this->_model->saveItem($this->_arrParam, ['task' => 'change-status']);
+				$this->_model->saveItem($this->_arrParam, ['task' => 'change-pass']);
 				URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 			}
 		}

@@ -1,31 +1,33 @@
 <?php
+
 $items              = @$this->arrParam['status'] ?? 'all';
 $btnSearch          = HelperBackend::button('submit', 'Search');
 $linkClear          = URL::createLink($arrParams['module'], $arrParams['controller'], $arrParams['action']);
 $btnClear           = HelperBackend::buttonLink($linkClear, 'Clear', 'btn-danger');
 $xhtmlFilterStatus  = HelperBackend::showFilterStatus($arrParams['module'], $arrParams['controller'], $this->itemsStatusCount, $arrParams['status'] ?? 'all', trim(@$arrParams['search']));
 //Input Search
-
-$ipSearch =  FormBackend::input('text', 'search', @$arrParams['search']);
+$inputSearch =  FormBackend::input('text', 'search', @$arrParams['search']);
 
 //Input Hidden
-$ipHdModule         = FormBackend::input('hidden', 'module', $arrParams['module']);
-$ipHdController     = FormBackend::input('hidden', 'controller', $arrParams['controller']);
-$ipHdAction         = FormBackend::input('hidden', 'action', $arrParams['action']);
+$inputHiddenModule         = FormBackend::input('hidden', 'module', $arrParams['module']);
+$inputHiddenController     = FormBackend::input('hidden', 'controller', $arrParams['controller']);
+$inputHiddenAction         = FormBackend::input('hidden', 'action', $arrParams['action']);
 
 //Search item
-$formSearch = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
+$formSearch = $inputHiddenModule . $inputHiddenController . $inputHiddenAction . $inputSearch;
 
 
 //Group
+$arrValueCategory = $this->slbCategory;
+$selectBoxCategory = FormBackend::selectBox('category_id', $arrValueCategory, @$arrParams['category_id'],'', 'slb-select-category');
 
-$arrValueGroup = $this->slbGroup;
-$groupUrl = URL::createLink($arrParams['module'], $arrParams['controller'], 'index', ['group_id' => 'value_new']);
-$attr  = sprintf('data-url=%s', $groupUrl);
-$selectBoxGroup = FormBackend::selectBox('group_id', $arrValueGroup, @$arrParams['group_id'], $attr, 'slb-select-group-acp');
+//Special
 
-//Select item -> group
-$formSlGroup = $ipHdModule . $ipHdController . $ipHdAction . $selectBoxGroup ;
+$arrValueSpecial = ['default' => ' -Select Special- ', 1 => 'Yes', 0 => 'No'];
+$selectBoxSpecial = FormBackend::selectBox('special', $arrValueSpecial, @$arrParams['special'],'', 'slb-select-special');
+
+//Select book -> category 
+$formSlCategory = $inputHiddenModule . $inputHiddenController . $inputHiddenAction . $selectBoxCategory . $selectBoxSpecial  ;
 ?>
 
 <div class="card card-outline card-info">
@@ -45,8 +47,8 @@ $formSlGroup = $ipHdModule . $ipHdController . $ipHdAction . $selectBoxGroup ;
                     <?= $xhtmlFilterStatus ?>
                 </div>
                 <div class="area-filter-group-acp mb-2 ">
-                <form action="" method="GET" id="select-user">
-                    <?= $formSlGroup ?>
+                <form action="" method="GET" id="select-book">
+                    <?= $formSlCategory ?>
                 </form>
                 </div>
                 <div class="area-search mb-2">

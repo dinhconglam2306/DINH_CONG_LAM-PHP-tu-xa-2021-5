@@ -13,6 +13,8 @@ class IndexController extends Controller
 
 	public function indexAction()
 	{
+		$this->_view->_title 				= "Trang chủ | BookStore";
+		$this->_view->category = $this->_model->CategoryList($this->_arrParam, $option = null);
 		$this->_view->render('index/index');
 	}
 
@@ -21,10 +23,10 @@ class IndexController extends Controller
 	{
 
 		$userInfo = Session::get('user');
-		if ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time()) {
+		if (@$userInfo['login'] == true && @$userInfo['time'] + TIME_LOGIN >= time()) {
 			URL::redirect('frontend', 'user', 'index');
 		};
-		$this->_view->_title 				= "Admin :: Login";
+		$this->_view->_title 				= "Đăng nhập";
 		if (@$this->_arrParam['form']['token'] > 0) {
 			$validate = new Validate($this->_arrParam['form']);
 			$email = $this->_arrParam['form']['email'];
@@ -40,7 +42,8 @@ class IndexController extends Controller
 					'login' => true,
 					'info'	=> $infoUser,
 					'time'	=> time(),
-					'group_acp' => $infoUser['group_acp']
+					'group_acp' => $infoUser['group_acp'],
+					'status' => $infoUser['status']
 				];
 				Session::set('user', $arrSession);
 				URL::redirect($this->_arrParam['module'], 'user', 'index');
@@ -49,14 +52,16 @@ class IndexController extends Controller
 			}
 		}
 
-		$this->_view->render($this->_arrParam['controller'] . '/login');
+		$this->_view->render('index/login');
 	}
 	public function registerAction()
 	{
 		$userInfo = Session::get('user');
-		if ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time()) {
+		if (@$userInfo['login'] == true && @$userInfo['time'] + TIME_LOGIN >= time()) {
 			URL::redirect('frontend', 'user', 'index');
 		};
+
+		$this->_view->_title 				= "Đăng ký tài khoản";
 		if (isset($this->_arrParam['form']['submit'])) {
 			URL::checkRefreshPage($this->_arrParam['form']['token'], $this->_arrParam['module'], $this->_arrParam['controller'], 'register');
 			$queryUserName 	= "SELECT `id` FROM `" . TBL_USER . "` WHERE `username` = '" . $this->_arrParam['form']['username'] . "'";
@@ -73,7 +78,7 @@ class IndexController extends Controller
 				$this->_view->errors 	= $validate->showErrorsFrontEnd();
 			} else {
 				// Insert Database
-				$id = $this->_model->saveItem($this->_arrParam, ['task' => 'register-user']);
+				$this->_model->saveItem($this->_arrParam, ['task' => 'register-user']);
 				URL::redirect('frontend', 'index', 'notice', ['type' => 'register-success']);
 			}
 		}
@@ -81,6 +86,7 @@ class IndexController extends Controller
 	}
 	public function noticeAction()
 	{
+		$this->_view->_title 				= "Trang chủ| StoreBook";
 		$this->_view->render('index/notice');
 	}
 	public function logoutAction()

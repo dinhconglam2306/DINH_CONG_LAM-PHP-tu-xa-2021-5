@@ -5,19 +5,18 @@ $dataForm = @$this->arrParam['form'];
 $inputName          = FormBackend::input('text', 'form[name]', @$dataForm['name']);
 $inputHidden        = FormBackend::input('hidden', 'form[token]', time());
 $inputOrdering      = FormBackend::input('number', 'form[ordering]', @$dataForm['ordering']);
-$inputPicture       = '<input type="file" class="form-control-file" name="picture" value="">';
+$inputPicture       = '<input type="file" class="form-control-file" name="picture" value="" id="imgInp">';
 $pathImage= '';
-$picture = '';
+$picture = '<div id="picture"></div>';
 $inputPictureHidden = '';
-if (!empty($dataForm)) {
+if (isset($this->arrParam['id'])) {
     @$pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture'];
     if(is_array($dataForm['picture']) == true){
         $pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture_hidden'];
     }
-    $picture            = sprintf('<img src="%s" style ="max-width:100px;" />', $pathImage);
+    $picture            = sprintf('<div id="picture"><img id="old" src="%s" style ="max-width:250px;" /></div>', $pathImage);
     @$inputPictureHidden        = FormBackend::input('hidden', 'form[picture_hidden]',@$dataForm['picture']);
 }
-
 
 //Select Box Status
 $arrValueStatus     = ['default' => ' - Select Status - ', 'active' => 'Active', 'inactive' => 'Inactive'];
@@ -26,7 +25,7 @@ $selectBoxStatus    = FormBackend::selectBox('form[status]', $arrValueStatus, @$
 //Row Form
 $rowName            = FormBackend::rowForm('Name', $inputName);
 $rowGroupStatus     = FormBackend::rowForm('Status ', $selectBoxStatus);
-$rowOrdering        = FormBackend::rowForm('Ordering', $inputOrdering);
+$rowOrdering        = FormBackend::rowForm('Ordering', $inputOrdering,false);
 $rowPicture        = FormBackend::rowForm('Picture', $inputPicture . $picture);
 $rows               = $rowName  . $rowGroupStatus . $rowOrdering . $rowPicture.$inputPictureHidden;
 

@@ -50,6 +50,21 @@ class HelperBackend
         return sprintf('<a href="#" data-url="%s" id="status-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl, $id, $colorClass, $icon);
     }
 
+    //Create Icon Status
+    public static function itemSpecial($module, $controller, $id, $value)
+    {
+        $datUrl = URL::createLink($module, $controller, 'changeSpecial', ['id' => $id, 'special' => $value]);
+        $colorClass = 'btn-success';
+        $icon = 'fa-check';
+
+        if ($value == 0) {
+            $colorClass = 'btn-danger';
+            $icon = 'fa-minus';
+        }
+
+        return sprintf('<a href="#" data-url="%s" id="special-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl, $id, $colorClass, $icon);
+    }
+
     //Create history item
     public static function itemHistory($by, $time, $id = '')
     {
@@ -57,7 +72,7 @@ class HelperBackend
         $xhtml = sprintf('
         <p class="mb-0"><i class="far fa-user"></i> <span class="modified-by-%s">%s</span></p>
         <p class="mb-0"><i class="far fa-clock"></i> <span class="status-%s">%s</span></p>
-        ', $id,$by, $id, $time);
+        ', $id, $by, $id, $time);
         return $xhtml;
     }
 
@@ -157,33 +172,33 @@ class HelperBackend
         ', $href);
         return $xhtml;
     }
-    public static function BackEndMenu($dataName, $iconClass, $title, $linkList,$linkForm)
+    public static function BackEndMenu($dataName, $iconClass, $title, $arrList)
     {
+        $xhtmlList  = '<ul class="nav nav-treeview">';
+        foreach ($arrList as $key => $value) {
+            $key = explode('|',$key);
+            $keyName = $key[0];
+            $keyDataAction = $key[1];
+            $xhtmlList .= sprintf('
+            <li class="nav-item">
+                <a href="%s" class="nav-link " data-action="%s">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>%s</p>
+                </a>
+            </li>
+            ', $value, $keyDataAction,$keyName);
+        }
+        $xhtmlList .= '</ul>';
+
         $xhtml = sprintf('
-        <li class="nav-item">
-            <a href="#" data-name ="%s" class="nav-link">
-                <i class="nav-icon %s"></i>
-                <p>
-                   %s
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="%s" class="nav-link ">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>List</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="%s" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Add</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        ', $dataName, $iconClass, $title, $linkList,$linkForm);
+            <li class="nav-item">
+                <a href="#" data-name ="%s" class="nav-link">
+                    <i class="nav-icon %s"></i>
+                    <p>%s<i class="right fas fa-angle-left"></i></p>
+                </a>
+                %s
+            </li>
+            ', $dataName, $iconClass, $title, $xhtmlList);
         return $xhtml;
     }
 }

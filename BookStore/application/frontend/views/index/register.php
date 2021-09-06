@@ -5,10 +5,10 @@ $dataForm = @$this->arrParam['form'];
 $formLink = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'register');
 
 //Input
-$inputUserName = FormFrontend::input('text', 'form[username]', 'form[username]', $dataForm['username']);
-$inputFullName = FormFrontend::input('text', 'form[fullname]', 'form[fullname]', $dataForm['fullname']);
-$inputEmail = FormFrontend::input('email', 'form[email]', 'form[email]', $dataForm['email']);
-$inputPassword = FormFrontend::input('text', 'form[password]', 'form[password]', $dataForm['password']);
+$inputUserName = FormFrontend::input('text', 'form[username]', 'form[username]', @$dataForm['username']);
+$inputFullName = FormFrontend::input('text', 'form[fullname]', 'form[fullname]', @$dataForm['fullname']);
+$inputEmail = FormFrontend::input('email', 'form[email]', 'form[email]', @$dataForm['email']);
+$inputPassword = FormFrontend::input('text', 'form[password]', 'form[password]', @$dataForm['password']);
 $inputHidden = FormFrontend::input('hidden', 'form[token]', 'form[token]', time());
 
 //Row

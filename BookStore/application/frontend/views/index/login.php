@@ -1,8 +1,8 @@
 <?php
 //Link
 
-$linkAction = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'login');
-$UrlRegister = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'register');
+$linkAction = URL::createLink($this->arrParam['module'], 'index', 'login');
+$UrlRegister = URL::createLink($this->arrParam['module'],'index', 'register');
 
 //Input
 $inputEmail = FormFrontend::input('text', 'form[email]', 'form[email]');

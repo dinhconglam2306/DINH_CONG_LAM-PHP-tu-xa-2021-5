@@ -67,6 +67,21 @@ class CategoryModel extends Model
 		}
 	}
 
+	public function changeOrdering($params, $options = null)
+	{
+		if ($options['task'] == 'change-ajax-ordering') {
+			$ordering = @$params['ordering'];
+			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['ordering' => $ordering, 'modified' => $modified,'modified_by' => $modified_by];
+			$id   = @$params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			return [$id,$modified,$modified_by];
+			// Session::set('message', SUCCESS_UPDATE_GROUP_USER);
+		}
+	}
+
 
 	//Thay đổi trạng thái của nhiều items
 	public function multiStatus($params, $options = null)
@@ -147,9 +162,6 @@ class CategoryModel extends Model
 		if ($options['task'] == 'edit') {
 			$params['form']['modified'] = date('Y-m-d G.i:s<br>', time());
 			$params['form']['modified_by'] = $this->_userInfo['username'];
-			echo '<pre>';
-			print_r($params['form']);
-			echo '</pre>';
 			if ($params['form']['picture']['name'] == null) {
 				unset($params['form']['picture']);
 			} else {

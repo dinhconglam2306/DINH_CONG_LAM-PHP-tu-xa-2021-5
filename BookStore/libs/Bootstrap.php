@@ -31,10 +31,10 @@ class Bootstrap
 			$requestUrl = "$module-$controller-$action";
 			$userInfo = Session::get('user');
 
-			$logger = ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time());
+			$login = (@$userInfo['login'] == true && @$userInfo['time'] + TIME_LOGIN >= time());
 			//MODULE BACKEND
 			if ($module == 'backend') {
-				if ($logger == true) {
+				if ($login == true) {
 					if ($userInfo['group_acp'] == 1) {
 						// if (in_array($requestUrl, $userInfo['info']['privilege']) == true) {
 						$this->_controllerObject->$actionName();
@@ -45,23 +45,21 @@ class Bootstrap
 						URL::redirect('frontend', 'index', 'notice', ['type' => 'not-permission']);
 					}
 				} else {
-					Session::delete('user');
-					require_once(APPLICATION_PATH . $module . DS . 'controllers' . DS . 'IndexController.php');
-					$indexController = new IndexController($this->_params);
-					$indexController->loginAction();
+					$this->callLoginAction($module);
 				}
 
 				//MODULE FRONTEND
 			} else if ($module == 'frontend') {
 				if ($controller == 'user') {
-					if ($logger == true) {
-						$this->_controllerObject->$actionName();
+					if ($login == true) {
+						if ($userInfo['status'] != 'inactive') {
+							$this->_controllerObject->$actionName();
+						} else {
+							Session::delete('user');
+							URL::redirect('frontend', 'index', 'notice', ['type' => 'not-login']);
+						}
 					} else {
-						// Session::delete('user');
-						// require_once(APPLICATION_PATH . $module . DS . 'controllers' . DS . 'IndexController.php');
-						// $indexController = new IndexController($this->_params);
-						// $indexController->loginAction();
-						URL::redirect('frontend', 'index', 'login');
+						$this->callLoginAction($module);
 					}
 				} else {
 					$this->_controllerObject->$actionName();
@@ -86,6 +84,14 @@ class Bootstrap
 	{
 		require_once $filePath;
 		$this->_controllerObject = new $controllerName($this->_params);
+	}
+
+	private function callLoginAction($module = 'fontend')
+	{
+		Session::delete('user');
+		require_once(APPLICATION_PATH . $module . DS . 'controllers' . DS . 'IndexController.php');
+		$indexController = new IndexController($this->_params);
+		$indexController->loginAction();
 	}
 
 	// ERROR CONTROLLER

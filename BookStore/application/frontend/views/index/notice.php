@@ -6,6 +6,11 @@ switch ($this->arrParam['type']) {
         @$breadcrumbTitle = 'Đăng ký thành công!';
         @$elmATitle  = 'Quay lại trang chủ';
         break;
+    case 'not-login':
+        @$message = 'Bạn chưa thể đăng nhập. Xin vui lòng chờ kích hoạt từ người quản trị';
+        @$breadcrumbTitle = 'Đăng nhập thất bại!';
+        @$elmATitle  = 'Quay lại trang chủ';
+        break;
     case 'not-permission':
         @$message = 'Bạn không có quyền đăng nhập vào chức năng này!';
         @$breadcrumbTitle = 'Đăng nhập thất bại!';
@@ -40,7 +45,7 @@ switch ($this->arrParam['type']) {
         <div class="row">
             <div class="col-sm-12">
                 <div class="error-section">
-                    <h2><?= $message; ?></h2>
+                    <h3><?= $message; ?></h3>
                     <a href="<?= $link; ?>" class="btn btn-solid"><?= $elmATitle; ?></a>
                 </div>
             </div>

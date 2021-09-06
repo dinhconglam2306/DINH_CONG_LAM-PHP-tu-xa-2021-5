@@ -1,13 +1,15 @@
 <?php
-class UserModel extends Model
+class BookModel extends Model
 {
 	private $_columns = [
 		'id',
-		'username',
-		'fullname',
-		'email',
-		'password',
-		'group_id',
+		'name',
+		'picture',
+		'description',
+		'price',
+		'special',
+		'sale_off',
+		'category_id',
 		'created',
 		'created_by',
 		'modified',
@@ -17,12 +19,13 @@ class UserModel extends Model
 	];
 	private $_userInfo;
 
-	private $_fieldSearchAccpted  = ['username', 'fullname'];
+	private $_fieldSearchAccpted  = ['name'];
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->setTable(TBL_USER);
+		$this->setTable(TBL_BOOK);
+
 		$userObj = Session::get('user');
 		$this->_userInfo = $userObj['info'];
 	}
@@ -30,22 +33,25 @@ class UserModel extends Model
 	//Hiện danh sách items
 	public function listItems($params, $options = null)
 	{
-		$query[] 	= "SELECT `u`.`id`,`u`.`group_id`, `u`.`username`,`u`.`fullname`,`u`.`email` ,`g`.`name` AS `group_name`, `u`.`created`, `u`.`created_by`, `u`.`modified`, `u`.`modified_by`, `u`.`status`";
-		$query[]	= "FROM `{$this->table}` AS `u`LEFT JOIN `" . TBL_GROUP . "` AS `g` ON `u`.`group_id` = `g`.`id`";
-		$query[]	= "WHERE `u`.`id` > 0";
+		$query[] 	= "SELECT `b`.`id`,`b`.`category_id`, `b`.`name`, `b`.`special`,`b`.`sale_off`,`b`.`picture`,`b`.`price` ,`c`.`name` AS `category_name`, `b`.`created`, `b`.`created_by`, `b`.`modified`, `b`.`modified_by`, `b`.`status`";
+		$query[]	= "FROM `{$this->table}` AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
+		$query[]	= "WHERE `b`.`id` > 0";
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%' . $params['search'] . '%"';
-			$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword, 'u');
+			$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword, 'b');
 			$query[] = "AND ($fieldSearchAccpted)";
 		}
 
 		if (@$params['status'] && $params['status'] != 'all') {
-			$query[] = "AND `u`.`status` = '{$params['status']}'";
+			$query[] = "AND `b`.`status` = '{$params['status']}'";
 		}
 
-		if (isset($params['group_id']) && $params['group_id'] != 'default') {
-			$query[] = "AND `u`.`group_id` = '{$params['group_id']}'";
+		if (isset($params['category_id']) && $params['category_id'] != '0') {
+			$query[] = "AND `b`.`category_id` = '{$params['category_id']}'";
+		}
+		if (isset($params['special']) && $params['special'] != 'default') {
+			$query[] = "AND `b`.`special` = '{$params['special']}'";
 		}
 
 		$query[] = 'ORDER BY `id` ASC';
@@ -63,18 +69,18 @@ class UserModel extends Model
 		return $result;
 	}
 
-	//Thay đổi  Group của item
-	public function changeGroup($params, $options = null)
+	//Thay đổi  Category của item
+	public function changeCategory($params, $options = null)
 	{
 		if ($options == null) {
 			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
 			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
-			$data = ['group_id' => $params['group_id'], 'modified' => $modified,'modified_by' => $modified_by];
+			$data = ['category_id' => $params['category_id'], 'modified' => $modified,'modified_by' => $modified_by];
 			
 			$id   = $params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
-			return [$id, $modified];
+			return [$id, $modified,$modified_by];
 			// Session::set('message', SUCCESS_UPDATE_GROUP_USER);
 		}
 	}
@@ -92,6 +98,21 @@ class UserModel extends Model
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
 			return [$id, $status, $link,$modified,$modified_by];
+		}
+	}
+
+	public function changeSpecial($params, $options = null)
+	{
+		if ($options['task'] == 'change-ajax-special') {
+			$special = ($params['special'] == 1) ? 0 : 1;
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['special' => $special,'modified' => $modified,'modified_by' => $modified_by];
+			$id   = $params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeSpecial', ['id' => $id, 'special' => $special]);
+			return [$id, $special, $link,$modified,$modified_by];
 		}
 	}
 
@@ -127,8 +148,8 @@ class UserModel extends Model
 				$fieldSearchAccpted = HelperBackend::fieldSearchAccepted($this->_fieldSearchAccpted, $keyword);
 				$query[] = "AND ($fieldSearchAccpted)";
 			}
-			if (isset($params['group_id'])) {
-				$query[] = "AND `group_id` = '{$params['group_id']}'";
+			if (isset($params['category_id'])) {
+				$query[] = "AND `category_id` = '{$params['category_id']}'";
 			}
 
 
@@ -148,34 +169,24 @@ class UserModel extends Model
 	//Lưu Item
 	public function saveItem($params, $options = null)
 	{
-		$userObj = Session::get('user');
-		$userInfo = $userObj['info'];
-
+		require_once LIBRARY_EXT_PATH . 'Upload.php';
+		$uploadObj = new Upload();
 		if ($options['task'] == 'add') {
+			$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'book');
 			$params['form']['created'] = date('Y-m-d H:i:s', time());
-			$params['form']['created_by'] = $userInfo['username'];
-			$params['form']['password']	= md5($params['form']['password']);
+			$params['form']['created_by'] = $this->_userInfo['username'];
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->insert($data);
 			Session::set('message', SUCCESS_ADD_ITEM);
 		}
 		if ($options['task'] == 'edit') {
-			unset($params['form']['username']);
-			unset($params['form']['email']);
 			$params['form']['modified'] = date('Y-m-d H:i:s', time());
-			$params['form']['modified_by'] = $userInfo['username'];
-			if ($params['form']['password'] == null) unset($params['form']['password']);
-			$data = array_intersect_key($params['form'], array_flip($this->_columns));
-			$this->update($data, [['id', $params['id']]]);
-			Session::set('message', SUCCESS_EDIT_ITEM);
-		}
-		if ($options['task'] == 'change-pass') {
-			unset($params['form']['username']);
-			unset($params['form']['email']);
-			$params['form']['modified'] = date('Y-m-d H:i:s', time());
-			$params['form']['modified_by'] = $userInfo['username'];
-			if ($params['form']['password'] != null) {
-				$params['form']['password'] = md5($params['form']['password']);
+			$params['form']['modified_by'] = $this->_userInfo['username'];
+			if ($params['form']['picture']['name'] == null) {
+				unset($params['form']['picture']);
+			} else {
+				$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'book');
+				$uploadObj->removeFile('category', $params['form']['picture_hidden']);
 			}
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 			$this->update($data, [['id', $params['id']]]);
@@ -186,9 +197,8 @@ class UserModel extends Model
 	//Item Info
 	public function infoItem($params, $options = null)
 	{
-
 		if ($options == null) {
-			$query[] 	= "SELECT  `id`, `username`,`email`, `fullname`,`group_id`, `status`";
+			$query[] 	= "SELECT  `id`, `name`,`price`,`sale_off`,`picture`,`special`, `description`,`ordering`,`category_id`, `status`";
 			$query[]	= "FROM `{$this->table}`";
 			$query[]	= "WHERE `id` = {$params['id']}";
 			$query = implode(' ', $query);
@@ -202,7 +212,7 @@ class UserModel extends Model
 		$result = [];
 		if ($options == null) {
 			$query[] 	= "SELECT `id`,`name`";
-			$query[]	= "FROM `" . TBL_GROUP . "`";
+			$query[]	= "FROM `" . TBL_CATEGORY . "`";
 			$query = implode(' ', $query);
 			$result = $this->fetchPairs($query);
 			return $result;

@@ -33,12 +33,22 @@ class UserModel extends Model
 		if ($options['task'] == 'register-user') {
 			$params['form']['password']	= md5($params['form']['password']);
 			$params['form']['register_date'] = date('Y-m-d H:m:s', time());
+			$params['form']['created'] = date('Y-m-d H:m:s', time());
 			$params['form']['status'] = 'inactive';
 			$data = array_intersect_key($params['form'], array_flip($this->_columns));
 
 			$this->insert($data);
 			
 			return $this->lastID();
+		}
+	}
+	public function CategoryList($params, $option)
+	{
+		if ($option == null) {
+			
+			$query = "SELECT `name` FROM `category` WHERE `status` = 'active'";
+			$result  = $this->fetchAll($query);
+			return $result;
 		}
 	}
 }

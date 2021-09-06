@@ -1,4 +1,5 @@
 <?php
+$info = Session::get('user');
 $arrMenu = [
     ['link' => URL::createLink('backend', 'group', 'index'), 'name' => 'Group', 'icon' => 'ion ion-ios-people', 'total' => $this->totalGroups],
     ['link' => URL::createLink('backend', 'user', 'index'), 'name' => 'User', 'icon' => 'ion ion-ios-person', 'total' => $this->totalItems],

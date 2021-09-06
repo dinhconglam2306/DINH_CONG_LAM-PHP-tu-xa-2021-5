@@ -1,3 +1,7 @@
+<?php
+$userInfo = Session::get('user');
+$userInfo = $userInfo['info'];
+?>
 <div class="breadcrumb-section">
   <div class="container">
     <div class="row">
@@ -39,17 +43,17 @@
 
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" name="form[email]" value="admin@gmail.com" class="form-control" id="email" readonly="1">
+                <input type="text" name="form[email]" value="<?= $userInfo['email'] ?>" class="form-control" id="email" readonly="1">
               </div>
 
               <div class="form-group">
                 <label for="fullname">Họ tên</label>
-                <input type="text" name="form[fullname]" value="Nguyễn Văn Linh" class="form-control" id="fullname">
+                <input type="text" name="form[fullname]" value="<?= $userInfo['fullname'] ?>" class="form-control" id="fullname">
               </div>
 
               <div class="form-group">
                 <label for="phone">Số điện thoại</label>
-                <input type="text" name="form[phone]" value="0336405077" class="form-control" id="phone">
+                <input type="text" name="form[phone]" value="" class="form-control" id="phone">
               </div>
 
               <div class="form-group">

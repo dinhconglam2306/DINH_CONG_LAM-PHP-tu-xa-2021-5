@@ -9,7 +9,7 @@ $inputFullName  = FormBackend::input('text', 'form[fullname]', @$dataForm['fulln
 $rowID          = FormBackend::rowForm('ID', $inputID);
 $rowUserName    = FormBackend::rowForm('Username', $inputUserName);
 $rowMail        = FormBackend::rowForm('Email', $inputMail);
-$rowFullName    = FormBackend::rowForm('FullName', $inputFullName);
+$rowFullName    = FormBackend::rowForm('FullName', $inputFullName,false);
 
 $inputHidden    = FormBackend::input('hidden', 'form[token]', time());
 

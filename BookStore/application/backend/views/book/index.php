@@ -1,6 +1,6 @@
 <?php
 $arrParams = $this->arrParam;
-$linkAddNew = URL::createLink('backend', 'group', 'form');
+$linkAddNew = URL::createLink('backend', 'book', 'form');
 $btnAddNew = HelperBackend::buttonLink($linkAddNew, '<i class="fas fa-plus"></i> Add New');
 $urlBulkAction = URL::createLink($arrParams['module'], $arrParams['controller'], 'value_new');
 $btnBulkAction = HelperBackend::buttonLink($urlBulkAction, 'Apply', 'btn-info btn-apply-bulk-action');
@@ -18,13 +18,13 @@ $selectBox = FormBackend::selectBox('list_action', $arrValue, '', '', 'form-cont
             <div class="row align-items-center justify-content-between mb-2">
                 <div>
                     <div class="input-group">
-                        <!-- <?= $selectBox; ?> -->
+                        <?= $selectBox; ?>
                         <span class="input-group-append">
-                            <!-- <?= $btnBulkAction ?> -->
+                            <?= $btnBulkAction ?>
                         </span>
                     </div>
                 </div>
-                <!-- <div><?= $btnAddNew ?></div> -->
+                <div><?= $btnAddNew ?></div>
             </div>
         </div>
         <?php require_once 'elements/list_table.php' ?>
