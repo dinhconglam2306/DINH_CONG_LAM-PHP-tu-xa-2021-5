@@ -30,4 +30,16 @@ class FormFrontend
         $xhtml = sprintf('<button type="%s" id="%s" name="%s" value="%s" class="btn btn-solid">%s</button>', $type, $id, $name, $value, $title);
         return $xhtml;
     }
+    public static function selectBox($name, $id, $arrValue, $keySelected = 'default')
+    {
+        $xhtmlOption = '';
+        foreach ($arrValue as $key => $value) {
+            $selected = '';
+            if (is_numeric($key)) $key = strval($key);
+            if ($key === $keySelected) $selected = 'selected';
+            $xhtmlOption .= sprintf('<option value="%s" %s>%s</option>', $key, $selected, $value);
+        }
+        $xhtml = sprintf('<select name="%s" id="%s">%s</select>', $name,  $id, $xhtmlOption);
+        return $xhtml;
+    }
 }

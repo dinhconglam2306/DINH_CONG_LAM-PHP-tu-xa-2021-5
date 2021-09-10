@@ -9,19 +9,19 @@ foreach ($this->items as $key => $item) {
     $ckb                = sprintf('<input type="checkbox" name="cid[]" value="%s">', $id);
     $name               = HelperBackend::highlight(@$arrParams['search'], $item['name']);
 
-    $picturePath        = UPLOAD_URL . 'book' . DS . $item['picture'];
-    if (file_exists($picturePath) == true) {
-        $picture            = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . $item['picture']);
-    }else{
-        $picture            = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . 'default.png');
-    }
-    $price              =   $item['price'];
-    $saleOff            =    $item['sale_off'];
+    $picture            = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . 'default.png');
+    $picturePath        = UPLOAD_PATH . 'book' . DS . $item['picture'];
+    if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . $item['picture']);
+
+    $price              = $item['price'];
+    $saleOff            = $item['sale_off'];
     $categoryLink       = URL::createLink($arrParams['module'], $arrParams['controller'], 'changeCategory', ['category_id' => 'value_new', 'id' => $id]);
     $attr               = sprintf('data-url=%s', $categoryLink);
-    $selectCategory        = FormBackend::selectBox('change_category', $this->slbCategory, $item['category_id'], $attr, 'form-control w-auto');
+    $selectCategory     = FormBackend::selectBox('change_category', $this->slbCategory, $item['category_id'], $attr, 'form-control w-auto');
     $status             = HelperBackend::itemStatus($arrParams['module'], $arrParams['controller'], $id, $item['status']);
     $special            = HelperBackend::itemSpecial($arrParams['module'], $arrParams['controller'], $id, $item['special']);
+    $dataOrdering       = URL::createLink('backend','book','changeOrdering',['ordering'=>'value_new','id'=>$id]);
+    $ordering           = sprintf('<input data-ordering="%s" type="number" name="ordering" value="%s" style = "width:50px; padding-left:11px;border-radius:5px;border:1px solid grey;">',$dataOrdering, $item['ordering']);
     $created            = HelperBackend::itemHistory($item['created_by'], $item['created']);
     $modified           = HelperBackend::itemHistory($item['modified_by'], $item['modified'], $id);
 
@@ -44,6 +44,7 @@ foreach ($this->items as $key => $item) {
         <td class="position-relative">' . $selectCategory . '</td>
         <td class="position-relative">' . $status . '</td>
         <td class="position-relative">' . $special . '</td>
+        <td class="position-relative">' . $ordering . '</td>
         <td>' . $created . '</td>
         <td>' . $modified . '</td>
         <td>' . $btnEdit . '
@@ -68,6 +69,7 @@ foreach ($this->items as $key => $item) {
                     <th>Category</th>
                     <th>Status</th>
                     <th>Special</th>
+                    <th>Ordering</th>
                     <th>Created</th>
                     <th>Modified</th>
                     <th>Action</th>

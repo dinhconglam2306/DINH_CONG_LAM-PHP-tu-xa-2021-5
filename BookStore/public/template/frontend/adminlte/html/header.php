@@ -1,19 +1,24 @@
 <?php
 $userObj = Session::get('user');
 
-$categoryList = $this->category;
+$categoryList = @$this->category;
+$categoryID='';
 $categoryXhtml = '<ul>';
-foreach ($categoryList as $value) {
-    $categoryXhtml .= sprintf('<li><a href="#">%s</a></li>', $value['name']);
+foreach ($categoryList as $key => $value) {
+    if($key == 0) $categoryID = $value['id'];
+    $name = $value['name'];
+    $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $value['id']]);
+    $categoryXhtml .= sprintf('<li><a href="%s">%s</a></li>', $link, $name);
 }
 $categoryXhtml .= '</ul>';
-
+$linkListBook = URL::createLink('frontend', 'book', 'list', ['category_id' => $categoryID]);
 $linkHome = URL::createLink($this->arrParam['module'], 'index', 'index');
 $linkRegister = URL::createLink($this->arrParam['module'], 'index', 'register');
 $linkLogin = URL::createLink($this->arrParam['module'], 'index', 'login');
 $linkLogout = URL::createLink($this->arrParam['module'], 'index', 'logout');
 $linkAdminControllPanel = URL::createLink('backend', 'dashboard', 'index');
 $linkMyProfile = URL::createLink('frontend', 'user', 'index');
+$linkCategory = URL::createLink('frontend', 'category', 'list');
 
 $userName = '';
 
@@ -71,10 +76,10 @@ foreach ($controlMenu as $key => $value) {
                                     <li>
                                         <div class="mobile-back text-right">Back<i class="fa fa-angle-right pl-2" aria-hidden="true"></i></div>
                                     </li>
-                                    <li><a href="<?= $linkHome; ?>" class="my-menu-link active">Trang chủ</a></li>
-                                    <li><a href="list.html">Sách</a></li>
+                                    <li><a href="<?= $linkHome; ?> " data-controller='index'>Trang chủ</a></li>
+                                    <li><a href="<?= $linkListBook; ?>" data-controller='book'>Sách</a></li>
                                     <li>
-                                        <a href="category.html">Danh mục</a>
+                                        <a href="<?= $linkCategory; ?>" data-controller='category'>Danh mục</a>
                                         <?= $categoryXhtml; ?>
                                     </li>
                                 </ul>

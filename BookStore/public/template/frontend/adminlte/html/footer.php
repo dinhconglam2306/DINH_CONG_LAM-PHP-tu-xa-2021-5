@@ -1,3 +1,14 @@
+<?php
+if (!empty($this->categorySpecial)) {
+    foreach ($this->categorySpecial as $key => $valueCategorySpecial) {
+        $categoryId          = $valueCategorySpecial['id'];
+        $categoryLink        = URL::createLink('frontend', 'book', 'list', ['category_id' => $categoryId]);
+
+        $categoryName = $valueCategorySpecial['name'];
+        @$xhtmlcategorySpecial .= sprintf('<li><a href="%s">%s</a></li>', $categoryLink, $categoryName);
+    }
+}
+?>
 <div class="phonering-alo-phone phonering-alo-green phonering-alo-show" id="phonering-alo-phoneIcon">
     <div class="phonering-alo-ph-circle"></div>
     <div class="phonering-alo-ph-circle-fill"></div>
@@ -28,11 +39,7 @@
                             <h4>Danh mục nổi bật</h4>
                         </div>
                         <div class="footer-contant">
-                            <ul>
-                                <li><a href="list.html">Bà mẹ - Em bé</a></li>
-                                <li><a href="list.html">Học Ngoại Ngữ</a></li>
-                                <li><a href="list.html">Công Nghệ Thông Tin</a></li>
-                            </ul>
+                            <ul><?= @$xhtmlcategorySpecial; ?></ul>
                         </div>
                     </div>
                 </div>

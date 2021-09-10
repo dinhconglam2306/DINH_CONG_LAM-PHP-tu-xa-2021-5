@@ -15,7 +15,7 @@ class IndexController extends Controller
 	{
 
 		$userInfo = Session::get('user');
-		if ($userInfo['login'] == true && $userInfo['time'] + TIME_LOGIN >= time()) {
+		if (@$userInfo['login'] == true && @$userInfo['time'] + TIME_LOGIN >= time()) {
 			URL::redirect('backend', 'dashboard', 'index');
 		};
 
@@ -44,7 +44,8 @@ class IndexController extends Controller
 				Session::set('user', $arrSession);
 				URL::redirect($this->_arrParam['module'], 'dashboard', 'index');
 			} else {
-				$this->_view->errors = $validate->showErrorsFrontEnd();
+				$notify =['type' => 'warning','title'=> 'Đăng nhập thất bại. Xin vui lòng kiểm tra lại thông tin đăng nhập!'];
+				Session::set('notify',$notify);
 			}
 		}
 

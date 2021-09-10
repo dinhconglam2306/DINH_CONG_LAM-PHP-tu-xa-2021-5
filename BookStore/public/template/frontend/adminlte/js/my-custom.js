@@ -42,23 +42,6 @@ $(document).ready(function () {
     });
 
     $('#sort-form select[name="sort"]').change(function () {
-        // console.log(getUrlParam('filter_price'));
-        if (getUrlParam('filter_price')) {
-            $('#sort-form').append(
-                '<input type="hidden" name="filter_price" value="' +
-                    getUrlParam('filter_price') +
-                    '">'
-            );
-        }
-
-        if (getUrlParam('search')) {
-            $('#sort-form').append(
-                '<input type="hidden" name="search" value="' +
-                    getUrlParam('search') +
-                    '">'
-            );
-        }
-
         $('#sort-form').submit();
     });
 
@@ -66,6 +49,7 @@ $(document).ready(function () {
     setTimeout(function () {
         $('#frontend-message').toggle('slow');
     }, 4000);
+
 });
 
 function activeMenu() {

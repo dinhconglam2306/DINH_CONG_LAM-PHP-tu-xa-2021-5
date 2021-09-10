@@ -36,6 +36,12 @@ class CategoryController extends Controller
 		echo json_encode($result);
 	}
 
+	public function changeIshomeAction()
+	{
+		$result = $this->_model->changeIshome($this->_arrParam, ['task' => 'change-ajax-ishome']);
+		echo json_encode($result);
+	}
+
 	public function changeOrderingAction()
 	{
 		$result = $this->_model->changeOrdering($this->_arrParam, ['task' => 'change-ajax-ordering']);
@@ -81,6 +87,7 @@ class CategoryController extends Controller
 			$validate 					= new Validate($this->_arrParam['form']);
 			$validate->addRule('name', 'string', ['min' => 3, 'max' => 30])
 					->addRule('status', 'status')
+					->addRule('is_home', 'status')
 					->addRule('ordering', 'int',['min' => 1, 'max' =>20 ])
 					->addRule('picture', 'file',['min' => 100, 'max' =>1000000,'entension' =>['jpg','png']],false);
 			$validate->run();

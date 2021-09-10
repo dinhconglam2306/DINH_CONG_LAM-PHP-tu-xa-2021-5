@@ -9,6 +9,7 @@ class CategoryModel extends Model
 		'created_by',
 		'modified',
 		'modified_by',
+		'is_home',
 		'status',
 		'ordering'
 	];
@@ -24,7 +25,7 @@ class CategoryModel extends Model
 	//Hiện danh sách items
 	public function listItems($params, $options = null)
 	{
-		$query[] 	= "SELECT `id`, `name`, `picture`, `ordering`, `created`, `created_by`, `modified`, `modified_by`, `status`";
+		$query[] 	= "SELECT `id`, `name`, `picture`, `ordering`, `is_home`,`created`, `created_by`, `modified`, `modified_by`, `status`";
 		$query[]	= "FROM `{$this->table}` WHERE `id` > 0";
 
 		if (!empty(trim(@$params['search']))) {
@@ -32,8 +33,12 @@ class CategoryModel extends Model
 			$query[] = "AND `name` LIKE $keyword";
 		}
 
-		if (@$params['status'] && $params['status'] != 'all') {
+		if (isset($params['status']) && $params['status'] != 'all') {
 			$query[] = "AND `status` = '{$params['status']}'";
+		}
+
+		if (isset($params['is_home']) && $params['is_home'] != 'default') {
+			$query[] = "AND `is_home` = '{$params['is_home']}'";
 		}
 
 		// $query[] = 'ORDER BY `id` DESC';
@@ -61,12 +66,28 @@ class CategoryModel extends Model
 			$data = ['status' => $status, 'modified' => $modified, 'modified_by' => $modified_by];
 			$id   = $params['id'];
 			$where = [['id', $id]];
-			$query = $this->update($data, $where);
+			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeStatus', ['id' => $id, 'status' => $status]);
 			return [$id, $status, $link, $modified, $modified_by];
 		}
 	}
 
+	public function changeIshome($params, $options = null)
+	{
+		if ($options['task'] == 'change-ajax-ishome') {
+			$isHome = ($params['is_home'] == 1) ? 0 : 1;
+			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['is_home' => $isHome, 'modified' => $modified, 'modified_by' => $modified_by];
+			$id   = $params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeIshome', ['id' => $id, 'is_home' => $isHome]);
+			return [$id, $isHome, $link, $modified, $modified_by];
+		}
+	}
+
+	//Change Ordering
 	public function changeOrdering($params, $options = null)
 	{
 		if ($options['task'] == 'change-ajax-ordering') {
@@ -133,6 +154,9 @@ class CategoryModel extends Model
 				$keyword = '"%' . $params['search'] . '%"';
 				$query[] = "AND `name` LIKE $keyword";
 			}
+			if (@$params['is_home'] && $params['is_home'] != 'default') {
+				$query[] = "AND `is_home` = '{$params['is_home']}'";
+			}
 
 			$query[] = "GROUP BY `status`";
 			$query = implode(' ', $query);
@@ -151,7 +175,6 @@ class CategoryModel extends Model
 		require_once LIBRARY_EXT_PATH . 'Upload.php';
 		$uploadObj = new Upload();
 		if ($options['task'] == 'add') {
-
 			$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'category');
 			$params['form']['created'] = date('Y-m-d G.i:s<br>', time());
 			$params['form']['created_by'] = $this->_userInfo['username'];
@@ -179,7 +202,7 @@ class CategoryModel extends Model
 	public function infoItem($params, $options = null)
 	{
 		if ($options == null) {
-			$query[] 	= "SELECT  `id`, `name`, `picture`, `status`,`ordering`";
+			$query[] 	= "SELECT  `id`, `name`, `picture`,`is_home`, `status`,`ordering`";
 			$query[]	= "FROM `{$this->table}`";
 			$query[]	= "WHERE `id` = {$params['id']}";
 			$query = implode(' ', $query);

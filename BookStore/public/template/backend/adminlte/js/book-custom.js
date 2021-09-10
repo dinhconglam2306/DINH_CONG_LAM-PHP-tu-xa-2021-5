@@ -1,5 +1,5 @@
 
-//AJAX CHANGE GROUP ACP - User - SPECIAL
+//AJAX CHANGE GROUP ACP - User - SPECIAL in Backend
 $('.btn-change').click(function(e){
   let attrID = $(this).attr('id');
   let dataUrl = $(this).attr('data-url');
@@ -7,6 +7,7 @@ $('.btn-change').click(function(e){
   $(this).notify("Cập nhật thành công",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
   e.preventDefault();
   $.get(dataUrl,function(data){
+    console.log(data)
       let elm       = 'a#'+ attrID;
       let classRemove = 'btn-success';
       let iconRemove  = 'fa-check';
@@ -51,3 +52,4 @@ $('select[name="change_category"]').change(function (e){
     },'json')
 
 });
+

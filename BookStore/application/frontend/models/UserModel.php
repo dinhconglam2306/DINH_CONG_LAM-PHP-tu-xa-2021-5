@@ -44,9 +44,9 @@ class UserModel extends Model
 	}
 	public function CategoryList($params, $option)
 	{
-		if ($option == null) {
+		if ($option['task'] == 'category-list') {
 			
-			$query = "SELECT `name` FROM `category` WHERE `status` = 'active'";
+			$query = "SELECT `name`,`id` FROM `category` WHERE `status` = 'active'";
 			$result  = $this->fetchAll($query);
 			return $result;
 		}

@@ -14,7 +14,7 @@ class Controller{
 	protected $_arrParam;
 
 	//Pagination
-	protected $_pagination = ['totalItemsPerPage' =>2	,'pageRange' =>2];
+	protected $_pagination = ['totalItemsPerPage' => 3 ,'pageRange' => 2 ];
 
 	
 	public function __construct($arrParams){

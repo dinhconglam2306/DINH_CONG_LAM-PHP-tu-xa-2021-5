@@ -16,3 +16,10 @@ ul.list-unstyled.mb-0 li.text-color {
   line-height: 1.5;
   text-transform: uppercase;
 }
+
+h6.description span {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -14,7 +14,7 @@ class UserController extends Controller
 	{
 
 		$this->_view->_title 				= "Thông tin tài khoản";
-		$this->_view->category = $this->_model->CategoryList($this->_arrParam, $option = null);
+		$this->_view->category = $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list']);
 		$this->_view->render('user/index');
 	}
 }

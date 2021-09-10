@@ -15,6 +15,33 @@
     <?php require_once APPLICATION_PATH . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
     <?php echo $this->_pluginsJsFiles; ?>
     <?php echo $this->_jsFiles; ?>
+
+    <?php
+    if (Session::get('notify')) {
+        $notify = Session::get('notify');
+        echo sprintf('
+            <script type="text/javascript">
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer)
+                  toast.addEventListener("mouseleave", Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                        position: "top-end",
+                        icon:"%s",
+                        title:"%s"
+                    });
+            </script>
+            ', $notify['type'], $notify['title']);
+        Session::delete('notify');
+    }
+    ?>
 </body>
 
 </html>

@@ -18,6 +18,12 @@ class Pagination
 		$this->totalPage 	= ceil($totalItems / $pagination['totalItemsPerPage']);
 	}
 
+	public function showingItem(){
+
+		$xhtml  = sprintf('<h5>Page %s of %s</h5>',$this->currentPage,$this->totalPage);
+		return $xhtml;
+	}
+
 	public function showPaginationBackend()
 	{
 		$url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -76,6 +82,68 @@ class Pagination
 			}
 			$paginationHTML = sprintf('
 				<ul class="pagination m-0 float-right">%s %s %s %s %s</ul>', $start, $prev, $listPage, $next, $end);
+		}
+
+		return $paginationHTML;
+	}
+	public function showPaginationFrontEnd()
+	{
+		$url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+		$query_str = parse_url($url, PHP_URL_QUERY);
+		parse_str($query_str, $queryParams);
+		if (array_key_exists('page', $queryParams)) unset($queryParams['page']);
+		$link = http_build_query($queryParams);
+		$link = 'index.php?' . $link;
+		$paginationHTML = '';
+		if ($this->totalPage > 1) {
+			$start =  '<li class="page-item disabled"><a href="" class="page-link"><i class="fa fa-angle-double-left"></i></a></li>';
+			$prev =  '<li class="page-item disabled"><a href="" class="page-link"><i class="fa fa-angle-left"></i></a></li>';
+			if ($this->currentPage > 1) {
+				$start =  sprintf('<li class="page-item"><a href="%s" class="page-link"><i class="fa fa-angle-double-left"></i></a></li>', $link);
+				$prev =  sprintf('<li class="page-item"><a href="%s&page=%s" class="page-link"><i class="fa fa-angle-left"></i></a></li>', $link, ($this->currentPage - 1));
+			}
+
+			$next = '<li class="page-item disabled"><a href="" class="page-link"><i class="fa fa-angle-right"></i></a></li>';
+			$end =  '<li class="page-item disabled"><a href="" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>';
+			if ($this->currentPage < $this->totalPage) {
+
+				$next =  sprintf('<li class="page-item"><a href="%s&page=%s" class="page-link"><i class="fa fa-angle-right"></i></a></li>', $link, ($this->currentPage + 1));
+				$end = 	sprintf('<li class="page-item"><a href="%s&page=%s" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>', $link, $this->totalPage);
+			}
+			$listPage = '';
+
+			if ($this->pageRange < $this->totalPage) {
+				if ($this->currentPage == 1) {
+					$startPage = 1;
+					$endPage = $this->pageRange;
+				} else if ($this->currentPage == $this->totalPage) {
+					$startPage = $this->totalPage - $this->pageRange + 1;
+					$endPage   = $this->totalPage;
+				} else {
+					$startPage = $this->currentPage - ($this->pageRange - 1) / 2;
+					$endPage   = $this->currentPage + ($this->pageRange - 1) / 2;
+					if ($startPage < 1) {
+						$startPage = 1;
+						$endPage =  $endPage + 1;
+					}
+					if ($endPage > $this->totalPage) {
+						$startPage = $endPage - $this->pageRange + 1;
+						$endPage = $this->totalPage;
+					}
+				}
+			} else {
+				$startPage = 1;
+				$endPage   = $this->totalPage;
+			}
+			for ($i =  $startPage; $i <= $endPage; $i++) {
+				if ($i == $this->currentPage) {
+					$listPage .= sprintf('<li class="page-item active"><a class="page-link" href="#">%s</a></li>', $i);
+				} else {
+					$listPage .= sprintf('<li class="page-item"><a class="page-link" href="%s&page=%s">%s</a></li>', $link, $i, $i);
+				}
+			}
+			$paginationHTML = sprintf('
+				<ul class="pagination">%s %s %s %s %s</ul>', $start, $prev, $listPage, $next, $end);
 		}
 
 		return $paginationHTML;

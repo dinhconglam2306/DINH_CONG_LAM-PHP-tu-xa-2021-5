@@ -99,15 +99,27 @@ $(document).ready(function () {
         console.log(time)
       },'json')
     });
-  
 
-
+    //submit
+    
+    $('select[name="category_id"]').change(function (){
+      $('#select-book').submit();
+    });
+    $('select[name="special"]').change(function (){
+      $('#select-book').submit();
+    });
+    $('select[name="is_home"]').change(function (){
+      $('#select-ishome').submit();
+    });
+    
     //Active
+    
     let controller = (getUrlVar('controller') == '') ? 'index' :getUrlVar('controller') ;
     let action = (getUrlVar('action') == '') ? 'index' :getUrlVar('action') ;
     $(`li.nav-item a[data-name=${controller}]`).addClass('active');
-    $(`a[data-action=${action}]`).addClass('active');
     $(`li.nav-item a[data-name=${controller}]`).parent().addClass('menu-is-opening menu-open');
+    $(`li.nav-item a[data-name=${controller}]`).next().children().children(`a[data-action=${action}]`).addClass('active')
+  
 
     //Img
     function readURL(input) {

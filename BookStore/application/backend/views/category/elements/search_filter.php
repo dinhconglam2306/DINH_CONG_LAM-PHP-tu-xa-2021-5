@@ -8,13 +8,20 @@ $xhtmlFilterStatus  = HelperBackend::showFilterStatus($arrParams['module'], $arr
 $ipSearch =  FormBackend::input('text', 'search', @$arrParams['search']);
 
 //Input Hidden
-$ipHdModule         = FormBackend::input('hidden', 'module', $arrParams['module']);
-$ipHdController     = FormBackend::input('hidden', 'controller', $arrParams['controller']);
-$ipHdAction         = FormBackend::input('hidden', 'action', $arrParams['action']);
+$inputHiddenModule         = FormBackend::input('hidden', 'module', $arrParams['module']);
+$inputHiddenController     = FormBackend::input('hidden', 'controller', $arrParams['controller']);
+$inputHiddenAction         = FormBackend::input('hidden', 'action', $arrParams['action']);
 
 
-$input = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
+$input = $inputHiddenModule . $inputHiddenController . $inputHiddenAction . $ipSearch;
 
+
+//Show at home
+
+$arrValueIsHome = ['default' => ' -Select show at home- ', 1 => 'Yes', 0 => 'No'];
+$selectBoxIsHome = FormBackend::selectBox('is_home', $arrValueIsHome, @$arrParams['is_home'], '', 'slb-select-ishome');
+
+$formSlIshome = $inputHiddenModule . $inputHiddenController . $inputHiddenAction . $selectBoxIsHome  ;
 ?>
 
 <div class="card card-outline card-info">
@@ -33,9 +40,11 @@ $input = $ipHdModule . $ipHdController . $ipHdAction . $ipSearch;
                 <div class="area-filter-status mb-2">
                     <?= $xhtmlFilterStatus ?>
                 </div>
-                <!-- <div class="area-filter-group-acp mb-2 ">
-                    <?= $selectBoxGrACP ?>
-                </div> -->
+                <div class="area-filter-group-acp mb-2 ">
+                    <form action="" method="GET" id="select-ishome">
+                        <?= $formSlIshome ?>
+                    </form>
+                </div>
                 <div class="area-search mb-2">
                     <form action="" method="GET">
                         <div class="input-group">

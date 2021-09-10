@@ -24,7 +24,7 @@ $dashBoard   = HelperBackend::BackEndMenuDashBoard($linkDashboard);
 @$group     = HelperBackend::BackEndMenu('group', 'fas fa-users', 'Group', ['List|index' => $linkGroupList]);
 $user     = HelperBackend::BackEndMenu('user', 'fas fa-user', 'User', ['List|index' => $linkUserList, 'Add|form' => $linkUserForm]);
 $category     = HelperBackend::BackEndMenu('category', 'fas fa-thumbtack', 'Category', ['List|index' => $linkCategoryList, 'Add|form' => $linkCategoryForm]);
-$book     = HelperBackend::BackEndMenu(' ', 'fas fa-book-open', 'Book', ['List|index' => $linkBookList, 'Add|form' => $linkBookForm]);
+$book     = HelperBackend::BackEndMenu('book', 'fas fa-book-open', 'Book', ['List|index' => $linkBookList, 'Add|form' => $linkBookForm]);
 ?>
 <aside class="main-sidebar sidebar-dark-info elevation-4">
     <!-- Brand Logo -->
@@ -47,7 +47,7 @@ $book     = HelperBackend::BackEndMenu(' ', 'fas fa-book-open', 'Book', ['List|i
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" id="nav-parent" data-widget="treeview" role="menu" data-accordion="false">
                 <?= $dashBoard . $group . $user . $category . $book; ?>
             </ul>
         </nav>

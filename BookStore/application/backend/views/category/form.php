@@ -1,33 +1,57 @@
 <?php
 $dataForm = @$this->arrParam['form'];
+echo '<pre>';
+print_r($dataForm);
+echo '</pre>';
 
 //Input
 $inputName          = FormBackend::input('text', 'form[name]', @$dataForm['name']);
 $inputHidden        = FormBackend::input('hidden', 'form[token]', time());
 $inputOrdering      = FormBackend::input('number', 'form[ordering]', @$dataForm['ordering']);
 $inputPicture       = '<input type="file" class="form-control-file" name="picture" value="" id="imgInp">';
-$pathImage= '';
+$pathImage = '';
 $picture = '<div id="picture"></div>';
 $inputPictureHidden = '';
+// if (isset($this->arrParam['id'])) {
+//     @$pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture'];
+
+//     if(is_array($dataForm['picture']) == true){
+//         $pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture_hidden'];
+//     }
+//     $picture            = sprintf('<div id="picture"><img id="old" src="%s" style ="max-width:250px;" /></div>', $pathImage);
+//     @$inputPictureHidden        = FormBackend::input('hidden', 'form[picture_hidden]',@$dataForm['picture']);
+// }
+
 if (isset($this->arrParam['id'])) {
-    @$pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture'];
-    if(is_array($dataForm['picture']) == true){
-        $pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture_hidden'];
+    $picture            = sprintf('<div id="picture"><img src="%s"style ="max-width :100px;"/></div>', UPLOAD_URL . 'category' . DS . 'default.png');
+    @$picturePath        = UPLOAD_PATH . 'category' . DS . @$dataForm['picture'];
+    if (file_exists($picturePath) && !empty($dataForm['picture'])) {
+        $picture  = sprintf('<div id="picture"><img src="%s"style ="max-width :100px;"/></div>', UPLOAD_URL . 'category' . DS . $dataForm['picture']);
+    } else {
+        if (is_array($dataForm['picture']) == true) {
+            $picture  = sprintf('<div id="picture"><img src="%s"style ="max-width :100px;"/></div>', UPLOAD_URL . 'category' . DS . $dataForm['picture_hidden']);
+        }
     }
-    $picture            = sprintf('<div id="picture"><img id="old" src="%s" style ="max-width:250px;" /></div>', $pathImage);
-    @$inputPictureHidden        = FormBackend::input('hidden', 'form[picture_hidden]',@$dataForm['picture']);
+    // $picture            = sprintf('<div id="picture"><img id="old" src="%s" style ="max-width:250px;" /></div>', $pathImage);
+    @$inputPictureHidden        = FormBackend::input('hidden', 'form[picture_hidden]', @$dataForm['picture']);
 }
 
 //Select Box Status
 $arrValueStatus     = ['default' => ' - Select Status - ', 'active' => 'Active', 'inactive' => 'Inactive'];
-$selectBoxStatus    = FormBackend::selectBox('form[status]', $arrValueStatus, @$dataForm['status'], '', '');
+$selectBoxStatus    = FormBackend::selectBox('form[status]', $arrValueStatus, @$dataForm['status']);
+
+//Show at home
+
+$arrValueIsHome = ['default' => ' -Select show at home- ', 1 => 'Yes', 0 => 'No'];
+$selectBoxIsHome = FormBackend::selectBox('form[is_home]', $arrValueIsHome, @$dataForm['is_home']);
 
 //Row Form
 $rowName            = FormBackend::rowForm('Name', $inputName);
-$rowGroupStatus     = FormBackend::rowForm('Status ', $selectBoxStatus);
-$rowOrdering        = FormBackend::rowForm('Ordering', $inputOrdering,false);
-$rowPicture        = FormBackend::rowForm('Picture', $inputPicture . $picture);
-$rows               = $rowName  . $rowGroupStatus . $rowOrdering . $rowPicture.$inputPictureHidden;
+$rowStatus          = FormBackend::rowForm('Status ', $selectBoxStatus);
+$rowShowAtHome      = FormBackend::rowForm('Show at home ', $selectBoxIsHome);
+$rowOrdering        = FormBackend::rowForm('Ordering', $inputOrdering, false);
+$rowPicture         = FormBackend::rowForm('Picture', $inputPicture . $picture);
+$rows               = $rowName  . $rowStatus . $rowShowAtHome .  $rowOrdering . $rowPicture . $inputPictureHidden;
 
 //ButtonSave
 $saveButton         = FormBackend::button('submit', 'Save', 'btn btn-success');

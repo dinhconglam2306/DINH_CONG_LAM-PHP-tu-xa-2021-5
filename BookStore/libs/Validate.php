@@ -119,7 +119,7 @@ class Validate
 	private function validateInt($element, $min = 0, $max = 0)
 	{
 		if (!filter_var($this->source[$element], FILTER_VALIDATE_INT, array("options" => array("min_range" => $min, "max_range" => $max)))) {
-			$this->setError($element, 'is an invalid number');
+			$this->setError($element, "Giá trị từ $min đến $max");
 		}
 	}
 
@@ -261,7 +261,6 @@ class Validate
 			if (!filter_var($this->source[$element]['size'], FILTER_VALIDATE_INT, array("options" => array("min_range" => $options['min'], "max_range" => $options['max'])))) {
 				$this->setError($element, 'kích thước không phù hợp');
 			}
-
 			$ext = pathinfo($this->source[$element]['name'], PATHINFO_EXTENSION);
 			if (in_array($ext, $options['entension']) == false) {
 				$this->setError($element, 'phần mở rộng không phù hợp');

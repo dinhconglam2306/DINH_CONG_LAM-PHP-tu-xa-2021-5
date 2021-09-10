@@ -14,7 +14,9 @@ class IndexController extends Controller
 	public function indexAction()
 	{
 		$this->_view->_title 				= "Trang chủ | BookStore";
-		$this->_view->category = $this->_model->CategoryList($this->_arrParam, $option = null);
+		$this->_view->category 				= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list']);
+		$this->_view->categorySpecial 		= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list-special']);
+		$this->_view->specialItems    		=  $this->_model->BookList($this->_arrParam, ['task' => 'book-special-list']);
 		$this->_view->render('index/index');
 	}
 
@@ -48,10 +50,11 @@ class IndexController extends Controller
 				Session::set('user', $arrSession);
 				URL::redirect($this->_arrParam['module'], 'user', 'index');
 			} else {
-				$this->_view->errors = $validate->showErrorsFrontEnd();
+				$notify = ['type' => 'warning', 'title' => 'Đăng nhập thất bại. Xin vui lòng kiểm tra lại thông tin đăng nhập!'];
+				Session::set('notify', $notify);
 			}
 		}
-
+		$this->_view->categorySpecial 		= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list-special']);
 		$this->_view->render('index/login');
 	}
 	public function registerAction()
@@ -93,5 +96,11 @@ class IndexController extends Controller
 	{
 		Session::delete('user');
 		URL::redirect('frontend', 'index', 'index');
+	}
+
+	public function quickViewBookAction()
+	{
+		$result = $this->_model->quickViewBook($this->_arrParam, ['task' => 'ajax-quick-view-book']);
+		echo json_encode($result);
 	}
 }

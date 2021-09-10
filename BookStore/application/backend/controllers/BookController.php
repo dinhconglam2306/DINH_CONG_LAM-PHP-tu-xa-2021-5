@@ -48,6 +48,11 @@ class BookController extends Controller
 		echo json_encode($result);
 		// URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 	}
+	public function changeOrderingAction()
+	{
+		$result = $this->_model->changeOrdering($this->_arrParam, ['task' => 'change-ajax-ordering']);
+		echo json_encode($result);
+	}
 
 	public function deleteAction()
 	{
