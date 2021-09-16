@@ -5,6 +5,7 @@ $arrMenu = [
     ['link' => URL::createLink('backend', 'user', 'index'), 'name' => 'User', 'icon' => 'ion ion-ios-person', 'total' => $this->totalItems],
     ['link' => URL::createLink('backend', 'category', 'index'), 'name' => 'Category', 'icon' => 'ion ion-clipboard', 'total' => 10],
     ['link' => URL::createLink('backend', 'book', 'index'), 'name' => 'Book', 'icon' => 'ion ion-ios-book', 'total' => 20],
+    ['link' => URL::createLink('backend', 'cart', 'index'), 'name' => 'Cart', 'icon' => 'ion ion-ios-cart', 'total' => 20],
 ];
 
 foreach ($arrMenu as $key => $value) {

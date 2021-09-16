@@ -1,9 +1,20 @@
 <?php
 $picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload book-picture" alt="">', UPLOAD_URL . 'book' . DS . 'default.png');
 
+// //Input Hidden
+// $inputHiddenModule         = FormBackend::input('hidden', 'module', $this->arrParam['module']);
+// $inputHiddenController     = FormBackend::input('hidden', 'controller', $this->arrParam['controller']);
+// $inputHiddenAction         = FormBackend::input('hidden', 'action', $this->arrParam['action']);
+
+// $inputHidden = $inputHiddenModule . $inputHiddenController . $inputHiddenAction;
+
+// if (isset($this->arrParam['book_id'])) {
+//     $inputHiddenAction         = FormBackend::input('hidden', 'book_id', $this->arrParam['book_id']);
+//     $inputHidden = $inputHiddenModule . $inputHiddenController . $inputHiddenAction . $inputHiddenAction;
+// }
+
+
 ?>
-
-
 <div class="modal fade bd-example-modal-lg theme-modal" id="quick-view" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content quick-view-modal">
@@ -18,8 +29,9 @@ $picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload b
                             <h2 class="book-name">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores,
                                 distinctio.</h2>
                             <h3 class="book-price">
-                                <span class="price-sale">26.910 ₫</span> 
-                                <del class="price">39.000 ₫</del></h3>
+                                <span class="price-sale">26.910 ₫</span>
+                                <del class="price">39.000 ₫</del>
+                            </h3>
                             <div class="border-product">
                                 <div class="book-description"><span class="description">Lorem ipsum dolor sit amet consectetur, adipisicing
                                         elit. Unde quae cupiditate delectus laudantium odio molestiae deleniti facilis

@@ -102,6 +102,10 @@ class Validate
 						$this->validateEmail($element);
 						$this->validateNotExistRecord($element, $value['options']);
 						break;
+					case 'pass-notExistRecord':
+						$this->validatePassword($element, $value['options']);
+						$this->validateNotExistRecord($element, $value['options']);
+						break;
 					case 'file':
 						$this->validateFile($element, $value['options']);
 						break;

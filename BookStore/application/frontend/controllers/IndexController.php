@@ -103,4 +103,28 @@ class IndexController extends Controller
 		$result = $this->_model->quickViewBook($this->_arrParam, ['task' => 'ajax-quick-view-book']);
 		echo json_encode($result);
 	}
+	public function orderAction()
+	{
+		$this->_view->_title 				= "Giỏ hàng";
+
+		$cart = Session::get('cart');
+		$bookID = $this->_arrParam['book_id'];
+		$price = $this->_arrParam['price'];
+
+		if (empty($cart)) {
+			$cart['quantity'][$bookID] = 1;
+			$cart['price'][$bookID] = $price;
+		} else {
+			if (key_exists($bookID, $cart['quantity'])) {
+				$cart['quantity'][$bookID] += 1;
+				$cart['price'][$bookID] = $price * $cart['quantity'][$bookID];
+			} else {
+				$cart['quantity'][$bookID] = 1;
+				$cart['price'][$bookID] = $price;
+			}
+		}
+		Session::set('cart',$cart);
+		$totalItems = array_sum($cart['quantity']);
+		echo json_encode($totalItems);
+	}
 }

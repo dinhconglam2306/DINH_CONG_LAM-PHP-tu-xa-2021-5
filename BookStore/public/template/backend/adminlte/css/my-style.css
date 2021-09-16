@@ -27,3 +27,25 @@ form#select-book {
 select.custom-select.slb-select-category {
   margin-right: 10px;
 }
+
+ul.list-picture li{
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+p.list{
+  margin-bottom: 80px;
+}
+
+select.delivery-warning {
+  background-color: #ffc107;
+}
+select.delivery-danger {
+  background-color: #dc3545;
+  color: white;
+}
+select.delivery-success {
+  background-color:#28a745 ;
+  color: white;
+}
+

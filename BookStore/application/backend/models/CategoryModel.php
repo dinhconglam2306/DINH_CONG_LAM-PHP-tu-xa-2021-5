@@ -26,7 +26,7 @@ class CategoryModel extends Model
 	public function listItems($params, $options = null)
 	{
 		$query[] 	= "SELECT `id`, `name`, `picture`, `ordering`, `is_home`,`created`, `created_by`, `modified`, `modified_by`, `status`";
-		$query[]	= "FROM `{$this->table}` WHERE `id` > 0";
+		$query[]	= "FROM `{$this->table}` WHERE `id` > 1";
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%' . $params['search'] . '%"';
@@ -41,7 +41,7 @@ class CategoryModel extends Model
 			$query[] = "AND `is_home` = '{$params['is_home']}'";
 		}
 
-		// $query[] = 'ORDER BY `id` DESC';
+		$query[] = 'ORDER BY `ordering` ASC';
 
 		//PAGINATION
 		$pagination = $params['pagination'];
@@ -94,11 +94,11 @@ class CategoryModel extends Model
 			$ordering = @$params['ordering'];
 			$modified = $params['modified'] = date('Y-m-d H:i:s', time());
 			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
-			$data = ['ordering' => $ordering, 'modified' => $modified,'modified_by' => $modified_by];
+			$data = ['ordering' => $ordering, 'modified' => $modified, 'modified_by' => $modified_by];
 			$id   = @$params['id'];
 			$where = [['id', $id]];
 			$this->update($data, $where);
-			return [$id,$modified,$modified_by];
+			return [$id, $modified, $modified_by];
 			// Session::set('message', SUCCESS_UPDATE_GROUP_USER);
 		}
 	}
@@ -136,6 +136,11 @@ class CategoryModel extends Model
 				$uploadObj->removeFile('category', $value);
 			}
 
+			//Change category of book => default category
+
+			$queryChange = "UPDATE `book` SET `category_id` = 1 WHERE `category_id` IN ($ids)";
+			$this->query($queryChange);
+
 			//Remove Database
 			$queryDB = "DELETE FROM `{$this->table}` WHERE `id` IN ($ids)";
 			$this->query($queryDB);
@@ -154,7 +159,7 @@ class CategoryModel extends Model
 				$keyword = '"%' . $params['search'] . '%"';
 				$query[] = "AND `name` LIKE $keyword";
 			}
-			if (@$params['is_home'] && $params['is_home'] != 'default') {
+			if (isset($params['is_home']) && $params['is_home'] != 'default') {
 				$query[] = "AND `is_home` = '{$params['is_home']}'";
 			}
 

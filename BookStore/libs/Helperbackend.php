@@ -65,6 +65,20 @@ class HelperBackend
         return sprintf('<a href="#" data-url="%s" id="special-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl, $id, $colorClass, $icon);
     }
 
+    public static function itemNew($module, $controller, $id, $value)
+    {
+        $datUrl = URL::createLink($module, $controller, 'changeNew', ['id' => $id, 'new' => $value]);
+        $colorClass = 'btn-success';
+        $icon = 'fa-check';
+
+        if ($value == 0) {
+            $colorClass = 'btn-danger';
+            $icon = 'fa-minus';
+        }
+
+        return sprintf('<a href="#" data-url="%s" id="new-%s"class="btn %s rounded-circle btn-change btn-sm"><i class="fas %s"></i></a>', $datUrl, $id, $colorClass, $icon);
+    }
+
     public static function itemIshome($module, $controller, $id, $value)
     {
         $datUrl = URL::createLink($module, $controller, 'changeIshome', ['id' => $id, 'is_home' => $value]);

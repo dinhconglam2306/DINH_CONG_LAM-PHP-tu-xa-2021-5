@@ -3,14 +3,18 @@
 class FormFrontend
 {
 
-    public static function input($type, $id, $name, $value = '', $class = '')
+    public static function input($type, $id, $name, $value = '', $class = '', $flag = true)
     {
-        $xhtml = sprintf('<input type="%s" id="%s" name="%s" value="%s" class="form-control %s">', $type, $id, $name, $value, $class);
+        $readonly='';
+        if ($flag == false) $readonly = 'readonly';
+        $xhtml = sprintf('<input type="%s" id="%s" name="%s" value="%s" class="form-control %s" %s>', $type, $id, $name, $value, $class,$readonly);
         return $xhtml;
     }
     //Create RowForm
-    public static function rowForm($for, $labelName, $input,$class)
+    public static function rowForm($for, $labelName, $input, $class = '')
     {
+        $readonly = '';
+
         $xhtml = sprintf(
             '<div class="%s">
                 <label for="%s" class="required">%s</label>

@@ -138,6 +138,7 @@ $(document).ready(function () {
       readURL(this);
   });
 
+  
 
 
     //delete message after 2s

@@ -53,6 +53,30 @@
             ', $notify['type'], $notify['title']);
          Session::delete('notify');
     }
+    if (Session::get('success')) {
+        $success = Session::get('success');
+        echo sprintf('
+            <script type="text/javascript">
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer)
+                  toast.addEventListener("mouseleave", Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                        position: "top-end",
+                        icon:"%s",
+                        title:"%s"
+                    });
+            </script>
+            ', $success['type'], $success['title']);
+         Session::delete('success');
+    }
     ?>
 </body>
 

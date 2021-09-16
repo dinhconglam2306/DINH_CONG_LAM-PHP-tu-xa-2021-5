@@ -35,15 +35,16 @@ $(document).ready(function () {
     //Quick view book
     $('.ti-search').click(function (e){
         let url  = $(this).attr('data-url').replace('value_new',$(this).attr('data-id'));
+        console.log(url)
         e.preventDefault();
         $.get(url,function(data){
+            console.log(data);
             let description = data[0]['description'];
             let name        = data[0]['name'];
             let picture     = data[0]['picture'];
             let price       =parseInt(data[0]['price']).toLocaleString();
             let sale_off    = data[0]['sale_off'];
             let price_sale  = (data[0]['price'] * (100 - sale_off)) / 100;
-                price_sale  = parseInt(price_sale).toLocaleString();
             
             //Book image
             let picturePath = $('.quick-view-img img').attr('src');
@@ -60,12 +61,86 @@ $(document).ready(function () {
 
             //Book price
             $('.book-price .price').text(price + 'đ')
-            $('.book-price .price-sale').text(price_sale + 'đ')
+            $('.book-price .price-sale').text(parseInt(price_sale).toLocaleString() + 'đ')
+            // add Attr
+            let link = `index.php?module=frontend&controller=user&action=order&book_id=${data[0]['id']}&price=${price_sale}&quantity=value_new`;
+            $('.btn-add-to-cart').attr('data-url',link);
+
+            //add href box show detail
+            let hrefDetail = `index.php?module=frontend&controller=book&action=detail&book_id=${data[0]['id']}`;
+            $('.btn-view-book-detail').attr('href',hrefDetail);
 
           },'json')
     })
+
+    $('.ti-shopping-cart').click(function (e){
+        let url = $(this).attr('data-url');
+        console.log(url);
+        $('a#cart').notify("Đã thêm vào rỏ hàng",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
+        e.preventDefault();
+        $.get(url,function(data){
+            console.log(data)
+            $('.badge-items').text(data)
+        },'json')
+    })
+    $('.btn-add-to-cart').click(function (e){
+        let quantityValue = $('input[name="quantity"]').val();
+        let url  = $(this).attr('data-url').replace('value_new',quantityValue);
+        e.preventDefault();
+        $('.product-title').notify("Đã thêm vào rỏ hàng",{elementPosition: 'top',className: 'success',autoHideDelay:1200})
+        $.get(url,function(data){
+            console.log(data)
+        })
+        setTimeout(function(){
+            location.reload();
+        },1400);
+    })
+
+    $('.btn-add-to-cart-detail').click(function (e){
+        let quantityValue = $('input[name="quantity"]').val();
+        let url  = $(this).attr('data-url').replace('value_new',quantityValue);
+        e.preventDefault();
+        $.get(url,function(data){
+            console.log(data)
+            $('.badge-items').text(data);
+            $('input[name="quantity"]').val('1');
+        })
+    })
+
+
+
     let controller = (getUrlVar('controller') == '') ? 'index' :getUrlVar('controller') ;
     $(`li a[data-controller=${controller}]`).addClass('my-menu-link active');
 
+
+    // Active Controler User in Frontend
+
+    let controllerUser  = (getUrlVar('controller') == '') ? 'index' :getUrlVar('controller') ;
+    let actionUser      = (getUrlVar('action') == '') ? 'index' :getUrlVar('action') ;
+
+    let dataUser  = `${controllerUser}-${actionUser}`;
+    $(`a[data=${dataUser}]`).parent().addClass('active');
+
+
+    //changeQuantity in Cart
+
+    $('input[name="quantity-cart"]').change(function (e){
+        let quantity = $(this).val();
+        let url      = $(this).attr('data-quantity').replace('value_new',quantity);
+        console.log(url)
+        window.location.href = url;
+    })
+
+    $('.ti-close').click(function (){
+        let url = $(this).attr('data-delete');
+        console.log(url);
+        window.location.href = url;
+    })
+
+
+    $('.check-eye').hover(function (){
+        let type = ($(this).prev().attr('type') == 'text') ? 'password' : 'text';
+        $(this).prev().attr('type',type);
+    })
 });
 

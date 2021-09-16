@@ -16,10 +16,18 @@ foreach ($arrCollection as $value) {
 $inputHiddenModule         = FormBackend::input('hidden', 'module', @$this->arrParam['module']);
 $inputHiddenController     = FormBackend::input('hidden', 'controller', @$this->arrParam['controller']);
 $inputHiddenAction         = FormBackend::input('hidden', 'action', @$this->arrParam['action']);
-$inputHiddenCategoryId     = FormBackend::input('hidden', 'category_id', @$this->arrParam['category_id']);
 
-$arrValueSort = ['default' => ' - Sắp xếp - ', 'price_asc' => 'Giá tăng dần', 'price_desc' => 'Giá giảm dần','id_desc' => 'Mới nhất'];
-$selectSort   = FormFrontend::selectBox('sort','sort',$arrValueSort,@$this->arrParam['sort']);
+
+
+$arrValueSort = ['default' => ' - Sắp xếp - ', 'price_asc' => 'Giá tăng dần', 'price_desc' => 'Giá giảm dần', 'id_desc' => 'Mới nhất'];
+$selectSort   = FormFrontend::selectBox('sort', 'sort', $arrValueSort, @$this->arrParam['sort']);
+
+$inputHidden = $inputHiddenModule . $inputHiddenController . $inputHiddenAction;
+if (isset($this->arrParam['category_id'])) {
+    $inputHiddenCategoryId     = FormBackend::input('hidden', 'category_id', @$this->arrParam['category_id']);
+    $inputHidden .= $inputHiddenCategoryId;
+}
+
 ?>
 <div class="product-filter-content">
     <div class="collection-view">
@@ -35,8 +43,8 @@ $selectSort   = FormFrontend::selectBox('sort','sort',$arrValueSort,@$this->arrP
     </div>
     <div class="product-page-filter">
         <form action="" id="sort-form" method="GET">
-            <?= $inputHiddenModule . $inputHiddenController . $inputHiddenAction .  $inputHiddenCategoryId  ;?>
-            <?= $selectSort ;?>
+            <?= $inputHidden; ?>
+            <?= $selectSort; ?>
         </form>
     </div>
 </div>

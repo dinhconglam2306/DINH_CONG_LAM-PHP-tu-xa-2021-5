@@ -6,6 +6,7 @@ class BookModel extends Model
 		'name',
 		'picture',
 		'description',
+		'content',
 		'price',
 		'special',
 		'sale_off',
@@ -33,7 +34,7 @@ class BookModel extends Model
 	//Hiện danh sách items
 	public function listItems($params, $options = null)
 	{
-		$query[] 	= "SELECT `b`.`id`,`b`.`ordering`,`b`.`category_id`, `b`.`name`, `b`.`special`,`b`.`sale_off`,`b`.`picture`,`b`.`price` ,`c`.`name` AS `category_name`, `b`.`created`, `b`.`created_by`, `b`.`modified`, `b`.`modified_by`, `b`.`status`";
+		$query[] 	= "SELECT `b`.`id`,`b`.`ordering`,`b`.`new`,`b`.`category_id`, `b`.`name`, `b`.`special`,`b`.`sale_off`,`b`.`picture`,`b`.`price` ,`c`.`name` AS `category_name`, `b`.`created`, `b`.`created_by`, `b`.`modified`, `b`.`modified_by`, `b`.`status`";
 		$query[]	= "FROM `{$this->table}` AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 		$query[]	= "WHERE `b`.`id` > 0";
 
@@ -54,7 +55,7 @@ class BookModel extends Model
 			$query[] = "AND `b`.`special` = '{$params['special']}'";
 		}
 
-		$query[] = 'ORDER BY `id` DESC';
+		$query[] = 'ORDER BY `ordering` ASC';
 
 		//PAGINATION
 		$pagination = $params['pagination'];
@@ -113,6 +114,21 @@ class BookModel extends Model
 			$this->update($data, $where);
 			$link = URL::createLink($params['module'], $params['controller'], 'changeSpecial', ['id' => $id, 'special' => $special]);
 			return [$id, $special, $link,$modified,$modified_by];
+		}
+	}
+
+	public function changeNew($params, $options = null)
+	{
+		if ($options['task'] == 'change-ajax-new') {
+			$new = ($params['new'] == 1) ? 0 : 1;
+			$modified = $params['modified']= date('Y-m-d H:i:s', time());
+			$modified_by = $params['form']['modified_by'] = $this->_userInfo['username'];
+			$data = ['new' => $new,'modified' => $modified,'modified_by' => $modified_by];
+			$id   = $params['id'];
+			$where = [['id', $id]];
+			$this->update($data, $where);
+			$link = URL::createLink($params['module'], $params['controller'], 'changeNew', ['id' => $id, 'new' => $new]);
+			return [$id, $new, $link,$modified,$modified_by];
 		}
 	}
 
@@ -222,7 +238,7 @@ class BookModel extends Model
 	public function infoItem($params, $options = null)
 	{
 		if ($options == null) {
-			$query[] 	= "SELECT  `id`, `name`,`price`,`sale_off`,`picture`,`special`, `description`,`ordering`,`category_id`, `status`";
+			$query[] 	= "SELECT  `id`,`content`, `name`,`price`,`sale_off`,`picture`,`special`, `description`,`ordering`,`category_id`, `status`";
 			$query[]	= "FROM `{$this->table}`";
 			$query[]	= "WHERE `id` = {$params['id']}";
 			$query = implode(' ', $query);

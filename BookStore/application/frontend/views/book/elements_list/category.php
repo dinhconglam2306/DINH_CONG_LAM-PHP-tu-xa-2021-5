@@ -1,11 +1,16 @@
 <?php
 foreach ($this->category as $key => $value) {
     $name = $value['name'];
-    $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $value['id']]);
-    $catID = @$this->arrParam['category_id'];
-    $textClass = 'text-dark';
-    $moreClass = '';
-    if ($value['id'] == $catID) $textClass = 'my-text-primary';
+    $link = URL::createLink('frontend', 'book', 'list');
+    $textClass = 'my-text-primary';
+
+    if (isset($this->arrParam['category_id'])) {
+        $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $value['id']]);
+        $catID = $this->arrParam['category_id'];
+        $textClass = 'text-dark';
+        if ($value['id'] == $catID) $textClass = 'my-text-primary'; if ($value['id'] == $catID) $textClass = 'my-text-primary';
+    }
+
     if ($key > 10) $moreClass = 'more-item';
     @$xhtmlCategory .= sprintf('
    <div class="custom-control custom-checkbox collection-filter-checkbox pl-0 category-item">

@@ -76,7 +76,7 @@ class IndexModel extends Model
 			$email = $params['form']['email'];
 			$password = md5($params['form']['password']);
 
-			$query[] = "SELECT `u`.`id`,`u`.`email`,`u`.`fullname`,`u`.`email`,`u`.`status`,`g`.`group_acp`";
+			$query[] = "SELECT `u`.`id`,`u`.`phone`,`u`.`address`,`u`.`username`,`u`.`email`,`u`.`fullname`,`u`.`email`,`u`.`status`,`g`.`group_acp`";
 			$query[] = "FROM `user` AS `u` LEFT JOIN `group` AS `g` ON `u`.`group_id` = `g`.`id`";
 			$query[] = "WHERE `email` = '$email' AND `password` = '$password'";
 
@@ -90,7 +90,7 @@ class IndexModel extends Model
 	{
 		if ($option['task'] == 'category-list') {
 
-			$query = "SELECT `name`,`id` FROM `category` WHERE `status` = 'active'";
+			$query = "SELECT `name`,`id` FROM `category` WHERE `status` = 'active' ORDER BY `ordering` ASC";
 			$result  = $this->fetchAll($query);
 			return $result;
 		}
@@ -115,6 +115,7 @@ class IndexModel extends Model
 
 			$query = implode(' ', $query);
 			$result  = $this->fetchAll($query);
+
 			return $result;
 		}
 	}

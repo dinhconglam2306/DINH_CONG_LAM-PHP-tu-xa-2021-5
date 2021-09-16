@@ -1,17 +1,17 @@
 <?php
 $userObj = Session::get('user');
-
 $categoryList = @$this->category;
-$categoryID='';
+$categoryID = '';
 $categoryXhtml = '<ul>';
 foreach ($categoryList as $key => $value) {
-    if($key == 0) $categoryID = $value['id'];
     $name = $value['name'];
     $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $value['id']]);
     $categoryXhtml .= sprintf('<li><a href="%s">%s</a></li>', $link, $name);
 }
 $categoryXhtml .= '</ul>';
-$linkListBook = URL::createLink('frontend', 'book', 'list', ['category_id' => $categoryID]);
+
+//Link menu
+$linkListBook = URL::createLink('frontend', 'book', 'list', ['category_id' => 'all']);
 $linkHome = URL::createLink($this->arrParam['module'], 'index', 'index');
 $linkRegister = URL::createLink($this->arrParam['module'], 'index', 'register');
 $linkLogin = URL::createLink($this->arrParam['module'], 'index', 'login');
@@ -88,7 +88,7 @@ foreach ($controlMenu as $key => $value) {
                         <div class="top-header">
                             <ul class="header-dropdown">
                                 <li class="onhover-dropdown mobile-account">
-                                    <img src="<?= $this->_dirImg ?>avatar.png" alt="avatar">
+                                    <img id="avatar" src="<?= $this->_dirImg ?>avatar.png" alt="avatar">
                                     <?= $userName; ?>
                                     <ul class="onhover-show-div">
                                         <?= $xhtml; ?>
@@ -125,13 +125,7 @@ foreach ($controlMenu as $key => $value) {
                                         </div>
                                     </li>
                                     <li class="onhover-div mobile-cart">
-                                        <div>
-                                            <a href="cart.html" id="cart" class="position-relative">
-                                                <img src="<?= $this->_dirImg ?>cart.png" class="img-fluid blur-up lazyload" alt="cart">
-                                                <i class="ti-shopping-cart"></i>
-                                                <span class="badge badge-warning">0</span>
-                                            </a>
-                                        </div>
+                                        <?php require_once 'elements/cart.php'; ?>
                                     </li>
                                 </ul>
                             </div>

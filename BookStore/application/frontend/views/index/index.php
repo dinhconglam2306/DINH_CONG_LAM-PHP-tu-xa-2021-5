@@ -1,9 +1,8 @@
-<?php 
+<?php
 $categoryID = $this->arrPararm['category_id'] ?? 1;
-$allBookLink = URL::createLink('frontend','book','list',['category_id' => $categoryID]);
-
+$allBookLink = URL::createLink('frontend', 'book', 'list', ['category_id' => $categoryID]);
 ?>
-<?php require_once 'elements/slider.php' ;?>
+<?php require_once 'elements/slider.php'; ?>
 
 <div class="title1 section-t-space title5">
     <h2 class="title-inner1">Sản phẩm nổi bật</h2>
@@ -32,7 +31,7 @@ $allBookLink = URL::createLink('frontend','book','list',['category_id' => $categ
     <div class="container">
         <div class="row">
             <div class="col">
-               <?php require_once 'elements/special_category.php' ?>
+                <?php require_once 'elements/special_category.php' ?>
             </div>
         </div>
     </div>

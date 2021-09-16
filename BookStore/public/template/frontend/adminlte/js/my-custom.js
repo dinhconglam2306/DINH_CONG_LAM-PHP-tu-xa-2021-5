@@ -45,7 +45,6 @@ $(document).ready(function () {
         $('#sort-form').submit();
     });
 
-
     setTimeout(function () {
         $('#frontend-message').toggle('slow');
     }, 4000);

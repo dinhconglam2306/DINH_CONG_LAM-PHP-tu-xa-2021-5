@@ -26,8 +26,8 @@ class IndexController extends Controller
 
 		if (@$this->_arrParam['form']['token'] > 0) {
 			$validate = new Validate($this->_arrParam['form']);
-			$username = $this->_arrParam['form']['username'];
-			$password = md5($this->_arrParam['form']['password']);
+			$username = @$this->_arrParam['form']['username'];
+			$password = md5(@$this->_arrParam['form']['password']);
 
 			$query    = "SELECT `id` FROM `user` WHERE `username` = '$username' AND `password` = '$password'";
 

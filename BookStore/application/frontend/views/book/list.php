@@ -1,11 +1,11 @@
 <?php
 // Danh sách book special of category
 foreach ($this->specialItems as $key => $item) {
-    $link = URL::createLink('frontend','book','detail',['book_id' => $item['id']]);
+    $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $item['id']]);
     $name = $item['name'];
     $picture            = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . 'default.png', $name);
     $picturePath        = UPLOAD_PATH . 'book' . DS . $item['picture'];
-    if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img style="max-width:90px; background-position:center,center;" class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . $item['picture'], $name);
+    if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . $item['picture'], $name);
     $price = number_format(($item['price'] * (100 - $item['sale_off'])) / 100);
 
     $xhtmlSpecial = sprintf('
@@ -116,4 +116,4 @@ foreach ($this->specialItems as $key => $item) {
     </a>
 </div>
 
-<?php require_once 'elements_list/quick_view.php' ;?>
+<?php require_once 'elements_list/quick_view.php'; ?>

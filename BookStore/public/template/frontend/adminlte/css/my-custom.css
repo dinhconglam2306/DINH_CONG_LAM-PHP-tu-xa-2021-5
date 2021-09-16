@@ -12,7 +12,7 @@ ul.list-unstyled.mb-0 {
 ul.list-unstyled.mb-0 li.text-color {
   color: red;
 }
-.error-section h3{
+.error-section h3 {
   line-height: 1.5;
   text-transform: uppercase;
 }
@@ -22,4 +22,55 @@ h6.description span {
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+h3.text-center.mb-50 {
+  margin-bottom: 30px;
+}
+
+h2.order-success {
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+h5.order-content {
+  font-size: 18px;
+  color: #777777;
+}
+
+span.order-pass {
+  color: #777777;
+}
+
+div.btn-order {
+  margin-top: 20px;
+}
+
+a.btn-success {
+  margin-bottom: 20px;
+}
+
+div.change-pass {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+div.change-pass label {
+  width: 200px;
+}
+div.change-pass i {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+
+
+button.btn.btn-link.collapsed.btn-order-id {
+  width: 220px;
+}
+
+input.input-order {
+  width: 180px;
+  margin-left: 50px;
 }

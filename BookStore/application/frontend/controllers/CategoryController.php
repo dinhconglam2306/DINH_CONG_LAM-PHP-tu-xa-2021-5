@@ -12,7 +12,7 @@ class CategoryController extends Controller
 
 	public function listAction()
 	{
-		$this->_view->_title 					= "Danh sách quyển sách";
+		$this->_view->_title 					= "Danh sách danh mục";
 
 		$itemCount 								= $this->_model->countItems($this->_arrParam, ['task' => 'count-items-status']);
 		$configPagination  						= ['totalItemsPerPage' => 8, 'pageRange' => 2];

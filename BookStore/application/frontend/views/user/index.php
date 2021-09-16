@@ -1,6 +1,38 @@
 <?php
 $userInfo = Session::get('user');
 $userInfo = $userInfo['info'];
+
+//input
+$inputEmail = FormFrontend::input('text', 'email', 'form[phone]', $userInfo['email'], '', false);
+$inputFullName = FormFrontend::input('text', 'fullname', 'form[fullname]', $userInfo['fullname']);
+$inputPhone = FormFrontend::input('text', 'phone', 'form[phone]', $userInfo['phone']);
+$inputAddress = FormFrontend::input('text', 'address', 'form[address]', $userInfo['address']);
+
+$inputHiddenToken = FormFrontend::input('hidden', 'token', 'form[token]', time());
+$inputHiddenId = FormFrontend::input('hidden', 'id', 'form[user_id]', $userInfo['id']);
+
+//Row
+
+$rowEmail     = FormFrontend::rowForm('email', 'Email', $inputEmail, 'form-group', false);
+$rowFullName  = FormFrontend::rowForm('fullname', 'Fullname', $inputFullName, 'form-group');
+$rowPhone     = FormFrontend::rowForm('phone', 'Phone', $inputPhone, 'form-group');
+$rowAddress     = FormFrontend::rowForm('address', 'Address', $inputAddress, 'form-group');
+
+
+$rows = $rowEmail . $rowFullName . $rowPhone . $rowAddress;
+
+//Button
+
+$button = FormFrontend::button('submit', 'submit-edit-user', 'submit', 'Cập nhật thông tin', 'Cập nhật thông tin');
+
+$submitForm = URL::createLink('frontend', 'user', 'form');
+
+
+
+$linkChangePw       = URL::createLink('frontend', 'user', 'changePw');
+$linkUserInfo     = URL::createLink('frontend', 'user', 'index');
+$linkOrderHistory = URL::createLink('frontend', 'user', 'orderHistory');
+$linkLogout       = URL::createLink('frontend', 'index', 'logout');
 ?>
 <div class="breadcrumb-section">
   <div class="container">
@@ -14,7 +46,6 @@ $userInfo = $userInfo['info'];
     </div>
   </div>
 </div>
-
 <section class="faq-section section-b-space">
   <div class="container">
     <div class="row">
@@ -27,11 +58,10 @@ $userInfo = $userInfo['info'];
           <div class="collection-mobile-back"><span class="filter-back"><i class="fa fa-angle-left" aria-hidden="true"></i> Ẩn</span></div>
           <div class="block-content">
             <ul>
-              <li class="active"><a href="account-form.html">Thông tin tài khoản</a></li>
-              <li class=""><a href="change-password.html">Thay đổi mật khẩu</a></li>
-              <li class=""><a href="order-history.html">Lịch sử mua hàng</a></li>
-              <li class=""><a href="index.html">Đăng xuất</a>
-              </li>
+              <li class=""><a data="user-index" href="<?= $linkUserInfo; ?>">Thông tin tài khoản</a></li>
+              <li class=""><a data="user-changePw" href="<?= $linkChangePw; ?>">Thay đổi mật khẩu</a></li>
+              <li class=""><a data="user-orderHistory" href="<?= $linkOrderHistory; ?>">Lịch sử mua hàng</a></li>
+              <li class=""><a href="<?= $linkLogout; ?>">Đăng xuất</a></li>
             </ul>
           </div>
         </div>
@@ -39,28 +69,8 @@ $userInfo = $userInfo['info'];
       <div class="col-lg-9">
         <div class="dashboard-right">
           <div class="dashboard">
-            <form action="" method="post" id="admin-form" class="theme-form">
-
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" name="form[email]" value="<?= $userInfo['email'] ?>" class="form-control" id="email" readonly="1">
-              </div>
-
-              <div class="form-group">
-                <label for="fullname">Họ tên</label>
-                <input type="text" name="form[fullname]" value="<?= $userInfo['fullname'] ?>" class="form-control" id="fullname">
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Số điện thoại</label>
-                <input type="text" name="form[phone]" value="" class="form-control" id="phone">
-              </div>
-
-              <div class="form-group">
-                <label for="address">Địa chỉ</label>
-                <input type="text" name="form[address]" value="Số 19, Đường 23, KDC Ấp 5, Phong Phú, Bình Chánh, HCM" class="form-control" id="address">
-              </div>
-              <input type="hidden" id="form[token]" name="form[token]" value="1599258345"><button type="submit" id="submit" name="submit" value="Cập nhật thông tin" class="btn btn-solid btn-sm">Cập nhật thông tin</button>
+            <form action="<?= $submitForm; ?>" method="post" id="admin-form" class="theme-form">
+              <?= $rows . $inputHiddenToken . $inputHiddenId . $button; ?>
             </form>
           </div>
         </div>

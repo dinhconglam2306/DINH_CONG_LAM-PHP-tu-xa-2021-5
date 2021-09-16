@@ -88,7 +88,7 @@ class CategoryModel extends Model
 			return $result;
 		}
 		if ($option['task'] == 'category-list-special') {
-			$query = "SELECT `name`,`id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active' AND `is_home` = 1";
+			$query = "SELECT `name`,`id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active'";
 			$categorySpecial  = $this->fetchAll($query);
 			foreach ($categorySpecial as $key => $value) {
 				$queryBook 	= "SELECT  `name`,`id`,`price`,`description`,`picture`,`sale_off` FROM `book` WHERE `category_id` = $value[id] AND `status` = 'active' AND `special` = 1 LIMIT 0,8 ";
@@ -102,7 +102,7 @@ class CategoryModel extends Model
 	{
 		if ($options['task'] == 'count-items-status') {
 			$query[] = "SELECT COUNT(`id`) AS `count`";
-			$query[] = "FROM `category` WHERE `is_home` = 1 AND `status` = 'active'";
+			$query[] = "FROM `category` WHERE `status` = 'active'";
 			$query = implode(' ', $query);
 			$items = $this->fetchRow($query);
 			return $items['count'];

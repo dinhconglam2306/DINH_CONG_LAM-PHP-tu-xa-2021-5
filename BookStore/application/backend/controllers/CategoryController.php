@@ -85,7 +85,7 @@ class CategoryController extends Controller
 
 		if (@$this->_arrParam['form']['token'] > 0) {
 			$validate 					= new Validate($this->_arrParam['form']);
-			$validate->addRule('name', 'string', ['min' => 3, 'max' => 30])
+			$validate->addRule('name', 'string', ['min' => 3, 'max' => 255])
 					->addRule('status', 'status')
 					->addRule('is_home', 'status')
 					->addRule('ordering', 'int',['min' => 1, 'max' =>20 ])

@@ -7,6 +7,7 @@
     <title><?= $this->_title; ?></title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <!-- CSS only -->
     <?= $this->_pluginsCssFiles; ?>
     <?= $this->_cssFiles; ?>
 
@@ -51,6 +52,13 @@
 
     <?php echo $this->_pluginsJsFiles; ?>
     <?php echo $this->_jsFiles; ?>
+    <?php
+    echo "<script type='text/javascript'>
+            CKEDITOR.replace('form[content]', {
+                customConfig : 'config.js'
+            });
+        </script>";
+    ?>
 </body>
 
 </html>
