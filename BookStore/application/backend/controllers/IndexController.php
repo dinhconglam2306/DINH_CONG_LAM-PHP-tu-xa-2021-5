@@ -39,7 +39,8 @@ class IndexController extends Controller
 					'login' => true,
 					'info'	=> $infoUser,
 					'time'	=> time(),
-					'group_acp' => $infoUser['group_acp']
+					'group_acp' => $infoUser['group_acp'],
+					'status' => $infoUser['status']
 				];
 				Session::set('user', $arrSession);
 				URL::redirect($this->_arrParam['module'], 'dashboard', 'index');

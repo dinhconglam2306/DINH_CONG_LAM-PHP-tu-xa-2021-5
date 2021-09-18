@@ -1,13 +1,14 @@
 <?php
 if (!empty($this->category)) {
     foreach ($this->category as $item) {
-        $link = URL::createLink('frontend','book','list',['category_id' => $item['id']]);
-        $linkAdd = '#';
-        $linkView = '#';
+        $id                 = $item['id'];
         $name               = $item['name'];
-        $picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload bg-img" alt="">', UPLOAD_URL . 'category' . DS . 'default.png');
-        $picturePath        = UPLOAD_PATH . 'category' . DS . $item['picture'];
-        if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img src="%s" class="img-fluid blur-up lazyload bg-img" alt="">', UPLOAD_URL . 'category' . DS . $item['picture']);
+        $nameURL            = URL::filterURL($name) . '-' . $id . '.html';
+        $link               = URL::createLink('frontend','book','list',['category_id' => $item['id']], $nameURL);
+        $linkAdd            = '#';
+        $linkView           = '#';
+
+        $picture            = HelperBackend::createImage('category',$item['picture'],['class'=>'img-fluid blur-up lazyload bg-img','alt'=>$name]);
         $dataUrlview = URL::createLink($this->arrParam['module'], $this->arrParam['controller'], 'quickViewCategory', ['category_id' => 'value_new']);
         @$xhtmlListCategory .= '
         <div class="col-xl-3 col-6 col-grid-box">

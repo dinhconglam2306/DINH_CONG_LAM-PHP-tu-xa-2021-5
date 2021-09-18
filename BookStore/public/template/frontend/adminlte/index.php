@@ -18,6 +18,24 @@
     <?php require_once 'html/tap-top.php'; ?>
 
     <?= $this->_jsFiles; ?>
+    <?php
+
+    //Active Menu
+    $controller = !empty($this->arrParam['controller']) ? $this->arrParam['controller'] : 'index';
+
+
+    //Active menu of User in my-accout.html
+    $controllerUser  = !empty($this->arrParam['controller']) ? $this->arrParam['controller'] : 'index'; ;
+    $actionUser      = !empty($this->arrParam['action']) ? $this->arrParam['action'] : 'index'; ;
+    $dataUser  =    $controllerUser . '-' . $actionUser;
+
+    ?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('li a[data-controller=<?= $controller ;?>').addClass('my-menu-link active');
+            $(`a[data=<?= $dataUser ;?>`).parent().addClass('active');
+        })
+    </script>
     <script>
         function openSearch() {
             document.getElementById("search-overlay").style.display = "block";
@@ -51,7 +69,7 @@
                     });
             </script>
             ', $notify['type'], $notify['title']);
-         Session::delete('notify');
+        Session::delete('notify');
     }
     if (Session::get('success')) {
         $success = Session::get('success');
@@ -75,7 +93,7 @@
                     });
             </script>
             ', $success['type'], $success['title']);
-         Session::delete('success');
+        Session::delete('success');
     }
     ?>
 </body>

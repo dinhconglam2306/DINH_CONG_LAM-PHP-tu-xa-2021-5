@@ -48,7 +48,7 @@ class IndexController extends Controller
 					'status' => $infoUser['status']
 				];
 				Session::set('user', $arrSession);
-				URL::redirect($this->_arrParam['module'], 'user', 'index');
+				URL::redirect($this->_arrParam['module'], 'user', 'index',null,'my-account.html');
 			} else {
 				$notify = ['type' => 'warning', 'title' => 'Đăng nhập thất bại. Xin vui lòng kiểm tra lại thông tin đăng nhập!'];
 				Session::set('notify', $notify);
@@ -95,7 +95,7 @@ class IndexController extends Controller
 	public function logoutAction()
 	{
 		Session::delete('user');
-		URL::redirect('frontend', 'index', 'index');
+		URL::redirect('frontend', 'index', 'index',null,'index.html');
 	}
 
 	public function quickViewBookAction()

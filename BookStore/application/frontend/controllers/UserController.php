@@ -126,7 +126,7 @@ class UserController extends Controller
 				if ($passWord1 = '' || $passWord2 == '') {
 					$checkPass = ['type' => 'warning', 'title' => 'Mật khẩu không được rỗng. Xin vui lòng nhập lại mật khẩu'];
 					Session::set('notify', $checkPass);
-				}else{
+				} else {
 					$checkPass = ['type' => 'warning', 'title' => 'Độ dài mật khẩu từ 8 đến 12 ký tự và ít nhất 1 ký tự in hoa'];
 					Session::set('notify', $checkPass);
 				}

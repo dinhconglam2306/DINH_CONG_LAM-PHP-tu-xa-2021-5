@@ -8,7 +8,8 @@ require_once 'define_notice.php';
 
 function __autoload($clasName)
 {
-	require_once LIBRARY_PATH . "{$clasName}.php";
+	$fileName = LIBRARY_PATH . "{$clasName}.php";
+	if (file_exists($fileName)) require_once $fileName;
 }
 
 Session::init();

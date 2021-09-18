@@ -3,6 +3,7 @@ if (!empty($this->categorySpecial)) {
     foreach ($this->categorySpecial as $key => $valueCategorySpecial) {
         $categorySpecialID   = $valueCategorySpecial['id'];
         $categorySpecialName = $valueCategorySpecial['name'];
+        $nameURL            = URL::filterURL($categorySpecialName) . '-' . $categorySpecialID . '.html';
         $active = '';
         $class = '';
         if ($key == 0) {
@@ -18,7 +19,7 @@ if (!empty($this->categorySpecial)) {
                 $xhtmlBooks .= HelperFrontend::showProduct($valueBook, $this->arrParam);
             }
         }
-        $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $valueCategorySpecial['id']]);
+        $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $categorySpecialID],$nameURL);
         $xhtmlBooks .= sprintf('</div>
                                 <div class="text-center"><a href="%s" class="btn btn-solid">Xem tất cả</a></div>
                             </div>', $link);

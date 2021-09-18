@@ -30,10 +30,9 @@ class IndexModel extends Model
 	public function BookList($params, $option)
 	{
 		if ($option['task'] == 'book-special-list') {
-			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`";
-			$query[] = "FROM `book` AS b , `category` AS c ";
-			$query[] = "WHERE `b`.`category_id` = `c`.`id`";
-			$query[] = "AND `b`.`status` = 'active' AND  `b`.`special` = 1";
+			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`, `c`.`name` AS `category_name`";
+			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
+			$query[] = "WHERE `b`.`status` = 'active' AND  `b`.`special` = 1";
 			$query[] = "AND `b`.`category_id` IN (SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
 			$query[] = "ORDER BY `b`.`ordering`";
 
@@ -97,8 +96,12 @@ class IndexModel extends Model
 		if ($option['task'] == 'category-list-special') {
 			$query = "SELECT `name`,`id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active' AND `is_home` = 1";
 			$categorySpecial  = $this->fetchAll($query);
+
 			foreach ($categorySpecial as $key => $value) {
-				$queryBook 	= "SELECT  `name`,`id`,`price`,`description`,`picture`,`sale_off` FROM `book` WHERE `category_id` = $value[id] AND `status` = 'active' AND `special` = 1 LIMIT 0,8 ";
+				$categoryID = $value['id'];
+				$queryBook = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`description`,`b`.`price`,`b`.`picture`,`b`.`sale_off`, `c`.`name` AS `category_name` 
+								FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id` 
+								WHERE `b`.`category_id` = $categoryID AND `b`.`status` = 'active' AND `b`.`special` = 1 LIMIT 0,8";
 				$books 		=  $this->fetchAll($queryBook);
 				$categorySpecial[$key]['books'] = $books;
 			}

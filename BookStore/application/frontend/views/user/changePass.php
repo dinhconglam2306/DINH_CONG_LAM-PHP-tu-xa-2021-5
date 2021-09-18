@@ -20,12 +20,6 @@ $button = FormFrontend::button('submit', 'submit-edit-pass-user', 'form[submit]'
 
 $submitForm = URL::createLink('frontend', 'user', 'changePw');
 
-
-
-$linkChangePw       = URL::createLink('frontend', 'user', 'changePw');
-$linkUserInfo     = URL::createLink('frontend', 'user', 'index');
-$linkOrderHistory = URL::createLink('frontend', 'user', 'orderHistory');
-$linkLogout       = URL::createLink('frontend', 'index', 'logout');
 ?>
 <div class="breadcrumb-section">
   <div class="container">
@@ -51,10 +45,7 @@ $linkLogout       = URL::createLink('frontend', 'index', 'logout');
           <div class="collection-mobile-back"><span class="filter-back"><i class="fa fa-angle-left" aria-hidden="true"></i> Ẩn</span></div>
           <div class="block-content">
             <ul>
-              <li class=""><a data="user-index" href="<?= $linkUserInfo; ?>">Thông tin tài khoản</a></li>
-              <li class=""><a data="user-changePw" href="<?= $linkChangePw; ?>">Thay đổi mật khẩu</a></li>
-              <li class=""><a data="user-orderHistory" href="<?= $linkOrderHistory; ?>">Lịch sử mua hàng</a></li>
-              <li class=""><a href="<?= $linkLogout; ?>">Đăng xuất</a></li>
+              <?php require_once 'elements/menu-user.php' ;?>
             </ul>
           </div>
         </div>

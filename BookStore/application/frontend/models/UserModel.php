@@ -123,7 +123,7 @@ class UserModel extends Model
 			$userInfo = Session::get('user');
 			$userName = $userInfo['info']['username'];
 			
-			$query = "SELECT `id`,`status`,`username`,`prices`,`quantities`,`names`,`picture`,`date` FROM `cart` WHERE `username` = '$userName' ORDER BY `date` DESC";
+			$query = "SELECT `id`,`books`,`status`,`username`,`prices`,`quantities`,`names`,`picture`,`date` FROM `cart` WHERE `username` = '$userName' ORDER BY `date` DESC";
 			$result = $this->fetchAll($query);
 			
 			return $result;

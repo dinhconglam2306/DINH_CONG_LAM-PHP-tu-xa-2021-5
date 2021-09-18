@@ -1,11 +1,16 @@
 <?php
 // Danh sách book special of category
 foreach ($this->specialItems as $key => $item) {
-    $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $item['id']]);
     $name = $item['name'];
-    $picture            = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . 'default.png', $name);
-    $picturePath        = UPLOAD_PATH . 'book' . DS . $item['picture'];
-    if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . $item['picture'], $name);
+    $id                 = $item['id'];
+    $nameURL            = URL::filterURL($name);
+
+    $catID                  = $item['category_id'];
+    $catNameURL             =   URL::filterURL($item['category_name']);
+
+    $linkNameURL            = "$catNameURL/$nameURL-$catID-$id.html";
+    $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $item['category_id'], 'book_id' => $item['id']],$linkNameURL);
+    $picture            = HelperBackend::createImage('book', $item['picture'], ['class' => 'img-fluid blur-up lazyload', 'alt' => $name]);
     $price = number_format(($item['price'] * (100 - $item['sale_off'])) / 100);
 
     $xhtmlSpecial = sprintf('

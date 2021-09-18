@@ -3,7 +3,7 @@ $userObj = Session::get('user');
 $navbarName = $userObj['info']['fullname'];
 
 $linkLogOut = URL::createLink('backend', 'dashboard', 'logout');
-$linkViewSite = URL::createLink('frontend', 'index', 'index');
+$linkViewSite = URL::createLink('frontend', 'index', 'index',null,'index.html');
 $linkProfile  = URL::createLink('backend', 'dashboard', 'profile');
 ?>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">

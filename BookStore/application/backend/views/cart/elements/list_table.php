@@ -38,9 +38,7 @@ if (!empty($this->items)) {
 
         $listPicture = '<ul class= "list-picture">';
         foreach ($arrPicture as $key => $value) {
-            $picture            = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . 'default.png');
-            $picturePath        = UPLOAD_PATH . 'book' . DS . $value;
-            if (file_exists($picturePath) && !empty($value))  $picture  = sprintf('<li><img src="%s"style ="max-width :100px;"/></li>', UPLOAD_URL . 'book' . DS . $value);
+            $picture            =sprintf('<li>%s</li>',HelperBackend::createImage('book',$value,['width' =>100]));
             $listPicture .= $picture;
         }
         $listPicture .= '</ul>';

@@ -5,10 +5,8 @@ if (!empty($this->items)) {
         $id                 = $item['id'];
         $ckb                = sprintf('<input type="checkbox" name="cid[]" value="%s">', $id);
         $name               = HelperBackend::highlight(@$arrParams['search'], $item['name']);
-
-        $picture            = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'category' . DS . 'default.png');
-        $picturePath        = UPLOAD_PATH . 'category' . DS . $item['picture'];
-        if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'category' . DS . $item['picture']);
+        
+        $picture            = HelperBackend::createImage('category',$item['picture'],['width' =>100]);
 
         $status             = HelperBackend::itemStatus($arrParams['module'], $arrParams['controller'], $id, $item['status']);
         $isHome             = HelperBackend::itemIshome($arrParams['module'], $arrParams['controller'], $id, $item['is_home']);

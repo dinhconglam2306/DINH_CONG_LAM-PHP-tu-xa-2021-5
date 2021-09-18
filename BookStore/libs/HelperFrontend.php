@@ -4,14 +4,23 @@ class HelperFrontend
 {
     public static function showProduct($producInfo, $params, $showRating = true)
     {
-        $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $producInfo['id']]);
-        $name               = $producInfo['name'];
+        $bookName               = $producInfo['name'];
+        $bookID                 =$producInfo['id'];
+        $bookNameURL            = URL::filterURL($bookName);
+
+        $catID                  =$producInfo['category_id'];
+        $catNameURL             =   URL::filterURL($producInfo['category_name']);
+
+        $linkNameURL            ="$catNameURL/$bookNameURL-$catID-$bookID.html";
+
+        
+
+        // $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $producInfo['id']],$nameURL);
+        $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $producInfo['category_id'] ,'book_id' => $producInfo['id']],$linkNameURL);
         $saleOff            = $producInfo['sale_off'];
 
-        $picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload bg-img" alt="">', UPLOAD_URL . 'book' . DS . 'default.png');
-        $picturePath        = UPLOAD_PATH . 'book' . DS . $producInfo['picture'];
-        if (file_exists($picturePath) && !empty($producInfo['picture']))  $picture  = sprintf('<img src="%s" class="img-fluid blur-up lazyload bg-img" alt="">', UPLOAD_URL . 'book' . DS . $producInfo['picture']);
-
+        $picture            = HelperBackend::createImage('book',$producInfo['picture'],['class'=>'img-fluid blur-up lazyload bg-img','alt'=>$bookName]);
+        
         $linkView = '#';
         $linkAdd = '#';
         $description        = $producInfo['description'];
@@ -49,8 +58,8 @@ class HelperFrontend
             </div>
             <div class="product-detail">
                ' . $rating . '
-                <a href="' . $link . '" title="' . $description . '">
-                    <h6 class="description"><span>' . $name . '</span></h6>
+                <a href="' . $link . '" title="' . $bookName . '">
+                    <h6 class="description"><span>' . $bookName . '</span></h6>
                 </a>
                 <h4 class="text-lowercase">' . number_format($priceSale) . ' đ <del>' . number_format($price) . ' đ</del></h4>
             </div>
@@ -62,11 +71,18 @@ class HelperFrontend
 
     public static function showMedia($mediaInfo, $showRating = true)
     {
-        $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $mediaInfo['id']]);
+
+        $bookName               = $mediaInfo['name'];
+        $bookID                 =$mediaInfo['id'];
+        $bookNameURL            = URL::filterURL($bookName);
+
+        $catID                  =$mediaInfo['category_id'];
+        $catNameURL             =   URL::filterURL($mediaInfo['category_name']);
+
+        $linkNameURL            ="$catNameURL/$bookNameURL-$catID-$bookID.html";
+        $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $mediaInfo['category_id'] ,'book_id' => $mediaInfo['id']],$linkNameURL);
         $name = $mediaInfo['name'];
-        $picture            = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . 'default.png', $name);
-        $picturePath        = UPLOAD_PATH . 'book' . DS . $mediaInfo['picture'];
-        if (file_exists($picturePath) && !empty($mediaInfo['picture']))  $picture  = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . $mediaInfo['picture'], $name);
+        $picture            = HelperBackend::createImage('book',$mediaInfo['picture'],['class'=>'img-fluid blur-up lazyload','alt'=>$name]);
         $price = number_format(($mediaInfo['price'] * (100 - $mediaInfo['sale_off'])) / 100);
 
         if ($showRating == false) $rating = '';

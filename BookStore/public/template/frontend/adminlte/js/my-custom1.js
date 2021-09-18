@@ -108,11 +108,6 @@ $(document).ready(function () {
     })
 
 
-
-    let controller = (getUrlVar('controller') == '') ? 'index' :getUrlVar('controller') ;
-    $(`li a[data-controller=${controller}]`).addClass('my-menu-link active');
-
-
     // Active Controler User in Frontend
 
     let controllerUser  = (getUrlVar('controller') == '') ? 'index' :getUrlVar('controller') ;

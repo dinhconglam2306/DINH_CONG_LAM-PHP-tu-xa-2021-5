@@ -12,15 +12,6 @@ $inputPicture       = '<input type="file" class="form-control-file" name="pictur
 $pathImage = '';
 $picture = '<div id="picture"></div>';
 $inputPictureHidden = '';
-// if (isset($this->arrParam['id'])) {
-//     @$pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture'];
-
-//     if(is_array($dataForm['picture']) == true){
-//         $pathImage          = UPLOAD_URL . 'category' . DS . @$dataForm['picture_hidden'];
-//     }
-//     $picture            = sprintf('<div id="picture"><img id="old" src="%s" style ="max-width:250px;" /></div>', $pathImage);
-//     @$inputPictureHidden        = FormBackend::input('hidden', 'form[picture_hidden]',@$dataForm['picture']);
-// }
 
 if (isset($this->arrParam['id'])) {
     $picture            = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', UPLOAD_URL . 'category' . DS . 'default.png');

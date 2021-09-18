@@ -1,24 +1,25 @@
 <?php
 $userObj = Session::get('user');
 $categoryList = @$this->category;
-$categoryID = '';
 $categoryXhtml = '<ul>';
 foreach ($categoryList as $key => $value) {
+    $id = $value['id'];
     $name = $value['name'];
-    $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $value['id']]);
+    $nameURL= URL::filterURL($name) . '-' . $id. '.html';
+    $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $id],$nameURL);
     $categoryXhtml .= sprintf('<li><a href="%s">%s</a></li>', $link, $name);
 }
 $categoryXhtml .= '</ul>';
 
 //Link menu
-$linkListBook = URL::createLink('frontend', 'book', 'list', ['category_id' => 'all']);
-$linkHome = URL::createLink($this->arrParam['module'], 'index', 'index');
-$linkRegister = URL::createLink($this->arrParam['module'], 'index', 'register');
-$linkLogin = URL::createLink($this->arrParam['module'], 'index', 'login');
-$linkLogout = URL::createLink($this->arrParam['module'], 'index', 'logout');
-$linkAdminControllPanel = URL::createLink('backend', 'dashboard', 'index');
-$linkMyProfile = URL::createLink('frontend', 'user', 'index');
-$linkCategory = URL::createLink('frontend', 'category', 'list');
+$linkListBook               = URL::createLink('frontend', 'book', 'list', ['category_id' => 'all'],'tat-ca-all.html');
+$linkHome                   = URL::createLink('frontend', 'index', 'index', null, 'index.html');
+$linkRegister               = URL::createLink('frontend', 'index', 'register', null, 'register.html');
+$linkLogin                  = URL::createLink('frontend', 'index', 'login', null, 'login.html');
+$linkLogout                 = URL::createLink('frontend', 'index', 'logout',null,'logout.html');
+$linkAdminControllPanel     = URL::createLink('backend', 'dashboard', 'index');
+$linkMyProfile              = URL::createLink('frontend', 'user', 'index', null, 'my-account.html');
+$linkCategory               = URL::createLink('frontend', 'category', 'list', null, 'category.html');
 
 $userName = '';
 
@@ -78,10 +79,7 @@ foreach ($controlMenu as $key => $value) {
                                     </li>
                                     <li><a href="<?= $linkHome; ?> " data-controller='index'>Trang chủ</a></li>
                                     <li><a href="<?= $linkListBook; ?>" data-controller='book'>Sách</a></li>
-                                    <li>
-                                        <a href="<?= $linkCategory; ?>" data-controller='category'>Danh mục</a>
-                                        <?= $categoryXhtml; ?>
-                                    </li>
+                                    <li><a href="<?= $linkCategory; ?>" data-controller='category'>Danh mục</a><?= $categoryXhtml; ?></li>
                                 </ul>
                             </nav>
                         </div>

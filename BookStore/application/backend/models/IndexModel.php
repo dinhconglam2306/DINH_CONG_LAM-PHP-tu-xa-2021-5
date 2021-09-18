@@ -13,7 +13,7 @@ class IndexModel extends Model
 			$username = $params['form']['username'];
 			$password = md5($params['form']['password']);
 
-			$query[] = "SELECT `u`.`id`,`u`.`username`,`u`.`fullname`,`u`.`email`,`u`.`group_id`,`g`.`group_acp`";
+			$query[] = "SELECT `u`.`id`,`u`.`status`,`u`.`username`,`u`.`fullname`,`u`.`email`,`u`.`group_id`,`g`.`group_acp`";
 			$query[] = "FROM `user` AS `u` LEFT JOIN `group` AS `g` ON `u`.`group_id` = `g`.`id`";
 			$query[] = "WHERE `username` = '$username' AND `password` = '$password'";
 

@@ -52,10 +52,9 @@ class CategoryModel extends Model
 			return $result;
 		}
 		if ($option['task'] == 'book-special-list-book') {
-			$query[] = "SELECT `b`.`name`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off` ";
-			$query[] = "FROM `book` AS b , `category` AS c";
-			$query[] = "WHERE `b`.`category_id` = `c`.`id`";
-			$query[] = "AND `b`.`category_id` IN";
+			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name` ";
+			$query[] = "FROM `book`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
+			$query[] = "WHERE `b`.`category_id` IN";
 			$query[] = "(SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
 			$query[] = "AND `b`.`status` = 'active' AND `b`.`special` = 1 ORDER BY `b`.`ordering` ASC LIMIT 0,8";
 

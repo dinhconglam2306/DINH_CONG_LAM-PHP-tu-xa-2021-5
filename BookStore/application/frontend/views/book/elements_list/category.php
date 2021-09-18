@@ -1,12 +1,15 @@
 <?php
 foreach ($this->category as $key => $value) {
+    $id = $value['id'];
     $name = $value['name'];
-    $link = URL::createLink('frontend', 'book', 'list');
     $textClass = 'my-text-primary';
+    
+    $nameURL = URL::filterURL($value['name']);
 
     if (isset($this->arrParam['category_id'])) {
-        $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $value['id']]);
         $catID = $this->arrParam['category_id'];
+        $nameURL = "$nameURL-$id.html";
+        $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $id ],$nameURL);
         $textClass = 'text-dark';
         if ($value['id'] == $catID) $textClass = 'my-text-primary'; if ($value['id'] == $catID) $textClass = 'my-text-primary';
     }

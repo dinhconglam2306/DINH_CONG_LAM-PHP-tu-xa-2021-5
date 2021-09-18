@@ -5,10 +5,9 @@ if (!empty($this->items)) {
         $ckb                = sprintf('<input type="checkbox" name="cid[]" value="%s">', $id);
         $name               = HelperBackend::highlight(@$arrParams['search'], $item['name']);
 
-        $picture            = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . 'default.png');
-        $picturePath        = UPLOAD_PATH . 'book' . DS . $item['picture'];
-        if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img src="%s"style ="max-width :100px;"/>', UPLOAD_URL . 'book' . DS . $item['picture']);
 
+        $picture            = HelperBackend::createImage('book',$item['picture'],['width' =>100]);
+        
         $price              = $item['price'];
         $saleOff            = $item['sale_off'];
         $categoryLink       = URL::createLink($arrParams['module'], $arrParams['controller'], 'changeCategory', ['category_id' => 'value_new', 'id' => $id]);

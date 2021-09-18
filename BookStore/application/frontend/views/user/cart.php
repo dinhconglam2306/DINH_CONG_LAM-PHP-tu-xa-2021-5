@@ -6,11 +6,9 @@ if (!empty($this->Items)) {
         $bookID = $item['id'];
         $link = $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $bookID]);
 
-        $name = $item['name'];
-        $picture            = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . 'default.png', $name);
-        $picturePath        = UPLOAD_PATH . 'book' . DS . $item['picture'];
-        if (file_exists($picturePath) && !empty($item['picture']))  $picture  = sprintf('<img class="img-fluid blur-up lazyload" src="%s" alt="%s">', UPLOAD_URL . 'book' . DS . $item['picture'], $name);
 
+        $name = $item['name'];
+        $picture            = HelperBackend::createImage('book',$item['picture'],['class'=>'img-fluid blur-up lazyload','alt'=>$name]);
         $price = $item['price'];
         $totalPrice = $item['totalPrice'];
         @$totalPrices += intval($totalPrice);

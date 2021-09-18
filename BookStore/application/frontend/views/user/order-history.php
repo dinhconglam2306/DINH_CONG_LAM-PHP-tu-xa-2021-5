@@ -1,23 +1,7 @@
 <?php
 $userInfo = Session::get('user');
+$model = new Model();
 
-$linkChangePw       = URL::createLink('frontend', 'user', 'changePw');
-$linkUserInfo     = URL::createLink('frontend', 'user', 'index');
-$linkOrderHistory = URL::createLink('frontend', 'user', 'orderHistory');
-$linkLogout       = URL::createLink('frontend', 'index', 'logout');
-?>
-<div class="breadcrumb-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title">
-                    <h2 class="py-2">Lịch sử mua hàng</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<?php
 
 if (!empty($this->listOrderHistory)) {
     foreach ($this->listOrderHistory as $key => $item) {
@@ -25,7 +9,7 @@ if (!empty($this->listOrderHistory)) {
         $status     = HelperFrontend::checkStatus($item['status']);
         $orderID     = $item['id'];
         $date        = date('H:i d/m/Y', strtotime($item['date']));
-
+        $arrBookID = explode(',', $item['books']);
         $arrBookName = explode(',', $item['names']);
         $arrPrices = explode(',', $item['prices']);
         $arrQuantity = explode(',', $item['quantities']);
@@ -34,24 +18,36 @@ if (!empty($this->listOrderHistory)) {
         $xhtmOrderHistoryBook = '';
         $totalOrderPrice = 0;
         foreach ($arrBookName as $keyB => $valueB) {
-            $picture            = sprintf('<img src="%s" alt="%s" style="width: 100px">', UPLOAD_URL . 'book' . DS . 'default.png', $valueB);
-            $picturePath        = UPLOAD_PATH . 'book' . DS . $arrPicture[$keyB];
-            if (file_exists($picturePath) && !empty($arrPicture[$keyB]))  $picture  = sprintf('<img src="%s" alt="%s" style="width: 100px">', UPLOAD_URL . 'book' . DS . $arrPicture[$keyB], $valueB);
-
+            $picture            = HelperBackend::createImage('book', $arrPicture[$keyB], ['width' => 100, 'alt' => $valueB]);
             $bookPrice = $arrPrices[$keyB];
             $bookQuantity = $arrQuantity[$keyB];
+            $bookID        = $arrBookID[$keyB];
+
+            // Tìm tên sách, tên category theo ID
+            $query = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`c`.`name` AS `category_name` FROM `book`  AS `b`LEFT JOIN `category` AS `c` ON `b`.`category_id` = `c`.`id`
+                        WHERE `b`.`id` = $bookID";
+            $result = $model->fetchAll($query);
+
+            // => Từ đó lấy được thông tin của sách, tạo link
+            $bookIDURL = $result[0]['id'];
+            $bookNameURL = URL::filterURL($result[0]['name']);
+            $catIdURL    = $result[0]['category_id'];
+            $catNameURL  = URL::filterURL($result[0]['category_name']);
+
+            $linkURL      = "$catNameURL/$bookNameURL-$catIdURL-$bookIDURL.html";
+            $link         = URL::createLink('frontend', 'book', 'detail', ['category_id' => $catIdURL, 'book_id' => $bookIDURL], $linkURL);
 
             $totalBookPrice = $bookPrice * $bookQuantity;
             $totalOrderPrice += $totalBookPrice;
             $xhtmOrderHistoryBook .= sprintf('
             <tr>
-                <td><a href="#">%s</a></td>
+                <td><a href="%s">%s</a></td>
                 <td style="min-width: 200px">%s</td>
                 <td style="min-width: 100px">%s đ</td>
                 <td>%s</td>
                 <td style="min-width: 150px">%s đ</td>
             </tr>
-            ', $picture, $valueB, number_format($bookPrice), $bookQuantity, number_format($totalBookPrice));
+            ', $link, $picture, $valueB, number_format($bookPrice), $bookQuantity, number_format($totalBookPrice));
         }
 
 
@@ -60,7 +56,7 @@ if (!empty($this->listOrderHistory)) {
         <div class="card-header">
             <h5 class="mb-0">
                 <button style="text-transform: none;" class="btn btn-link collapsed btn-order-id" type="button" data-toggle="collapse" data-target="#' . $orderID . '">Mã đơn hàng:
-                    ' . $orderID . '</button>&nbsp;&nbsp;Thời gian: ' . $date . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trạng thái : '.$status.'
+                    ' . $orderID . '</button>&nbsp;&nbsp;Thời gian: ' . $date . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trạng thái : ' . $status . '
             </h5>
         </div>
         <div id="' . $orderID . '" class="collapse" data-parent="#accordionExample" style="">
@@ -96,6 +92,17 @@ if (!empty($this->listOrderHistory)) {
     $xhtmlOrderHistoryList = '<h3>Chưa có đơn hàng nào!</h3>';
 }
 ?>
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title">
+                    <h2 class="py-2">Lịch sử mua hàng</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <section class="faq-section section-b-space">
     <div class="container">
         <div class="row">
@@ -108,10 +115,7 @@ if (!empty($this->listOrderHistory)) {
                     <div class="collection-mobile-back"><span class="filter-back"><i class="fa fa-angle-left" aria-hidden="true"></i> Ẩn</span></div>
                     <div class="block-content">
                         <ul>
-                            <li class=""><a data="user-index" href="<?= $linkUserInfo; ?>">Thông tin tài khoản</a></li>
-                            <li class=""><a data="user-changePw" href="<?= $linkChangePw; ?>">Thay đổi mật khẩu</a></li>
-                            <li class=""><a data="user-orderHistory" href="<?= $linkOrderHistory; ?>">Lịch sử mua hàng</a></li>
-                            <li class=""><a href="<?= $linkLogout; ?>">Đăng xuất</a></li>
+                            <?php require_once 'elements/menu-user.php'; ?>
                         </ul>
                     </div>
                 </div>

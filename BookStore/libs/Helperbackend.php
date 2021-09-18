@@ -229,4 +229,20 @@ class HelperBackend
             ', $dataName, $iconClass, $title, $xhtmlList);
         return $xhtml;
     }
+
+    public static function createImage($folder,$pictureName,$attribute){
+        
+        $class = !empty($attribute['class'])? $attribute['class'] : '';
+        $width = !empty($attribute['width'])? $attribute['width'] : '';
+        $height = !empty($attribute['height'])? $attribute['height'] : '';
+        $alt    = !empty($attribute['alt'])? $attribute['alt'] : '';
+
+        $attrStr = "class='$class' width='$width' height='$height' alt='$alt'";
+        
+        $picture            = sprintf('<img src="%s" %s />', UPLOAD_URL . $folder . DS . 'default.png',$attrStr);
+        $picturePath        = UPLOAD_PATH . $folder . DS . $pictureName;
+        if (file_exists($picturePath) && !empty($pictureName))  $picture  = sprintf('<img src="%s" %s/>', UPLOAD_URL . $folder . DS . $pictureName,$attrStr);
+
+        return $picture;
+    }
 }

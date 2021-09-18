@@ -30,14 +30,14 @@ class BookModel extends Model
 	public function BookList($params, $option)
 	{
 		if ($option['task'] == 'book-list') {
-			$query[] = "SELECT `name`,`id`,`price`,`description`,`picture`,`sale_off`";
-			$query[] = "FROM `{$this->table}`";
-			$query[] = "WHERE `status` = 'active'";
-			$query[] = "AND `category_id` IN (SELECT `id` FROM `category` WHERE `status` = 'active')";
+			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name`";
+			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
+			$query[] = "WHERE `b`.`status` = 'active'";
+			$query[] = "AND `b`.`category_id` IN (SELECT `id` FROM `category` WHERE `status` = 'active')";
 
 			if (isset($params['category_id'])) {
 				if ($params['category_id'] == 'all') {
-					$query[] = "AND `id` > 0";
+					$query[] = "AND `b`.`id` > 0";
 				} else {
 					$catID = $params['category_id'];
 					$query[] = "AND `category_id`= $catID";
@@ -49,7 +49,7 @@ class BookModel extends Model
 				$query[] = "ORDER BY `$arrSort[0]` $arrSort[1]";
 			}
 			if ((!isset($params['sort'])) || (isset($params['sort']) && $params['sort'] == 'default')) {
-				$query[] = "ORDER BY `ordering` ASC";
+				$query[] = "ORDER BY `b`.`ordering` ASC";
 			}
 
 
@@ -66,8 +66,8 @@ class BookModel extends Model
 			return $result;
 		}
 		if ($option['task'] == 'book-special-list-book') {
-			$query[] = "SELECT `b`.`name`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off` ";
-			$query[] = "FROM `book` AS b , `category` AS c";
+			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off`, `c`.`name` AS `category_name` ";
+			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 			$query[] = "WHERE `b`.`category_id` = `c`.`id`";
 			$query[] = "AND `b`.`category_id` IN";
 			$query[] = "(SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
@@ -78,10 +78,9 @@ class BookModel extends Model
 			return $result;
 		}
 		if ($option['task'] == 'book-new-list') {
-			$query[] = "SELECT `b`.`name`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off` ";
-			$query[] = "FROM `book` AS b , `category` AS c";
-			$query[] = "WHERE `b`.`category_id` = `c`.`id`";
-			$query[] = "AND `b`.`category_id` IN";
+			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name` ";
+			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
+			$query[] = "WHERE `b`.`category_id` IN";
 			$query[] = "(SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
 			$query[] = "AND `b`.`status` = 'active' AND `b`.`special` = 1 ORDER BY `b`.`id` DESC LIMIT 0,6 ";
 
@@ -91,10 +90,11 @@ class BookModel extends Model
 		}
 		if ($option['task'] == 'book-connection') {
 			$bookID = $params['book_id'];
-			$query[] = "SELECT `name`,`id`,`price`,`description`,`picture`,`sale_off` ";
-			$query[] = "FROM `{$this->table}`";
-			$query[] = "WHERE `category_id` = (SELECT `category_id` FROM `{$this->table}` WHERE `id` = $bookID)";
-			$query[] = "AND `id` <> $bookID ORDER BY `ordering` ASC LIMIT 0,6";
+			$categoryID = $params['category_id'];
+			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name`";
+			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
+			$query[] = "WHERE `b`.`category_id` = $categoryID";
+			$query[] = "AND `b`.`id` <> $bookID ORDER BY `b`.`ordering` ASC LIMIT 0,6";
 
 			$query = implode(' ', $query);
 			$result  = $this->fetchAll($query);
@@ -113,7 +113,7 @@ class BookModel extends Model
 			$query = "SELECT `name`,`id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active' AND `is_home` = 1";
 			$categorySpecial  = $this->fetchAll($query);
 			foreach ($categorySpecial as $key => $value) {
-				$queryBook 	= "SELECT  `name`,`id`,`price`,`description`,`picture`,`sale_off` FROM `book` WHERE `category_id` = $value[id] AND `status` = 'active' AND `special` = 1 LIMIT 0,8 ";
+				$queryBook 	= "SELECT  `name`,`category_id`,`id`,`price`,`description`,`picture`,`sale_off` FROM `book` WHERE `category_id` = $value[id] AND `status` = 'active' AND `special` = 1 LIMIT 0,8 ";
 				$books 		=  $this->fetchAll($queryBook);
 				$categorySpecial[$key]['books'] = $books;
 			}

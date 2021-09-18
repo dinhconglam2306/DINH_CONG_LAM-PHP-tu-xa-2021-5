@@ -4,7 +4,7 @@ $cart = Session::get('cart');
 $totalItems = 0;
 if(!empty($cart))$totalItems = array_sum($cart['quantity']);
 
-$linkCart = URL::createLink('frontend','user','cart');
+$linkCart = URL::createLink('frontend','user','cart',null,'cart.html');
 ?>
 <div>
     <a href="<?= $linkCart ;?>" id="cart" class="position-relative">
