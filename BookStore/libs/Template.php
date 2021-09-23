@@ -25,7 +25,7 @@ class Template
 		$folderTemplate = $this->getFolderTemplate();
 		$fileTemplate 	= $this->getFileTemplate();
 
-		$pathFileConfig	= TEMPLATE_PATH . $folderTemplate . $fileConfig;
+		$pathFileConfig	= PATH_TEMPLATE . $folderTemplate . $fileConfig;
 		if (file_exists($pathFileConfig)) {
 			$arrCongif = parse_ini_file($pathFileConfig);
 
@@ -37,9 +37,9 @@ class Template
 			$view->_jsFiles 		= $view->createLink($this->_folderTemplate . $arrCongif['dirJs'], $arrCongif['fileJs'], 'js');
 			$view->_pluginsCssFiles = $view->createLink($this->_folderTemplate . $arrCongif['dirPlugins'], $arrCongif['filePluginCss'], 'css');
 			$view->_pluginsJsFiles 	= $view->createLink($this->_folderTemplate . $arrCongif['dirPlugins'], $arrCongif['filePluginJs'], 'js');
-			$view->_dirImg 			= TEMPLATE_URL . $folderTemplate . $arrCongif['dirImg'] . DS;
+			$view->_dirImg 			= URL_TEMPLATE . $folderTemplate . $arrCongif['dirImg'] . DS;
 
-			$view->setTemplatePath(TEMPLATE_PATH . $folderTemplate . $fileTemplate);
+			$view->setTemplatePath(PATH_TEMPLATE . $folderTemplate . $fileTemplate);
 		}
 	}
 

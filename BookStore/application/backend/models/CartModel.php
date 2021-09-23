@@ -10,19 +10,19 @@ class CartModel extends Model
 	//Hiện danh sách items
 	public function listItems($params, $options = null)
 	{
-		$query[] 	= "SELECT `id`,`username`,`books`,`prices`,`quantities`,`names`,`picture`,`status`,`date`";
-		$query[]	= "FROM `{$this->table}`";
-		$query[]	= "WHERE `id` != ''";
+		$query[] 	= "SELECT `c`.`id`,`c`.`receiver`,`c`.`quantities`,`c`.`username`,`c`.`books`,`c`.`prices`,`c`.`names`,`c`.`status`,`c`.`date`,`u`.`fullname`,`u`.`email`,`u`.`phone`,`u`.`address`";
+		$query[]	= "FROM `{$this->table}`  AS `c` LEFT JOIN `" . TBL_USER . "` AS `u` ON `c`.`username` = `u`.`username`";
+		$query[]	= "WHERE `c`.`id` != ''";
 
 		if (!empty(trim(@$params['search']))) {
 			$keyword = '"%' . $params['search'] . '%"';
-			$query[] = "AND `username` LIKE $keyword";
+			$query[] = "AND `c`.`username` LIKE $keyword";
 		}
 		if (isset($params['select_cart_status']) && $params['select_cart_status'] != 'default') {
-			$query[] = "AND `status` = '{$params['select_cart_status']}'";
+			$query[] = "AND `c`.`status` = '{$params['select_cart_status']}'";
 		}
 
-		$query[] = 'ORDER BY `date` DESC';
+		$query[] = 'ORDER BY `c`.`date` DESC';
 
 		//PAGINATION
 		$pagination = $params['pagination'];
@@ -37,18 +37,39 @@ class CartModel extends Model
 
 		return $result;
 	}
+	public function infoOrder($params, $options = null)
+	{
+		if ($options == null) {
+			$id = $params['id'];
+			$query[] = "SELECT `id`,`username`,`prices`,`quantities`,`names`,`picture`,`status`,`date`,`pay`,`ship`";
+			$query[] = "FROM `cart`";
+			$query[] = "WHERE `id` = '$id'";
+
+			$query		= implode(' ', $query);
+			$result = $this->fetchRow($query);
+
+			return $result;
+		}
+	}
 
 	//Thay đổi trạng thái của 1 item
 	public function changeStatusCart($params, $options = null)
 	{
 		if ($options['task'] == 'change-ajax-status-cart') {
-			if (!empty($params['status'])) {
+			if ((isset($params['status']))) {
 				$status = $params['status'];
 				$data = ['status' => $status];
 				$id   = $params['id'];
 				$where = [['id', $id]];
 				$this->update($data, $where);
 				$link = URL::createLink($params['module'], $params['controller'], 'changeStatusCart', ['id' => $id, 'status' => $status]);
+				
+
+				$date = date('Y-m-d H:i:s', time());
+				$query = "UPDATE `cart_status` SET `$status` = '$date' WHERE `id` = '$id'";
+				$this->query($query);
+
+				
 				return [$id, $status, $link];
 			}
 		}
@@ -66,7 +87,7 @@ class CartModel extends Model
 	public function countItems($params, $options = null)
 	{
 		if ($options['task'] == 'count-items-status') {
-			$query[] = "SELECT `status`, COUNT(*) AS `count`";
+			$query[] = "SELECT COUNT(*) AS `count`";
 			$query[] = "FROM `{$this->table}` WHERE `id` !=''";
 
 			if (!empty(trim(@$params['search']))) {
@@ -74,7 +95,6 @@ class CartModel extends Model
 				$query[] = "AND `username` LIKE $keyword";
 			}
 
-			$query[] = "GROUP BY `status`";
 			$query = implode(' ', $query);
 			$items = $this->fetchAll($query);
 

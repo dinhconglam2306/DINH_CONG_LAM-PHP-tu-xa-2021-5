@@ -33,7 +33,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <?php require_once APPLICATION_PATH . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
+                            <?php require_once PATH_APPLICATION . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
                         </div>
                     </div>
                 </div>

@@ -8,3 +8,6 @@ if (!empty($this->listBooks)) {
 }
 ?>
 <?= $xhtmlListBook; ?>
+<?php 
+
+?>

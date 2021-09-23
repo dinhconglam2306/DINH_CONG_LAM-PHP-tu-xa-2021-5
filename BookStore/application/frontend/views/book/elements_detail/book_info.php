@@ -4,12 +4,12 @@ $description        = $bookItem['description'];
 $content            = $bookItem['content'];
 $price              = $bookItem['price'];
 $priceSale          = ($bookItem['price'] * (100 - $bookItem['sale_off'])) / 100;
-$picture            = sprintf('<img src="%s" class="img-fluid w-100 blur-up lazyload image_zoom_cls-0" alt="">', UPLOAD_URL . 'book' . DS . $bookItem['picture']);
+$picture            = sprintf('<img src="%s" class="img-fluid w-100 blur-up lazyload image_zoom_cls-0" alt="">', URL_UPLOAD . 'book' . DS . $bookItem['picture']);
 $saleOff            = $bookItem['sale_off'];
 
 $bookID             = $bookItem['id'];
 $dataUrl            = URL::createLink('frontend','user','order',['book_id' => $bookID,'price' => $priceSale,'quantity'=>'value_new']);
-$href               = URL::createLink('frontend','book','detail',['book_id' => $bookID]);
+// $href               = URL::createLink('frontend','book','detail',['book_id' => $bookID]);
 
 ?>
 <div class="col-lg-9 col-sm-12 col-xs-12">
@@ -49,7 +49,7 @@ $href               = URL::createLink('frontend','book','detail',['book_id' => $
                         </div>
                     </div>
                     <div class="product-buttons">
-                        <a href="#" class="btn btn-solid ml-0 btn-add-to-cart-detail" data-url="<?= $dataUrl ;?>"data-href="<?= $href ;?>"><i class="fa fa-cart-plus"></i> Chọn mua</a>
+                        <a href="#" class="btn btn-solid ml-0 btn-add-to-cart-detail" data-url="<?= $dataUrl ;?>"><i class="fa fa-cart-plus"></i> Chọn mua</a>
                     </div>
                     <div class="border-product">
                         <span class="description"></span>

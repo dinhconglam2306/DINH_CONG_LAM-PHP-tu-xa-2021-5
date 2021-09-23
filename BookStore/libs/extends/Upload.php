@@ -5,7 +5,7 @@ class Upload
 	{
 		if ($options == null) {
 			if ($fileObj['tmp_name'] != null) {
-				$uploadDir = UPLOAD_PATH . $folderUpload . DS;
+				$uploadDir = PATH_UPLOAD . $folderUpload . DS;
 				$fileName = $this->randomString(9) . '.' . pathinfo($fileObj['name'], PATHINFO_EXTENSION);
 				@copy($fileObj['tmp_name'], $uploadDir . $fileName);
 			}
@@ -14,7 +14,7 @@ class Upload
 	}
 
 	public function removeFile($folderUpload,$fileName){
-		$fileName = UPLOAD_PATH . $folderUpload . DS . $fileName;
+		$fileName = PATH_UPLOAD . $folderUpload . DS . $fileName;
 		@unlink($fileName);
 	}
 

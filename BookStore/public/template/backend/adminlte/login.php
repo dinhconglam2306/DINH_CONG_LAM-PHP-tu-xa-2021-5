@@ -12,7 +12,7 @@
 </head>
 
 <body class="hold-transition login-page">
-    <?php require_once APPLICATION_PATH . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
+    <?php require_once PATH_APPLICATION . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
     <?php echo $this->_pluginsJsFiles; ?>
     <?php echo $this->_jsFiles; ?>
 

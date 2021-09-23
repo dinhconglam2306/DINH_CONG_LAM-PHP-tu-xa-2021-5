@@ -112,7 +112,7 @@ class Validate
 				}
 			}
 			if (!array_key_exists($element, $this->errors)) {
-				$this->result[$element] = $this->source[$element];
+				$this->result[$element] = @$this->source[$element];
 			}
 		}
 		$eleNotValidate = array_diff_key($this->source, $this->errors);
@@ -261,7 +261,7 @@ class Validate
 	// Validate File
 	private function validateFile($element, $options)
 	{
-		if ($this->source[$element]['name'] != null) {
+		if (@$this->source[$element]['name'] != null) {
 			if (!filter_var($this->source[$element]['size'], FILTER_VALIDATE_INT, array("options" => array("min_range" => $options['min'], "max_range" => $options['max'])))) {
 				$this->setError($element, 'kích thước không phù hợp');
 			}

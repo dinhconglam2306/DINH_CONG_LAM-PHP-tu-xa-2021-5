@@ -1,6 +1,6 @@
 <?php
 $linkHome = URL::createLink('frontend', 'index', 'index');
-
+$orderID = $this->orderID;
 ?>
 <div class="breadcrumb-section">
     <div class="container">
@@ -22,7 +22,7 @@ $linkHome = URL::createLink('frontend', 'index', 'index');
                     <h2 class="order-success">Cảm ơn bạn đã mua hàng</h3>
                         <div class="container">
                             <h5 class="text-center order-content">Sách bạn đã đặt sẽ được chuyển đến bạn trong thời gian sớm nhất</h5>
-                            <span class="order-pass">Mã đơn hàng:</span>
+                            <span class="order-pass">Mã đơn hàng  :   <span style="font-weight:bold; font-size:16px;"><?= $orderID; ?></span></span>
                             <div class="text-center btn-order"><a href="<?= $linkHome; ?>" class="btn btn-solid">Tiếp tục mua hàng</a></div>
                         </div>
                 </div>

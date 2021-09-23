@@ -27,14 +27,15 @@ class IndexModel extends Model
 	}
 
 	//Hiện danh sách nổi bật
-	public function BookList($params, $option)
+	public function bookList($params, $option)
 	{
 		if ($option['task'] == 'book-special-list') {
 			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`, `c`.`name` AS `category_name`";
 			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 			$query[] = "WHERE `b`.`status` = 'active' AND  `b`.`special` = 1";
-			$query[] = "AND `b`.`category_id` IN (SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
+			$query[] = "AND `b`.`category_id` IN (SELECT `id` FROM `category` WHERE `status` = 'active') ";
 			$query[] = "ORDER BY `b`.`ordering`";
+			$query[] = "LIMIT 0,8";
 
 
 			$query = implode(' ', $query);
@@ -85,7 +86,7 @@ class IndexModel extends Model
 			return $result;
 		}
 	}
-	public function CategoryList($params, $option)
+	public function categoryList($params, $option)
 	{
 		if ($option['task'] == 'category-list') {
 
@@ -101,7 +102,7 @@ class IndexModel extends Model
 				$categoryID = $value['id'];
 				$queryBook = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`description`,`b`.`price`,`b`.`picture`,`b`.`sale_off`, `c`.`name` AS `category_name` 
 								FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id` 
-								WHERE `b`.`category_id` = $categoryID AND `b`.`status` = 'active' AND `b`.`special` = 1 LIMIT 0,8";
+								WHERE `b`.`category_id` = $categoryID AND `b`.`status` = 'active' AND `b`.`special` = 0 LIMIT 0,8";
 				$books 		=  $this->fetchAll($queryBook);
 				$categorySpecial[$key]['books'] = $books;
 			}

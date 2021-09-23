@@ -43,7 +43,11 @@ if (isset($this->arrParam['category_id'])) {
     </div>
     <div class="product-page-filter">
         <form action="" id="sort-form" method="GET">
-            <?= $inputHidden; ?>
+            <?php
+            if(URL_FRIENDLY == false){
+                echo   $inputHidden; 
+            }
+            ?>
             <?= $selectSort; ?>
         </form>
     </div>

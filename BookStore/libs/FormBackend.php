@@ -17,7 +17,7 @@ class FormBackend
     }
 
     //Create SelectBox
-    public static function selectBoxCartStatus($name, $arrValue, $keySelected = 'default', $attributes = '',$class='',$id='')
+    public static function selectBoxCartStatus($name, $arrValue, $keySelected = 'default', $attributes = '', $class = '', $id = '')
     {
         $xhtmlOption = '';
         foreach ($arrValue as $key => $value) {
@@ -26,17 +26,27 @@ class FormBackend
             if ($key === $keySelected) $selected = 'selected';
             $xhtmlOption .= sprintf('<option value="%s" %s>%s</option>', $key, $selected, $value);
         }
-        $btnClass='';
-        if($keySelected == 'not-delivery') $btnClass ='delivery-danger';
-        if($keySelected == 'delivery') $btnClass ='delivery-warning';
-        if($keySelected == 'delivered') $btnClass ='delivery-success';
-        $xhtml = sprintf('<select id="%s" name="%s" class="custom-select  %s %s" %s>%s</select>',$id, $name,$class, $btnClass, $attributes, $xhtmlOption);
+        $btnClass = '';
+        if ($keySelected == 'not-handle') $btnClass = 'handle-danger';
+        if ($keySelected == 'processing') $btnClass = 'processing-secondary';
+        if ($keySelected == 'not-delivery') $btnClass = 'delivery-warning';
+        if ($keySelected == 'delivery') $btnClass = 'delivery-info';
+        if ($keySelected == 'delivered') $btnClass = 'delivered-success';
+        if ($keySelected == 'cancelled') $btnClass = 'cancelled-dark';
+        $xhtml = sprintf('<select id="%s" name="%s" class="custom-select  %s %s" %s>%s</select>', $id, $name, $class, $btnClass, $attributes, $xhtmlOption);
         return $xhtml;
     }
 
     public static function input($type, $name, $value = '', $readonly = '', $plusBotton = '', $class = '')
     {
         $xhtml = sprintf('<input type="%s" class="form-control %s" name="%s" value="%s" %s>%s', $type, $class, $name, $value, $readonly, $plusBotton);
+        return $xhtml;
+    }
+
+    //inputSearch
+    public static function inputSearch($type,  $name, $id, $placeholder = '')
+    {
+        $xhtml = sprintf('<input type="%s" class="form-control" name="%s" id="%s" placeholder="%s">', $type,  $name, $id, $placeholder);
         return $xhtml;
     }
     //Create RowForm
@@ -94,7 +104,7 @@ class FormBackend
 
     //Create textarea form
 
-    public static function textarea($name, $id, $title, $class='', $row = null, $cols = null)
+    public static function textarea($name, $id, $title, $class = '', $row = null, $cols = null)
     {
         $xhtml = sprintf(
             '

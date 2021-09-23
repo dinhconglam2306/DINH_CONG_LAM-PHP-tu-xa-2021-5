@@ -26,7 +26,7 @@ class BookController extends Controller
 
 		//List Items
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
-		$this->_view->slbCategory 				= [0=>' - Select Category - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
+		$this->_view->slbCategory 				= [0 => ' - Select Category - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
 
@@ -87,11 +87,11 @@ class BookController extends Controller
 	public function formAction()
 	{
 		$this->_view->_title 			= ucfirst($this->_arrParam['controller']) . ' Controller :: Add';
-		$this->_view->slbCategory 				= [0=>' - Select Category - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
-		if(!empty($_FILES))$this->_arrParam['form']['picture'] = $_FILES['picture'];
+		$this->_view->slbCategory 				= [0 => ' - Select Category - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
+		if (!empty($_FILES)) $this->_arrParam['form']['picture'] = $_FILES['picture'];
 		if (@isset($this->_arrParam['id']) && !@$this->_arrParam['form']['token']) {
 			$this->_view->_title 		= ucfirst($this->_arrParam['controller']) . ' Controller :: Edit';
-			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam,$option = null);
+			$this->_arrParam['form'] 	= $this->_model->infoItem($this->_arrParam, $option = null);
 			if (empty($this->_arrParam['form'])) URL::redirect($this->_arrParam['module'], $this->_arrParam['controller'], 'index');
 		}
 
@@ -100,19 +100,24 @@ class BookController extends Controller
 			if (isset($this->_arrParam['id'])) {
 				$task = 'edit';
 			}
-			$validate 					= new Validate($this->_arrParam['form']);
-			$validate->addRule('name', 'string', ['min' => 1,'max'=> 255])
-					 ->addRule('ordering', 'int',['min' => 1,'max'=> 100])
-					 ->addRule('status', 'status')
-					 ->addRule('special', 'status')
-					 ->addRule('category_id', 'status')
-					 ->addRule('sale_off', 'int',['min' => 1,'max'=> 100])
-					 ->addRule('price', 'int',['min' => 100,'max'=>2500000 ])
-					 ->addRule('picture', 'file',['min' => 100, 'max' =>1000000,'entension' =>['jpg','png','jfif']],false);
+			$validate 	= new Validate($this->_arrParam['form']);
+			$validate
+				->addRule('name', 'string', ['min' => 1, 'max' => 255])
+				->addRule('ordering', 'int', ['min' => 1, 'max' => 100])
+				->addRule('status', 'status')
+				->addRule('special', 'status')
+				->addRule('category_id', 'status')
+				->addRule('sale_off', 'int', ['min' => 1, 'max' => 100])
+				->addRule('price', 'int', ['min' => 100, 'max' => 2500000])
+				->addRule('picture', 'file', ['min' => 100, 'max' => 1000000, 'entension' => ['jpg', 'png', 'jfif']], false);
 			$validate->run();
 			$this->_arrParam['form'] 	= $validate->getResult();
 			if ($validate->isValid() 	== false) {
 				$this->_view->error 	= $validate->showErrors();
+			// $this->_validate->validate();
+			// $this->_arrParam['form'] 	= $this->_validate->getResult();
+			// if ($this->_validate->isValid() 	== false) {
+			// 	$this->_view->error 	= $this->_validate->showErrors();
 			} else {
 				// Insert Database
 				$this->_model->saveItem($this->_arrParam, ['task' => $task]);
@@ -120,7 +125,7 @@ class BookController extends Controller
 			}
 		}
 		$this->_view->arrParam = $this->_arrParam;
-		$this->_view->slbCategory 				= ['default'=>' - Select Category - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
+		$this->_view->slbCategory 				= ['default' => ' - Select Category - '] + $this->_model->itemInSelectbox($this->_arrParam, null);
 		$this->_view->render($this->_arrParam['controller'] . '/form');
 	}
 }

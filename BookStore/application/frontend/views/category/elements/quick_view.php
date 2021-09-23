@@ -1,5 +1,5 @@
 <?php
-$picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload book-picture" alt="">', UPLOAD_URL . 'category' . DS . 'default.png');
+$picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload book-picture" alt="">', URL_UPLOAD . 'category' . DS . 'default.png');
 
 ?>
 <div class="modal fade bd-example-modal-lg theme-modal" id="quick-view" tabindex="-1" role="dialog" aria-hidden="true">

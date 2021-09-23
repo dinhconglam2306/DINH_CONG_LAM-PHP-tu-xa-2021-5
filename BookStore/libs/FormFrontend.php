@@ -13,8 +13,6 @@ class FormFrontend
     //Create RowForm
     public static function rowForm($for, $labelName, $input, $class = '')
     {
-        $readonly = '';
-
         $xhtml = sprintf(
             '<div class="%s">
                 <label for="%s" class="required">%s</label>

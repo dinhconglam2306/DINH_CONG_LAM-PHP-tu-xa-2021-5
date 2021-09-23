@@ -27,7 +27,7 @@ class CategoryModel extends Model
 	}
 
 	//Hiện danh sách book
-	public function BookList($params, $option)
+	public function bookList($params, $option)
 	{
 		if ($option['task'] == 'book-list') {
 			$catID = $params['category_id'];
@@ -63,7 +63,7 @@ class CategoryModel extends Model
 			return $result;
 		}
 	}
-	public function CategoryList($params, $option)
+	public function categoryList($params, $option)
 	{
 		if ($option['task'] == 'category-list') {
 			$query[] = "SELECT `name`,`picture`,`id` ";

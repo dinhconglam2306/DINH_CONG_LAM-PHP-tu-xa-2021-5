@@ -7,13 +7,15 @@
     <title><?= $this->_title; ?></title>
     <link rel="icon" href="<?= $this->_dirImg ?>favicon.png" type="image/x-icon">
     <link rel="shortcut icon" href="<?= $this->_dirImg ?>favicon.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700,900" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;1,700&display=swap" rel="stylesheet">
     <?= $this->_cssFiles; ?>
 </head>
 
 <body>
     <?php require_once 'html/header.php'; ?>
-    <?php require_once APPLICATION_PATH . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
+    <?php require_once PATH_APPLICATION . $this->_moduleName . DS . 'views' . DS . $this->_fileView . '.php'; ?>
     <?php require_once 'html/footer.php'; ?>
     <?php require_once 'html/tap-top.php'; ?>
 
@@ -25,15 +27,15 @@
 
 
     //Active menu of User in my-accout.html
-    $controllerUser  = !empty($this->arrParam['controller']) ? $this->arrParam['controller'] : 'index'; ;
-    $actionUser      = !empty($this->arrParam['action']) ? $this->arrParam['action'] : 'index'; ;
+    $controllerUser  = !empty($this->arrParam['controller']) ? $this->arrParam['controller'] : 'index';;
+    $actionUser      = !empty($this->arrParam['action']) ? $this->arrParam['action'] : 'index';;
     $dataUser  =    $controllerUser . '-' . $actionUser;
 
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('li a[data-controller=<?= $controller ;?>').addClass('my-menu-link active');
-            $(`a[data=<?= $dataUser ;?>`).parent().addClass('active');
+            $('li a[data-controller=<?= $controller; ?>').addClass('my-menu-link active');
+            $(`a[data=<?= $dataUser; ?>`).parent().addClass('active');
         })
     </script>
     <script>
@@ -55,7 +57,7 @@
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,
-                timer: 3000,
+                timer: 3500,
                 timerProgressBar: true,
                 didOpen: (toast) => {
                   toast.addEventListener("mouseenter", Swal.stopTimer)

@@ -5,9 +5,15 @@ $model = new Model();
 
 if (!empty($this->listOrderHistory)) {
     foreach ($this->listOrderHistory as $key => $item) {
-
         $status     = HelperFrontend::checkStatus($item['status']);
         $orderID     = $item['id'];
+        $icon = '';
+        $linkDelete = URL::createLink('frontend', 'user', 'deleteOrder', ['order_id' => $orderID]);
+        if ($item['status'] == 'not-handle' || $item['status'] == 'processing' || $item['status'] == 'not-delivery') {
+            $icon = sprintf(' <a href="%s" class="btn btn-info rounded btn-delete-cart "><i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;Xóa đơn hàng</a>', $linkDelete);
+        }
+
+
         $date        = date('H:i d/m/Y', strtotime($item['date']));
         $arrBookID = explode(',', $item['books']);
         $arrBookName = explode(',', $item['names']);
@@ -46,17 +52,19 @@ if (!empty($this->listOrderHistory)) {
                 <td style="min-width: 100px">%s đ</td>
                 <td>%s</td>
                 <td style="min-width: 150px">%s đ</td>
+                <td></td>
             </tr>
             ', $link, $picture, $valueB, number_format($bookPrice), $bookQuantity, number_format($totalBookPrice));
         }
 
-
+        $linkCheckStatus = URL::createLink('frontend', 'user', 'checkStatusOrder', ['id' => $orderID]);
         @$xhtmlOrderHistoryList .= '
         <div class="card">
         <div class="card-header">
             <h5 class="mb-0">
                 <button style="text-transform: none;" class="btn btn-link collapsed btn-order-id" type="button" data-toggle="collapse" data-target="#' . $orderID . '">Mã đơn hàng:
-                    ' . $orderID . '</button>&nbsp;&nbsp;Thời gian: ' . $date . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trạng thái : ' . $status . '
+                    ' . $orderID . '</button>&nbsp;&nbsp;Thời gian: ' . $date . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trạng thái : <a href="' . $linkCheckStatus . '" title="Check trạng thái đơn hàng"><span class="infomation-order">' . $status . ' <i class="fa fa-eye eye-cart"></i></span></a>
+                   
             </h5>
         </div>
         <div id="' . $orderID . '" class="collapse" data-parent="#accordionExample" style="">
@@ -70,6 +78,7 @@ if (!empty($this->listOrderHistory)) {
                             <td>Giá</td>
                             <td>Số lượng</td>
                             <td>Thành tiền</td>
+                            <td> ' . $icon . '</td>
                         </tr>
                     </thead>
 
@@ -89,7 +98,24 @@ if (!empty($this->listOrderHistory)) {
     </div>';
     }
 } else {
-    $xhtmlOrderHistoryList = '<h3>Chưa có đơn hàng nào!</h3>';
+    $linkHome = URL::createLink('frontend', 'index', 'index');
+    $xhtmlOrderHistoryList = '
+    <div class="col-lg-9">
+        <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div>
+                    <a href="#" class="btn btn-warning rounded-circle btn-change btn-sm"><i class="fa fa-exclamation-triangle error-icon" aria-hidden="true"></i></a>
+                    <h2 class="order-success">Chưa có đơn nào trong giỏ hàng</h3>
+                        <div class="container">
+                            <div class="text-center btn-order"><a href="' . $linkHome . '" class="btn btn-solid">Quay lại trang chủ</a></div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    ';
 }
 ?>
 <div class="breadcrumb-section">
@@ -118,12 +144,39 @@ if (!empty($this->listOrderHistory)) {
                             <?php require_once 'elements/menu-user.php'; ?>
                         </ul>
                     </div>
+                    <br />
+                    <div class="block-content">
+                        <?php require_once 'elements/search-order.php'; ?>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-9">
                 <div class="accordion theme-accordion" id="accordionExample">
                     <div class="accordion theme-accordion" id="accordionExample">
                         <?= $xhtmlOrderHistoryList; ?>
+                    </div>
+                    <div class="theme-paggination-block">
+                        <div class="container-fluid p-0">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <nav aria-label="Page navigation">
+                                        <nav>
+                                            <?= $this->pagination->showPaginationFrontEnd(); ?>
+                                        </nav>
+                                    </nav>
+                                </div>
+                                <div class="col-xl-6 col-md-6 col-sm-12">
+                                    <div class="product-search-count-bottom">
+
+                                        <?php
+                                        if (!empty($this->listOrderHistory)) {
+                                            echo $this->pagination->showingItem();
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <?php
-$picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload book-picture" alt="">', UPLOAD_URL . 'book' . DS . 'default.png');
+$picture            = sprintf('<img src="%s" class="img-fluid blur-up lazyload book-picture" alt="">', URL_UPLOAD . 'book' . DS . 'default.png');
 
 // //Input Hidden
 // $inputHiddenModule         = FormBackend::input('hidden', 'module', $this->arrParam['module']);

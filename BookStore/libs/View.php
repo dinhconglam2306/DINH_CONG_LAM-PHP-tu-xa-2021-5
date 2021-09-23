@@ -19,7 +19,7 @@ class View
 
 	public function render($fileInclude, $loadFull = true)
 	{
-		$path = APPLICATION_PATH . $this->_moduleName . DS . 'views' . DS . $fileInclude . '.php';
+		$path = PATH_APPLICATION . $this->_moduleName . DS . 'views' . DS . $fileInclude . '.php';
 		if (file_exists($path)) {
 			if ($loadFull == true) {
 				$this->_fileView = $fileInclude;
@@ -43,7 +43,7 @@ class View
 	{
 		$xhtml = '';
 		if (!empty($files)) {
-			$path = TEMPLATE_URL . $path . DS;
+			$path = URL_TEMPLATE . $path . DS;
 			foreach ($files as $file) {
 				if ($type == 'css') {
 					$xhtml .= '<link rel="stylesheet" type="text/css" href="' . $path . $file . '"/>';
@@ -86,7 +86,7 @@ class View
 	{
 		if (!empty($arrayCSS)) {
 			foreach ($arrayCSS as $css) {
-				$file = APPLICATION_URL . $this->_moduleName . DS . 'views' . DS . $css;
+				$file = URL_APPLICATION . $this->_moduleName . DS . 'views' . DS . $css;
 				$this->_cssFiles .= '<link rel="stylesheet" type="text/css" href="' . $file . '"/>';
 			}
 		}
@@ -97,7 +97,7 @@ class View
 	{
 		if (!empty($arrayJS)) {
 			foreach ($arrayJS as $js) {
-				$file = APPLICATION_URL . $this->_moduleName . DS . 'views' . DS . $js;
+				$file = URL_APPLICATION . $this->_moduleName . DS . 'views' . DS . $js;
 				$this->_jsFiles .= '<script type="text/javascript" src="' . $file . '"></script>';
 			}
 		}

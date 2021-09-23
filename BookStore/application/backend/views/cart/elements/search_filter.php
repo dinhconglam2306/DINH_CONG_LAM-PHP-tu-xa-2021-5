@@ -17,7 +17,7 @@ $formSearch = $inputHiddenModule . $inputHiddenController . $inputHiddenAction .
 
 //Search Status Cart
 
-$arrStatus  = ['default' => ' -Select Status Cart- ', 'not-delivery' => 'Chưa giao hàng', 'delivery' => 'Đang giao hàng', 'delivered' => 'Đã giao hàng'];
+$arrStatus  = ['default' => ' -Select Status Cart- ', 'not-handle' => 'Đang chờ xử lý','processing' => 'Đã tiếp nhận','not-delivery' => 'Đang chuẩn bị sách', 'delivery' => 'Đang giao hàng', 'delivered' => 'Đã giao hàng','cancelled' => 'Đã hủy'];
 $selectBoxStatusCart = FormBackend::selectBoxCartStatus('select_cart_status', $arrStatus, @$arrParams['select_cart_status'],'','','select_cart_status');
 
 //Select book -> category 

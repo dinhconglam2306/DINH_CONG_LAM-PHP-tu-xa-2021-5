@@ -1,0 +1,30 @@
+<?php
+$linkHome = URL::createLink('frontend', 'index', 'index');
+$orderID = $this->orderID;
+?>
+<div class="breadcrumb-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title">
+                    <h2 class="py-2">Đặt hàng thành công</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="cart-section section-b-space">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div>
+                    <a href="#" class="btn btn-success rounded-circle btn-change btn-sm"><i class="fa fa-check"></i></a>
+                    <h2 class="order-success">Đơn hàng được hủy thành công</h3>
+                        <div class="container">
+                            <div class="text-center btn-order"><a href="<?= $linkHome; ?>" class="btn btn-solid">Tiếp tục mua hàng</a></div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

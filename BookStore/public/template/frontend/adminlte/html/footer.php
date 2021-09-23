@@ -1,6 +1,13 @@
 <?php
-if (!empty($this->categorySpecial)) {
-    foreach ($this->categorySpecial as $key => $valueCategorySpecial) {
+
+$model      = new Model();
+$query = "SELECT `name`,`id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active'";
+
+$categorySpecial = $model->fetchAll($query);
+
+
+if (!empty($categorySpecial)) {
+    foreach ($categorySpecial as $key => $valueCategorySpecial) {
         $categoryId          = $valueCategorySpecial['id'];
         $categoryLink        = URL::createLink('frontend', 'book', 'list', ['category_id' => $categoryId]);
 

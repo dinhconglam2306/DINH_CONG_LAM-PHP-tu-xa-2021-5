@@ -25,6 +25,14 @@ class CartController extends Controller
 		$this->_view->items 				= $this->_model->listItems($this->_arrParam);
 		$this->_view->render($this->_arrParam['controller'] . '/index');
 	}
+	public function detailAction()
+	{
+		$this->_view->_title 				= ucfirst($this->_arrParam['controller']) . " Controller :: Detail";
+
+		//Detail Items
+		$this->_view->item 					= $this->_model->infoOrder($this->_arrParam,$option = null);
+		$this->_view->render($this->_arrParam['controller'] . '/detail');
+	}
 
 	public function changeStatusCartAction()
 	{

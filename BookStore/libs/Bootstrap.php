@@ -8,9 +8,9 @@ class Bootstrap
 	public function init()
 	{
 		$this->setParam();
-
-		$controllerName	= ucfirst($this->_params['controller']) . 'Controller';
-		$filePath	= APPLICATION_PATH . $this->_params['module'] . DS . 'controllers' . DS . $controllerName . '.php';
+		
+		$controllerName = $this->convertNameURLToClassName($this->_params['controller']) .  'Controller';
+		$filePath	= PATH_APPLICATION . $this->_params['module'] . DS . 'controllers' . DS . $controllerName . '.php';
 
 		if (file_exists($filePath)) {
 			$this->loadExistingController($filePath, $controllerName);
@@ -89,7 +89,7 @@ class Bootstrap
 	private function callLoginAction($module = 'fontend')
 	{
 		Session::delete('user');
-		require_once(APPLICATION_PATH . $module . DS . 'controllers' . DS . 'IndexController.php');
+		require_once(PATH_APPLICATION . $module . DS . 'controllers' . DS . 'IndexController.php');
 		$indexController = new IndexController($this->_params);
 		$indexController->loginAction();
 	}
@@ -97,9 +97,16 @@ class Bootstrap
 	// ERROR CONTROLLER
 	public function _error()
 	{
-		require_once APPLICATION_PATH . 'default' . DS . 'controllers' . DS . 'ErrorController.php';
+		require_once PATH_APPLICATION . 'default' . DS . 'controllers' . DS . 'ErrorController.php';
 		$this->_controllerObject = new ErrorController();
 		$this->_controllerObject->setView('default');
 		$this->_controllerObject->indexAction();
+	}
+
+	private function convertNameURLToClassName($nameURL)
+	{
+		$nameURL = ucwords(strtolower($nameURL),'-');
+		$className = str_replace('-',"",$nameURL);
+		return $className;
 	}
 }

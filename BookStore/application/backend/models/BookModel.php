@@ -204,7 +204,7 @@ class BookModel extends Model
 	//Lưu Item
 	public function saveItem($params, $options = null)
 	{
-		require_once LIBRARY_EXT_PATH . 'Upload.php';
+		require_once PATH_LIBRARY_EXT . 'Upload.php';
 		$uploadObj = new Upload();
 		if ($options['task'] == 'add') {
 			$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'book');

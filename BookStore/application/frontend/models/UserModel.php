@@ -1,21 +1,6 @@
 <?php
 class UserModel extends Model
 {
-	private $_columns = [
-		'id',
-		'username',
-		'fullname',
-		'email',
-		'password',
-		'group_id',
-		'created',
-		'created_by',
-		'modified',
-		'modified_by',
-		'register_date',
-		'status',
-		'ordering'
-	];
 
 	private $_userInfo;
 
@@ -41,11 +26,13 @@ class UserModel extends Model
 				foreach ($cart['quantity'] as $key => $value) $ids .= "'$key',";
 				$ids .= "'0')";
 
-				$query[] = "SELECT `name`,`id`,`picture`";
+				$query[] = "SELECT `name`,`category_id`,`id`,`picture`";
 				$query[] = "FROM `book`";
 				$query[] = "WHERE `status` = 'active'";
 				$query[] = "AND `id` IN $ids";
 				$query[] = "ORDER BY `ordering` ASC";
+
+
 
 				$query		= implode(' ', $query);
 
@@ -59,6 +46,17 @@ class UserModel extends Model
 			}
 			return $result;
 		}
+		if ($options['task'] == 'cart-new') {
+
+			$query[] = "SELECT `id`";
+			$query[] = "FROM `cart`";
+			$query[] = "ORDER BY `date` DESC";
+			$query[] = "LIMIT 0,1";
+			$query		= implode(' ', $query);
+
+			$result = $this->fetchAll($query);
+			return $result['0']['id'];
+		}
 	}
 	public function saveItem($params, $options = null)
 	{
@@ -69,36 +67,42 @@ class UserModel extends Model
 			$address = $params['form']['address'];
 			$query = "UPDATE `user` SET `phone` = '$phone', `fullname` = '$fullname',`address` = '$address' WHERE `id` = '$id'";
 			$this->query($query);
-			
+
 			$userInfo = Session::get('user');
-			$userInfo['info']['phone']= $phone;
-			$userInfo['info']['fullname']= $fullname;
-			$userInfo['info']['address']= $address;
-			Session::set('user',$userInfo);
+			$userInfo['info']['phone'] = $phone;
+			$userInfo['info']['fullname'] = $fullname;
+			$userInfo['info']['address'] = $address;
+			Session::set('user', $userInfo);
 
 			$success = ['type' => 'success', 'title' => 'Cập nhật thông tin thành công!'];
-			Session::set('success',$success);
+			Session::set('success', $success);
 		}
 		if ($options['task'] == 'submit-cart') {
+
 			$id		= $this->randomString(7);
 			$username = $this->_userInfo['username'];
-			$books = implode(',',$params['form']['book_id']);
-			$prices = implode(',',$params['form']['price']);
-			$quantities = implode(',',$params['form']['quantity']);
-			$names = implode(',',$params['form']['name']);
-			$pictures = implode(',',$params['form']['picture']);
-			$date = date('Y-m-d H:i:s',time());
-			
-			$query = "INSERT INTO `cart` (`id`,`username`,`books`,`prices`,`quantities`,`names`,`picture`,`status`,`date`)
-					VALUES('$id','$username','$books','$prices','$quantities','$names','$pictures','not-delivery','$date') ";
+			$books = implode(',', $params['form']['book_id']);
+			$prices = implode(',', $params['form']['price']);
+			$quantities = implode(',', $params['form']['quantity']);
+			$names = implode(',', $params['form']['name']);
+			$pictures = implode(',', $params['form']['picture']);
+			$receiver = implode('</br>', $params['receiver']);
+			$date = date('Y-m-d H:i:s', time());
+
+			$ship = $params['ship'];
+			$pay = $params['payment'];
+
+			$query = "INSERT INTO `cart` (`id`,`username`,`books`,`prices`,`quantities`,`names`,`picture`,`status`,`date`,`receiver`,`ship`,`pay`)
+					VALUES('$id','$username','$books','$prices','$quantities','$names','$pictures','not-handle','$date','$receiver','$ship','$pay') ";
 
 			$this->query($query);
 			Session::delete('cart');
 
-			
+			$queryStatusCart  = "INSERT INTO `cart_status` (`id`,`not-handle`) VALUES('$id','$date')";
+			$this->query($queryStatusCart);
 		}
 	}
-	public function CategoryList($params, $option = null)
+	public function categoryList($params, $option = null)
 	{
 		if ($option['task'] == 'category-list') {
 
@@ -118,21 +122,41 @@ class UserModel extends Model
 		}
 	}
 
-	public function OrderHisTory($params,$option = null){
-		if($option['task'] == 'list-order-history'){
+	public function orderHisTory($params, $option = null)
+	{
+		if ($option['task'] == 'list-order-history') {
 			$userInfo = Session::get('user');
 			$userName = $userInfo['info']['username'];
-			
-			$query = "SELECT `id`,`books`,`status`,`username`,`prices`,`quantities`,`names`,`picture`,`date` FROM `cart` WHERE `username` = '$userName' ORDER BY `date` DESC";
+
+			$query = "SELECT `id`,`books`,`status`,`username`,`prices`,`quantities`,`names`,`picture`,`date`";
+			$query .= " FROM `cart`";
+			$query .= " WHERE `username` = '$userName' AND `status` <> 'cancelled'";
+
+			if (isset($params['status']) && $params['status'] != 'default') {
+				$query .= " AND `status` = '{$params['status']}'";
+			}
+
+
+
+			$query .= " ORDER BY `date` DESC";
+
+			//PAGINATION
+			$pagination = $params['pagination'];
+			$totalItemsPerPage = $pagination['totalItemsPerPage'];
+			if ($totalItemsPerPage > 0) {
+				$position = ($pagination['currentPage'] - 1) * $totalItemsPerPage;
+				$query .= " LIMIT $position, $totalItemsPerPage";
+			}
 			$result = $this->fetchAll($query);
-			
+
 			return $result;
 		}
 	}
 
-	public function changePass($params,$option = null){
-		if($option['task'] == 'change-pass-user'){
-			$password = md5($params['form']['password']);
+	public function changePass($params, $option = null)
+	{
+		if ($option['task'] == 'change-pass-user') {
+			$password = md5($params['form']['password_new']);
 			$username = $params['form']['username'];
 
 			$query = "UPDATE `user` SET `password` = '$password' WHERE `username` = '$username'";
@@ -140,10 +164,58 @@ class UserModel extends Model
 		}
 	}
 
+	public function deleteOrder($params, $option = null)
+	{
+		if ($option['task'] == 'cancel-order') {
+			$orderID = $params['order_id'];
+			$query = "UPDATE `cart` SET `status` = 'cancelled' WHERE `id` = '$orderID'";
+			$this->query($query);
+		}
+	}
+
+	public function checkPass($params, $option = null)
+	{
+		if ($option['task'] == 'check-password') {
+			$password = md5($params['form']['password_old']);
+			$query = "SELECT `password` FROM `user` WHERE `password` = '$password'";
+			$result = $this->fetchRow($query);
+			return $result;
+		}
+	}
+
+	public function checkStatusOrder($params, $option = null)
+	{
+		if ($option['task'] == 'order-infomation') {
+			$id = $params['id'];
+			$query = "SELECT `id`,`date`,`status` FROM `cart` WHERE `id` = '$id'";
+			$result = $this->fetchRow($query);
+			return $result;
+		}
+
+		if ($option['task'] == 'order-status') {
+			$id = $params['id'];
+			$query = "SELECT `not-handle`,`processing`,`not-delivery`,`delivery`,`delivered` FROM `cart_status` WHERE `id` = '$id'";
+			$result = $this->fetchRow($query);
+			return $result;
+		}
+	}
+
+	public function countItems($params, $options = null)
+	{
+		if ($options['task'] == 'count-order') {
+			$query[] = "SELECT COUNT(`id`) AS `count`";
+			$query[] = "FROM `cart` WHERE `status` <> 'cancelled'";
+
+			$query = implode(' ', $query);
+			$items = $this->fetchRow($query);
+			return $items['count'];
+		}
+	}
+
 	private function randomString($length = 5)
 	{
-		$arrCharacter = array_merge(range('a', 'z'),range('A', 'Z'), range('0', '9'));
-		$arrCharacter = implode('',$arrCharacter);
+		$arrCharacter = array_merge(range('a', 'z'), range('A', 'Z'), range('0', '9'));
+		$arrCharacter = implode('', $arrCharacter);
 		$arrCharacter = str_shuffle($arrCharacter);
 
 		$result 	  = substr($arrCharacter, 0, $length);

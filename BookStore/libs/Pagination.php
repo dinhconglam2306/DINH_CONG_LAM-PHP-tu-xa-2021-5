@@ -18,9 +18,10 @@ class Pagination
 		$this->totalPage 	= ceil($totalItems / $pagination['totalItemsPerPage']);
 	}
 
-	public function showingItem(){
+	public function showingItem()
+	{
 
-		$xhtml  = sprintf('<h5>Page %s of %s</h5>',$this->currentPage,$this->totalPage);
+		$xhtml  = sprintf('<h5>Page %s of %s</h5>', $this->currentPage, $this->totalPage);
 		return $xhtml;
 	}
 
@@ -89,12 +90,18 @@ class Pagination
 	public function showPaginationFrontEnd()
 	{
 		$url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
-		$query_str = parse_url($url, PHP_URL_QUERY);
-		parse_str($query_str, $queryParams);
-		if (array_key_exists('page', $queryParams)) unset($queryParams['page']);
-		$link = http_build_query($queryParams);
-		$link = 'index.php?' . $link;
+		if (URL_FRIENDLY == false) {
+			$query_str = parse_url($url, PHP_URL_QUERY);
+			parse_str($query_str, $queryParams);
+			if (array_key_exists('page', $queryParams)) unset($queryParams['page']);
+			$link = http_build_query($queryParams);
+			$link = 'index.php?' . $link;
+		} else {
+			$link = URL::getURL('page');
+		}
+
 		$paginationHTML = '';
+
 		if ($this->totalPage > 1) {
 			$start =  '<li class="page-item disabled"><a href="" class="page-link"><i class="fa fa-angle-double-left"></i></a></li>';
 			$prev =  '<li class="page-item disabled"><a href="" class="page-link"><i class="fa fa-angle-left"></i></a></li>';

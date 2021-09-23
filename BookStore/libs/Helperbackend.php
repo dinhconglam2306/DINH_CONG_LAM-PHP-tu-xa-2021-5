@@ -230,7 +230,7 @@ class HelperBackend
         return $xhtml;
     }
 
-    public static function createImage($folder,$pictureName,$attribute){
+    public static function createImage($folder,$pictureName,$attribute=null){
         
         $class = !empty($attribute['class'])? $attribute['class'] : '';
         $width = !empty($attribute['width'])? $attribute['width'] : '';
@@ -239,9 +239,9 @@ class HelperBackend
 
         $attrStr = "class='$class' width='$width' height='$height' alt='$alt'";
         
-        $picture            = sprintf('<img src="%s" %s />', UPLOAD_URL . $folder . DS . 'default.png',$attrStr);
-        $picturePath        = UPLOAD_PATH . $folder . DS . $pictureName;
-        if (file_exists($picturePath) && !empty($pictureName))  $picture  = sprintf('<img src="%s" %s/>', UPLOAD_URL . $folder . DS . $pictureName,$attrStr);
+        $picture            = sprintf('<img src="%s" %s />', URL_UPLOAD . $folder . DS . 'default.png',$attrStr);
+        $picturePath        = PATH_UPLOAD . $folder . DS . $pictureName;
+        if (file_exists($picturePath) && !empty($pictureName))  $picture  = sprintf('<img src="%s" %s/>', URL_UPLOAD . $folder . DS . $pictureName,$attrStr);
 
         return $picture;
     }

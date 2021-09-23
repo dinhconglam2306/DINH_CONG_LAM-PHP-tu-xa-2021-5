@@ -1,22 +1,67 @@
 <?php
-$userObj = Session::get('user');
-$categoryList = @$this->category;
-$categoryXhtml = '<ul>';
-foreach ($categoryList as $key => $value) {
-    $id = $value['id'];
-    $name = $value['name'];
-    $nameURL= URL::filterURL($name) . '-' . $id. '.html';
-    $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $id],$nameURL);
-    $categoryXhtml .= sprintf('<li><a href="%s">%s</a></li>', $link, $name);
+/*----------SEARCH-START-----------------*/
+
+//Input Search
+$inputSearch =  FormBackend::inputSearch('text', 'search', 'search_input', 'Tìm kiếm sách...');
+
+//Input Hidden
+
+$categoryID = $this->arrParam['category_id'] ?? 'all';
+
+$inputHiddenModule         = FormBackend::input('hidden', 'module', 'frontend');
+$inputHiddenController     = FormBackend::input('hidden', 'controller', 'book');
+$inputHiddenAction         = FormBackend::input('hidden', 'action', 'list');
+$inputHiddenCategoryId     = FormBackend::input('hidden', 'category_id', $categoryID);
+
+$formSearch = $inputHiddenModule . $inputHiddenController . $inputHiddenAction  . $inputHiddenCategoryId;
+
+
+$actionForm = '';
+if (URL_FRIENDLY == true) {
+    $url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $url = explode('/', $url);
+    $link = $url[count($url) - 1];
+    // $url = explode('&', $url);
+    // if (array_key_exists('search', $url)) unset($url['search']);
+    // $link = $url[0];
+    // $link = URL::getURL('search');
+    if ($link == 'index.html') {
+        $actionForm = 'tat-ca-all.html';
+    } else {
+        $actionForm = $link;
+    }
+    $formSearch = '';
 }
+
+/*----------SEARCH-END-----------------*/
+
+$userObj    = Session::get('user');
+
+$model      = new Model();
+
+$query      = "SELECT `name`,`id` FROM `category` WHERE `status` = 'active' ORDER BY `ordering` ASC";
+$category   = $model->fetchAll($query);
+
+
+$categoryXhtml = '<ul>';
+if (!empty($category)) {
+    foreach ($category as $key => $value) {
+        $id = $value['id'];
+        $name = $value['name'];
+        $nameURL = URL::filterURL($name) . '-' . $id . '.html';
+        $link = URL::createLink('frontend', 'book', 'list', ['category_id' => $id], $nameURL);
+        $categoryXhtml .= sprintf('<li><a href="%s">%s</a></li>', $link, $name);
+    }
+}
+
 $categoryXhtml .= '</ul>';
 
 //Link menu
-$linkListBook               = URL::createLink('frontend', 'book', 'list', ['category_id' => 'all'],'tat-ca-all.html');
+$linkListBook               = URL::createLink('frontend', 'book', 'list', ['category_id' => 'all'], 'tat-ca-all.html');
 $linkHome                   = URL::createLink('frontend', 'index', 'index', null, 'index.html');
 $linkRegister               = URL::createLink('frontend', 'index', 'register', null, 'register.html');
 $linkLogin                  = URL::createLink('frontend', 'index', 'login', null, 'login.html');
-$linkLogout                 = URL::createLink('frontend', 'index', 'logout',null,'logout.html');
+$linkLogout                 = URL::createLink('frontend', 'index', 'logout', null, 'logout.html');
 $linkAdminControllPanel     = URL::createLink('backend', 'dashboard', 'index');
 $linkMyProfile              = URL::createLink('frontend', 'user', 'index', null, 'my-account.html');
 $linkCategory               = URL::createLink('frontend', 'category', 'list', null, 'category.html');
@@ -109,9 +154,10 @@ foreach ($controlMenu as $key => $value) {
                                                     <div class="container">
                                                         <div class="row">
                                                             <div class="col-xl-12">
-                                                                <form action="" method="GET">
+                                                                <form action="<?= $actionForm; ?>" method="GET">
                                                                     <div class="form-group">
-                                                                        <input type="text" class="form-control" name="search" id="search-input" placeholder="Tìm kiếm sách...">
+                                                                        <?= $formSearch; ?>
+                                                                        <?= $inputSearch; ?>
                                                                     </div>
                                                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                                                 </form>

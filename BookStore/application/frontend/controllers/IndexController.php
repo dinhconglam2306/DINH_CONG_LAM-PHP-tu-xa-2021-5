@@ -14,9 +14,9 @@ class IndexController extends Controller
 	public function indexAction()
 	{
 		$this->_view->_title 				= "Trang chủ | BookStore";
-		$this->_view->category 				= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list']);
-		$this->_view->categorySpecial 		= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list-special']);
-		$this->_view->specialItems    		=  $this->_model->BookList($this->_arrParam, ['task' => 'book-special-list']);
+		// $this->_view->category 				= $this->_model->categoryList($this->_arrParam, ['task' => 'category-list']);
+		$this->_view->categorySpecial 		= $this->_model->categoryList($this->_arrParam, ['task' => 'category-list-special']);
+		$this->_view->specialItems    		=  $this->_model->bookList($this->_arrParam, ['task' => 'book-special-list']);
 		$this->_view->render('index/index');
 	}
 
@@ -54,14 +54,14 @@ class IndexController extends Controller
 				Session::set('notify', $notify);
 			}
 		}
-		$this->_view->categorySpecial 		= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list-special']);
+		$this->_view->categorySpecial 		= $this->_model->categoryList($this->_arrParam, ['task' => 'category-list-special']);
 		$this->_view->render('index/login');
 	}
 	public function registerAction()
 	{
 		$userInfo = Session::get('user');
 		if (@$userInfo['login'] == true && @$userInfo['time'] + TIME_LOGIN >= time()) {
-			URL::redirect('frontend', 'user', 'index');
+			URL::redirect('frontend', 'user', 'index',null,'login.html');
 		};
 
 		$this->_view->_title 				= "Đăng ký tài khoản";
@@ -82,7 +82,7 @@ class IndexController extends Controller
 			} else {
 				// Insert Database
 				$this->_model->saveItem($this->_arrParam, ['task' => 'register-user']);
-				URL::redirect('frontend', 'index', 'notice', ['type' => 'register-success']);
+				URL::redirect('frontend', 'index', 'notice', ['type' => 'register-success'],'thong-bao.html');
 			}
 		}
 		$this->_view->render($this->_arrParam['controller'] . '/register');

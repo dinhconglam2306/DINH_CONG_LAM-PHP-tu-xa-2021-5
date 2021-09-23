@@ -1,5 +1,6 @@
 <?php
 // Danh sách book special of category
+
 foreach ($this->specialItems as $key => $item) {
     $name = $item['name'];
     $id                 = $item['id'];
@@ -7,7 +8,7 @@ foreach ($this->specialItems as $key => $item) {
 
     $catID                  = $item['category_id'];
     $catNameURL             =   URL::filterURL($item['category_name']);
-
+   
     $linkNameURL            = "$catNameURL/$nameURL-$catID-$id.html";
     $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $item['category_id'], 'book_id' => $item['id']],$linkNameURL);
     $picture            = HelperBackend::createImage('book', $item['picture'], ['class' => 'img-fluid blur-up lazyload', 'alt' => $name]);
@@ -45,7 +46,7 @@ foreach ($this->specialItems as $key => $item) {
         <div class="row">
             <div class="col-12">
                 <div class="page-title">
-                    <h2 class="py-2">Tất cả sách</h2>
+                    <h2 class="py-2"><?= $this->_title ;?></h2>
                 </div>
             </div>
         </div>

@@ -130,7 +130,7 @@ class CategoryModel extends Model
 
 			$arrImage = $this->fetchPairs($query);
 
-			require_once LIBRARY_EXT_PATH . 'Upload.php';
+			require_once PATH_LIBRARY_EXT . 'Upload.php';
 			$uploadObj = new Upload();
 			foreach ($arrImage as $value) {
 				$uploadObj->removeFile('category', $value);
@@ -177,7 +177,7 @@ class CategoryModel extends Model
 	//Lưu Item
 	public function saveItem($params, $options = null)
 	{
-		require_once LIBRARY_EXT_PATH . 'Upload.php';
+		require_once PATH_LIBRARY_EXT . 'Upload.php';
 		$uploadObj = new Upload();
 		if ($options['task'] == 'add') {
 			$params['form']['picture'] = $uploadObj->uploadFile($params['form']['picture'], 'category');

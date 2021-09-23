@@ -19,7 +19,7 @@ ul.list-unstyled.mb-0 li.text-color {
 
 h6.description span {
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -30,7 +30,8 @@ h3.text-center.mb-50 {
 
 h2.order-success {
   font-size: 25px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 h5.order-content {
@@ -51,9 +52,6 @@ a.btn-success {
 }
 
 div.change-pass {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
 }
 div.change-pass label {
@@ -61,16 +59,167 @@ div.change-pass label {
 }
 div.change-pass i {
   position: absolute;
+  top: 40px;
   right: 10px;
   cursor: pointer;
 }
-
+div.change-pass label {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+}
 
 button.btn.btn-link.collapsed.btn-order-id {
   width: 220px;
 }
 
 input.input-order {
-  width: 180px;
+  width: 220px;
+  margin-left: 50px;
+}
+.checkoutPage {
+  padding: 20px;
+  margin-top: 50px;
+}
+
+body {
+  color: #000;
+  overflow-x: hidden;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+
+.card {
+  z-index: 0;
+  background-color: #eceff1;
+  padding-bottom: 20px;
+  margin-top: 90px;
+  margin-bottom: 90px;
+  border-radius: 10px;
+}
+
+.top {
+  padding-top: 40px;
+  padding-left: 13% !important;
+  padding-right: 13% !important;
+}
+
+#progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  color: #455a64;
+  padding-left: 0px;
+  margin-top: 30px;
+}
+
+#progressbar li {
+  list-style-type: none;
+  font-size: 13px;
+  width: 20%;
+  float: left;
+  position: relative;
+  font-weight: 400;
+}
+
+#progressbar .step0:before {
+  font-family: FontAwesome;
+  content: "\f10c";
+  color: #fff;
+}
+
+#progressbar li:before {
+  width: 40px;
+  height: 40px;
+  line-height: 45px;
+  display: block;
+  font-size: 20px;
+  background: #c5cae9;
+  border-radius: 50%;
+  margin: auto;
+  padding: 0px;
+}
+
+#progressbar li:after {
+  content: "";
+  width: 100%;
+  height: 12px;
+  background: #c5cae9;
+  position: absolute;
+  left: 0;
+  top: 16px;
+  z-index: -1;
+}
+
+#progressbar li:last-child:after {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: absolute;
+  left: -50%;
+}
+
+#progressbar li:nth-child(2):after,
+#progressbar li:nth-child(3):after,
+#progressbar li:nth-child(4):after {
+  left: -50%;
+}
+
+#progressbar li:first-child:after {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  position: absolute;
+  left: 50%;
+}
+
+#progressbar li:last-child:after {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#progressbar li:first-child:after {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #651fff;
+}
+
+#progressbar li.active:before {
+  font-family: FontAwesome;
+  content: "\f00c";
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+}
+
+.icon-content {
+  padding-bottom: 20px;
+}
+
+@media screen and (max-width: 992px) {
+  .icon-content {
+    width: 50%;
+  }
+}
+
+.infomation-order {
+  position: relative;
+}
+.infomation-order .eye-cart {
+  margin-left: 80px;
+  color: white;
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
+.note-order {
+  color: red;
+}
+a.btn.btn-info.rounded.btn-delete-cart {
   margin-left: 50px;
 }

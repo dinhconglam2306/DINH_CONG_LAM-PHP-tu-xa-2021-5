@@ -4,23 +4,25 @@ class HelperFrontend
 {
     public static function showProduct($producInfo, $params, $showRating = true)
     {
-        $bookName               = $producInfo['name'];
-        $bookID                 =$producInfo['id'];
+        $bookName               = HelperBackend::highlight(@$params['search'], $producInfo['name']);
+        // $bookName               = $producInfo['name'];
+        $bookID                 = $producInfo['id'];
         $bookNameURL            = URL::filterURL($bookName);
 
-        $catID                  =$producInfo['category_id'];
+        $catID                  = $producInfo['category_id'];
         $catNameURL             =   URL::filterURL($producInfo['category_name']);
-
-        $linkNameURL            ="$catNameURL/$bookNameURL-$catID-$bookID.html";
-
         
+
+        $linkNameURL            = "$catNameURL/$bookNameURL-$catID-$bookID.html";
+
+
 
         // $link = URL::createLink('frontend', 'book', 'detail', ['book_id' => $producInfo['id']],$nameURL);
-        $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $producInfo['category_id'] ,'book_id' => $producInfo['id']],$linkNameURL);
+        $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $producInfo['category_id'], 'book_id' => $producInfo['id']], $linkNameURL);
         $saleOff            = $producInfo['sale_off'];
 
-        $picture            = HelperBackend::createImage('book',$producInfo['picture'],['class'=>'img-fluid blur-up lazyload bg-img','alt'=>$bookName]);
-        
+        $picture            = HelperBackend::createImage('book', $producInfo['picture'], ['class' => 'img-fluid blur-up lazyload bg-img', 'alt' => $bookName]);
+
         $linkView = '#';
         $linkAdd = '#';
         $description        = $producInfo['description'];
@@ -73,16 +75,16 @@ class HelperFrontend
     {
 
         $bookName               = $mediaInfo['name'];
-        $bookID                 =$mediaInfo['id'];
+        $bookID                 = $mediaInfo['id'];
         $bookNameURL            = URL::filterURL($bookName);
 
-        $catID                  =$mediaInfo['category_id'];
+        $catID                  = $mediaInfo['category_id'];
         $catNameURL             =   URL::filterURL($mediaInfo['category_name']);
 
-        $linkNameURL            ="$catNameURL/$bookNameURL-$catID-$bookID.html";
-        $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $mediaInfo['category_id'] ,'book_id' => $mediaInfo['id']],$linkNameURL);
+        $linkNameURL            = "$catNameURL/$bookNameURL-$catID-$bookID.html";
+        $link = URL::createLink('frontend', 'book', 'detail', ['category_id' => $mediaInfo['category_id'], 'book_id' => $mediaInfo['id']], $linkNameURL);
         $name = $mediaInfo['name'];
-        $picture            = HelperBackend::createImage('book',$mediaInfo['picture'],['class'=>'img-fluid blur-up lazyload','alt'=>$name]);
+        $picture            = HelperBackend::createImage('book', $mediaInfo['picture'], ['class' => 'img-fluid blur-up lazyload', 'alt' => $name]);
         $price = number_format(($mediaInfo['price'] * (100 - $mediaInfo['sale_off'])) / 100);
 
         if ($showRating == false) $rating = '';
@@ -112,16 +114,74 @@ class HelperFrontend
     {
         $status = '';
         switch ($value) {
+            case 'not-handle':
+                $status = '<input class="btn btn-danger rounded input-order" type="button" value=" Đang chờ xử lý">';
+                break;
+            case 'processing':
+                $status = '<input class="btn btn-primary rounded input-order" type="button" value=" Đã tiếp nhận">';
+                break;
             case 'not-delivery':
-                $status = '<input class="btn btn-danger rounded input-order" type="button" value=" Chưa nhận">';
+                $status = '<input class="btn btn-warning rounded input-order" type="button" value=" Đang chuẩn bị sách">';
                 break;
             case 'delivery':
-                $status = '<input class="btn btn-warning rounded input-order" type="button" value=" Đang vận chuyển">';
+                $status = '<input class="btn btn-info rounded input-order" type="button" value=" Đang giao hàng">';
                 break;
             case 'delivered':
-                $status ='<input class="btn btn-success rounded input-order" type="button" value=" Đã nhận">';
+                $status = '<input class="btn btn-success rounded input-order" type="button" value=" Đã nhận">';
                 break;
         }
         return $status;
+    }
+
+    public static function checkStatusChange($value)
+    {
+        $status = '';
+        switch ($value) {
+            case 'not-handle':
+                $status = 'ĐANG CHỜ XỬ LÝ';
+                break;
+            case 'processing':
+                $status = 'ĐANG XỬ LÝ';
+                break;
+            case 'not-delivery':
+                $status = 'ĐANG CHUẨN BỊ SÁCH';
+                break;
+            case 'delivery':
+                $status = 'ĐANG GIAO HÀNG';
+                break;
+            case 'delivered':
+                $status = 'ĐANG GỬI HÀNG';
+                break;
+        }
+        return $status;
+    }
+    public static function checkShip($value)
+    {
+        $xhtml = '';
+        switch ($value) {
+            case 'inShop':
+                $xhtml = 'Nhận tại cửa hàng';
+                break;
+            case 'atHome':
+                $xhtml = 'Nhận tại nhà';
+                break;
+        }
+        return $xhtml;
+    }
+    public static function checkPay($value)
+    {
+        $xhtml = '';
+        switch ($value) {
+            case 'money':
+                $xhtml = 'Trả khi nhận hàng';
+                break;
+            case 'credit':
+                $xhtml = 'Thanh toán bằng thẻ quốc tế Visa, Master, JCB';
+                break;
+            case 'debit':
+                $xhtml = 'Thẻ ATM nội địa/Internet Bankin';
+                break;
+        }
+        return $xhtml;
     }
 }

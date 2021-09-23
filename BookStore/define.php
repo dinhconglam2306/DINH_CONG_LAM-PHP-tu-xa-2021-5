@@ -2,19 +2,19 @@
 
 // ====================== PATHS ===========================
 define('DS', '/');
-define('ROOT_PATH', dirname(__FILE__));						        // Định nghĩa đường dẫn đến thư mục gốc
-define('LIBRARY_PATH', ROOT_PATH . DS . 'libs' . DS);			    // Định nghĩa đường dẫn đến thư mục thư viện
-define('LIBRARY_EXT_PATH', LIBRARY_PATH . 'extends' . DS);			    // Định nghĩa đường dẫn đến thư mục thư viện
-define('PUBLIC_PATH', ROOT_PATH . DS . 'public' . DS);			    // Định nghĩa đường dẫn đến thư mục public							
-define('UPLOAD_PATH', PUBLIC_PATH . 'files' . DS);			    // Định nghĩa đường dẫn đến thư mục public							
-define('APPLICATION_PATH', ROOT_PATH . DS . 'application' . DS);	// Định nghĩa đường dẫn đến thư mục public							
-define('TEMPLATE_PATH', PUBLIC_PATH . 'template' . DS);		        // Định nghĩa đường dẫn đến thư mục public							
+define('PATH_ROOT', dirname(__FILE__));						        // Định nghĩa đường dẫn đến thư mục gốc
+define('PATH_LIBRARY', PATH_ROOT . DS . 'libs' . DS);			    // Định nghĩa đường dẫn đến thư mục thư viện
+define('PATH_LIBRARY_EXT', PATH_LIBRARY . 'extends' . DS);			    // Định nghĩa đường dẫn đến thư mục thư viện
+define('PATH_PUBLIC', PATH_ROOT . DS . 'public' . DS);			    // Định nghĩa đường dẫn đến thư mục public							
+define('PATH_UPLOAD', PATH_PUBLIC . 'files' . DS);			    // Định nghĩa đường dẫn đến thư mục public							
+define('PATH_APPLICATION', PATH_ROOT . DS . 'application' . DS);	// Định nghĩa đường dẫn đến thư mục public							
+define('PATH_TEMPLATE', PATH_PUBLIC . 'template' . DS);		        // Định nghĩa đường dẫn đến thư mục public							
 
-define('ROOT_URL', DS . 'DINH_CONG_LAM-PHP-tu-xa-2021-5' . DS . 'BookStore' . DS);
-define('APPLICATION_URL', ROOT_URL . 'application' . DS);
-define('PUBLIC_URL', ROOT_URL . 'public' . DS);
-define('UPLOAD_URL', PUBLIC_URL . 'files' . DS);
-define('TEMPLATE_URL', PUBLIC_URL . 'template' . DS);
+define('URL_ROOT', DS . 'DINH_CONG_LAM-PHP-tu-xa-2021-5' . DS . 'BookStore' . DS);
+define('URL_APPLICATION', URL_ROOT . 'application' . DS);
+define('URL_PUBLIC', URL_ROOT . 'public' . DS);
+define('URL_UPLOAD', URL_PUBLIC . 'files' . DS);
+define('URL_TEMPLATE', URL_PUBLIC . 'template' . DS);
 
 define('DEFAULT_MODULE', 'backend');
 define('DEFAULT_CONTROLLER', 'index');
@@ -37,5 +37,7 @@ define('TBL_CART', 'cart');
 
 // ====================== CONFIG ===========================
 define('TIME_LOGIN', 3600);
+
+define('URL_FRIENDLY',true);
 
 

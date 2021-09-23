@@ -28,24 +28,47 @@ select.custom-select.slb-select-category {
   margin-right: 10px;
 }
 
-ul.list-picture li{
+ul.list-picture li {
   list-style: none;
   margin-bottom: 20px;
 }
 
-p.list{
+p.list {
   margin-bottom: 80px;
 }
 
-select.delivery-warning {
-  background-color: #ffc107;
-}
-select.delivery-danger {
+select.handle-danger {
   background-color: #dc3545;
   color: white;
 }
-select.delivery-success {
-  background-color:#28a745 ;
+select.processing-secondary {
+  background-color: #007bff;
+  color: white;
+}
+select.delivery-warning {
+  background-color: #ffc107;
+  color: black;
+}
+select.delivery-info {
+  background-color: #17a2b8;
   color: white;
 }
 
+select.delivered-success {
+  background-color: #28a745;
+  color: white;
+}
+select.cancelled-dark {
+  background-color: #6c757d;
+  color: white;
+}
+
+span.quantities {
+  color: white;
+  padding: 2px 8px;
+  border-radius: 50%;
+  background-color: #17a2b8;
+}
+span.bold-title {
+  font-weight: bold;
+}

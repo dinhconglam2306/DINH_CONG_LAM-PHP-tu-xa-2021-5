@@ -86,19 +86,20 @@ $(document).ready(function () {
     $('.btn-add-to-cart').click(function (e){
         let quantityValue = $('input[name="quantity"]').val();
         let url  = $(this).attr('data-url').replace('value_new',quantityValue);
+        $('.modal').modal('hide')
         e.preventDefault();
-        $('.product-title').notify("Đã thêm vào rỏ hàng",{elementPosition: 'top',className: 'success',autoHideDelay:1200})
+        $('a#cart').notify("Đã thêm vào rỏ hàng",{elementPosition: 'top',className: 'success',autoHideDelay:1200})
         $.get(url,function(data){
+            $('.badge-items').text(data)
+            $('input[name="quantity"]').val('1');
             console.log(data)
         })
-        setTimeout(function(){
-            location.reload();
-        },1400);
     })
 
     $('.btn-add-to-cart-detail').click(function (e){
         let quantityValue = $('input[name="quantity"]').val();
         let url  = $(this).attr('data-url').replace('value_new',quantityValue);
+        $('a#cart').notify("Đã thêm vào rỏ hàng",{elementPosition: 'top',className: 'success',autoHideDelay:1000})
         e.preventDefault();
         $.get(url,function(data){
             console.log(data)
@@ -133,9 +134,35 @@ $(document).ready(function () {
     })
 
 
-    $('.check-eye').hover(function (){
+    $('.check-eye').click(function (){
         let type = ($(this).prev().attr('type') == 'text') ? 'password' : 'text';
         $(this).prev().attr('type',type);
     })
+
+    //submit form
+
+    $('.slb-order-status').change(function (){
+        $('#select-order-status').submit();
+    })
+
+
+    $('.btn-delete-cart').click(function(e){
+        e.preventDefault();
+        let href = $(this).attr('href');
+        Swal.fire({
+            title: 'Bạn muốn xóa đơn hàng này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = href;
+            }
+          })
+    })
+
+
 });
 

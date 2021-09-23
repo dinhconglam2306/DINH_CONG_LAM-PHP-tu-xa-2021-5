@@ -1,8 +1,6 @@
 <?php
 $dataForm = @$this->arrParam['form'];
-echo '<pre>';
-print_r($dataForm);
-echo '</pre>';
+
 
 //Input
 $inputName          = FormBackend::input('text', 'form[name]', @$dataForm['name']);
@@ -14,13 +12,13 @@ $picture = '<div id="picture"></div>';
 $inputPictureHidden = '';
 
 if (isset($this->arrParam['id'])) {
-    $picture            = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', UPLOAD_URL . 'category' . DS . 'default.png');
-    @$picturePath        = UPLOAD_PATH . 'category' . DS . @$dataForm['picture'];
+    $picture            = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', URL_UPLOAD . 'category' . DS . 'default.png');
+    @$picturePath        = PATH_UPLOAD . 'category' . DS . @$dataForm['picture'];
     if (file_exists($picturePath) && !empty($dataForm['picture'])) {
-        $picture  = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', UPLOAD_URL . 'category' . DS . $dataForm['picture']);
+        $picture  = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', URL_UPLOAD . 'category' . DS . $dataForm['picture']);
     } else {
         if (is_array($dataForm['picture']) == true) {
-            $picture  = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', UPLOAD_URL . 'category' . DS . $dataForm['picture_hidden']);
+            $picture  = sprintf('<div id="picture"><img src="%s"style ="max-width :100px; margin-top:10px;"/></div>', URL_UPLOAD . 'category' . DS . $dataForm['picture_hidden']);
         }
     }
     // $picture            = sprintf('<div id="picture"><img id="old" src="%s" style ="max-width:250px;" /></div>', $pathImage);

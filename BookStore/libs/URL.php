@@ -4,14 +4,14 @@ class URL
 {
     public static function createLink($module, $controller, $action, $params = null, $router = null)
     {
-        if ($router != null) return ROOT_URL . $router;
+        if ($router != null && URL_FRIENDLY == true) return URL_ROOT . $router;
         $linkParams = '';
         if ($params) {
             foreach ($params as $key => $value) {
                 $linkParams .= "&{$key}={$value}";
             }
         }
-        $url = ROOT_URL . sprintf('index.php?module=%s&controller=%s&action=%s%s', $module, $controller, $action, $linkParams);
+        $url = URL_ROOT . sprintf('index.php?module=%s&controller=%s&action=%s%s', $module, $controller, $action, $linkParams);
         return $url;
     }
 
@@ -95,5 +95,18 @@ class URL
         $value =  URL::replaceSpace($value);
         $value = URL::removeCircumflex($value);
         return $value;
+    }
+
+    public static function getURL($key)
+    {
+        $link='';
+        $url =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+        $url = explode('/', $url);
+        $url = $url[count($url) - 1];
+        $url = explode('&', $url);
+        if (array_key_exists($key, $url)) unset($url[$key]);
+        $link = $url[0];
+
+        return $link;
     }
 }

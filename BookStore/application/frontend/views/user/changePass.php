@@ -3,20 +3,25 @@ $userInfo = Session::get('user');
 $userInfo = $userInfo['info'];
 
 //input
-$inputPw = FormFrontend::input('password', 'password', 'form[password]', '');
-$inputPwCheck = FormFrontend::input('password', 'password_check', 'form[password_check]', '');
+$inputPasswordOld = FormFrontend::input('text', 'password_old', 'form[password_old]', '');
+$inputPasswordNew = FormFrontend::input('text', 'password_new', 'form[password_new]', '');
+$inputPasswordNewCheck = FormFrontend::input('text', 'password_new_check', 'form[password_new_check]', '');
 
 $inputHiddenToken = FormFrontend::input('hidden', 'token', 'form[token]', time());
 $inputHiddenId = FormFrontend::input('hidden', 'id', 'form[username]', $userInfo['username']);
 
 //Row
 $icon ='<i class="fa fa-eye check-eye"></i>';
-$rowPw1  = FormFrontend::rowForm('password', 'Nhập mật khẩu mới', $inputPw . $icon , 'form-group change-pass');
-$rowPw2  = FormFrontend::rowForm('password_check', 'Nhập lại mật khẩu mới', $inputPwCheck . $icon, 'form-group change-pass');
+$rowPasswordOld = FormFrontend::rowForm('password_old', 'Nhập mật khẩu cũ', $inputPasswordOld . $icon , 'form-group change-pass');
+$rowPasswordNew  = FormFrontend::rowForm('password_new', 'Nhập mật khẩu mới', $inputPasswordNew . $icon , 'form-group change-pass');
+$rowPasswordNewCheck  = FormFrontend::rowForm('password_new_check', 'Nhập lại mật khẩu mới', $inputPasswordNewCheck . $icon, 'form-group change-pass');
 
+
+
+$row  = $rowPasswordOld . $rowPasswordNew . $rowPasswordNewCheck . $inputHiddenToken . $inputHiddenId ;
 //Button
 
-$button = FormFrontend::button('submit', 'submit-edit-pass-user', 'form[submit]', 'Thay đổi mật khẩu', 'Thay đổi mật khẩu');
+$button = FormFrontend::button('submit', 'submit-edit-pass-user', 'form[submit]', 'Đổi mật khẩu', 'Đổi mật khẩu');
 
 $submitForm = URL::createLink('frontend', 'user', 'changePw');
 
@@ -54,7 +59,7 @@ $submitForm = URL::createLink('frontend', 'user', 'changePw');
         <div class="dashboard-right">
           <div class="dashboard">
             <form action="<?= $submitForm; ?>" method="post" id="admin-form" class="theme-form">
-              <?= $rowPw1 . $rowPw2 . $inputHiddenToken . $inputHiddenId . $button; ?>
+              <?= $row . $button; ?>
             </form>
           </div>
         </div>

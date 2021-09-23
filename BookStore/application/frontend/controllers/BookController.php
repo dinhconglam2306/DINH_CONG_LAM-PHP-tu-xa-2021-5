@@ -21,7 +21,6 @@ class BookController extends Controller
 		$this->_view->pagination 			= new Pagination($itemCount, $this->_pagination);
 		$this->_view->listBooks    			=  $this->_model->BookList($this->_arrParam, ['task' => 'book-list']);
 		$this->_view->category 				= ['all' => ['name' => 'Tất cả', 'id' => 'all']] + $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list']);
-		$this->_view->categorySpecial 		= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list-special']);
 		$this->_view->specialItems    		=  $this->_model->BookList($this->_arrParam, ['task' => 'book-special-list-book']);
 		$this->_view->render('book/list');
 	}
@@ -31,11 +30,9 @@ class BookController extends Controller
 		$book = $this->_model->bookName($this->_arrParam, ['task' => 'book-name']);
 		$this->_view->_title = "Sách :     " . $book['name'];
 		$this->_view->bookItem    			=  $this->_model->infoBook($this->_arrParam, ['task' => 'book-info']);
-		$this->_view->category 				= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list']);
-		$this->_view->categorySpecial 		= $this->_model->CategoryList($this->_arrParam, ['task' => 'category-list-special']);
-		$this->_view->specialItems    		=  $this->_model->BookList($this->_arrParam, ['task' => 'book-special-list-book']);
-		$this->_view->newBook    			=  $this->_model->BookList($this->_arrParam, ['task' => 'book-new-list']);
-		$this->_view->connectionBook    	=  $this->_model->BookList($this->_arrParam, ['task' => 'book-connection']);
+		$this->_view->specialItems    		=  $this->_model->bookList($this->_arrParam, ['task' => 'book-special-list-book']);
+		$this->_view->newBook    			=  $this->_model->bookList($this->_arrParam, ['task' => 'book-new-list']);
+		$this->_view->connectionBook    	=  $this->_model->bookList($this->_arrParam, ['task' => 'book-connection']);
 		$this->_view->render('book/detail');
 	}
 	public function quickViewBookAction()

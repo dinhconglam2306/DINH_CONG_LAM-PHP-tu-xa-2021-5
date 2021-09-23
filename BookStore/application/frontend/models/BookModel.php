@@ -27,7 +27,7 @@ class BookModel extends Model
 	}
 
 	//Hiện danh sách book
-	public function BookList($params, $option)
+	public function bookList($params, $option)
 	{
 		if ($option['task'] == 'book-list') {
 			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name`";
@@ -42,15 +42,19 @@ class BookModel extends Model
 					$catID = $params['category_id'];
 					$query[] = "AND `category_id`= $catID";
 				}
+				if (!empty(trim(@$params['search']))) {
+					$keyword = '"%' . $params['search'] . '%"';
+					$query[] = "AND `b`.`name` LIKE $keyword";
+				}
 			}
 
 			if (isset($params['sort']) && $params['sort'] != 'default') {
 				$arrSort = explode('_', $params['sort']);
 				$query[] = "ORDER BY `$arrSort[0]` $arrSort[1]";
 			}
-			if ((!isset($params['sort'])) || (isset($params['sort']) && $params['sort'] == 'default')) {
-				$query[] = "ORDER BY `b`.`ordering` ASC";
-			}
+			// if ((!isset($params['sort'])) || (isset($params['sort']) && $params['sort'] == 'default')) {
+			// 	$query[] = "ORDER BY `b`.`ordering` ASC";
+			// }
 
 
 			//PAGINATION
@@ -70,7 +74,7 @@ class BookModel extends Model
 			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 			$query[] = "WHERE `b`.`category_id` = `c`.`id`";
 			$query[] = "AND `b`.`category_id` IN";
-			$query[] = "(SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
+			$query[] = "(SELECT `id` FROM `category` WHERE `status` = 'active') ";
 			$query[] = "AND `b`.`status` = 'active' AND `b`.`special` = 1 ORDER BY `b`.`ordering` ASC LIMIT 0,8";
 
 			$query = implode(' ', $query);
@@ -81,8 +85,8 @@ class BookModel extends Model
 			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name` ";
 			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 			$query[] = "WHERE `b`.`category_id` IN";
-			$query[] = "(SELECT `id` FROM `category` WHERE `is_home` = 1 AND `status` = 'active') ";
-			$query[] = "AND `b`.`status` = 'active' AND `b`.`special` = 1 ORDER BY `b`.`id` DESC LIMIT 0,6 ";
+			$query[] = "(SELECT `id` FROM `category` WHERE  `status` = 'active') ";
+			$query[] = "AND `b`.`status` = 'active' AND `b`.`new` = 1 ORDER BY `b`.`id` DESC LIMIT 0,6 ";
 
 			$query = implode(' ', $query);
 			$result  = $this->fetchAll($query);
@@ -101,7 +105,7 @@ class BookModel extends Model
 			return $result;
 		}
 	}
-	public function CategoryList($params, $option)
+	public function categoryList($params, $option)
 	{
 		if ($option['task'] == 'category-list') {
 

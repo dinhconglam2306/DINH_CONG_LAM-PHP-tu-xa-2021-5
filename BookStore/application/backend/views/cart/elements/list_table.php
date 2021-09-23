@@ -1,71 +1,66 @@
 <?php
 if (!empty($this->items)) {
+    $xhtmlReceiver = '';
     foreach ($this->items as $key => $item) {
+        $receiver = sprintf('<span>%s</span>',$item['receiver']);
+        $arrReceiver = explode(',', $item['receiver']);
+
+
+        $fullName       = HelperBackend::highlight(@$arrParams['search'], $item['fullname']);
+        $email          = $item['email'];
+        $phone          = $item['phone'];
+        $address        = $item['address'];
         $id = $item['id'];
 
 
-        $arrStatus  = ['not-delivery' => 'Chưa giao hàng', 'delivery' => 'Đang giao hàng', 'delivered' => 'Đã giao hàng'];
+        $arrStatus  = ['not-handle' => 'Đang chờ xử lý','processing' => 'Đã tiếp nhận','not-delivery' => 'Đang chuẩn bị sách', 'delivery' => 'Đang giao hàng', 'delivered' => 'Đã giao hàng'];
+        if($item['status'] == 'cancelled') $arrStatus =['cancelled' => 'Đã hủy'];
         $dataStatusLink = URL::createLink($arrParams['module'], $arrParams['controller'], 'changeStatusCart', ['status' => 'value_new', 'id' => $id]);
         $atttStatus = sprintf('data-url = %s', $dataStatusLink);
         $selectStatus = FormBackend::selectBoxCartStatus('status-cart', $arrStatus, @$item['status'], $atttStatus, 'cart-status', $id);
-        $date               = $item['date'];
+        $date        = date('d/m/Y H:i:s', strtotime($item['date']));
 
-        $ckb                = sprintf('<input type="checkbox" name="cid[]" value="%s">', $id);
-        $username               = HelperBackend::highlight(@$arrParams['search'], $item['username']);
 
 
         $arrBookName = explode(',', $item['names']);
         $arrPrices = explode(',', $item['prices']);
         $arrQuantity = explode(',', $item['quantities']);
-        $arrPicture = explode(',', $item['picture']);
 
 
-        $nameBooks = '';
-        foreach ($arrBookName as $key => $value) $nameBooks .= sprintf('<p class="list">%s</p>', $value);
 
-        $prices = '';
-        $quantities = '';
-        $nameBooks = '';
-        $totalPriceList=0;
-        foreach ($arrPrices as $key => $value) {
-            $prices .= sprintf('<p class="list">%s đ</p>', number_format($value));
-            $quantities .= sprintf('<p class="list">%s</p>', $arrQuantity[$key]);
-            $nameBooks .= sprintf('<p class="list">%s</p>', $arrBookName[$key]);
-            $totalPriceList  += $value * $arrQuantity[$key];
+        $totalPriceList = 0;
+        $details = '';
+        foreach ($arrPrices as $keyB => $value) {
+            @$prices     = $value;
+            @$quantities = $arrQuantity[$keyB];
+            @$nameBooks  = $arrBookName[$keyB];
+            @$totalPrice   = $prices * $quantities;
+            @$totalPriceList += $totalPrice;
+            @$details  .= sprintf('<span>- %s x <span class="quantities">%s</span> = %s đ</span></br>', $nameBooks, $quantities, number_format($totalPrice));
         }
-    
-        // foreach ($arrQuantity as $key => $value) $quantities .= sprintf('<p class="list">%s</p>', $value);
-
-        $listPicture = '<ul class= "list-picture">';
-        foreach ($arrPicture as $key => $value) {
-            $picture            =sprintf('<li>%s</li>',HelperBackend::createImage('book',$value,['width' =>100]));
-            $listPicture .= $picture;
-        }
-        $listPicture .= '</ul>';
-
-
 
 
         $optionsBtnAction   = ['small' => true, 'circle' => true];
-        // $linkEdit           = URL::createLink($arrParams['module'], $arrParams['controller'], 'form', ['id' => $id]);
-        // $btnEdit            = HelperBackend::buttonLink($linkEdit, '<i class="fas fa-pen"></i>', 'btn-info', $optionsBtnAction);
-        $linkDelete         = URL::createLink($arrParams['module'], $arrParams['controller'], 'delete', ['id' => $id]);
-        $btnDelete          = HelperBackend::buttonLink($linkDelete, '<i class="fas fa-trash"></i>', 'btn-danger btn-delete', $optionsBtnAction);
+        $linkDetail         = URL::createLink($arrParams['module'], $arrParams['controller'], 'detail', ['id' => $id]);
+        $btnDetail          = HelperBackend::buttonLink($linkDetail, '<i class="fas fa-eye"></i>', 'btn-info btn-detail', $optionsBtnAction);
 
 
         @$xhtml .= '
         <tr>
-            <td>' . $ckb . '</td>
             <td>' . $id . '</td>
-            <td>' . $username . '</td>
-            <td>' . $nameBooks . '</td>
-            <td>' . $prices . '</td>
-            <td>' . $quantities . '</td>
-            <td>' . number_format($totalPriceList) . 'đ</td>
-            <td>' . $listPicture . '</td>
+            <td class="text-left">
+                <p class="mb-0"><b>Họ tên</b>: ' . $fullName . '</p>
+                <p class="mb-0"><b>Email</b>: ' . $email . '</p>
+                <p class="mb-0"><b>Số điện thoại</b>: ' . $phone . '</p>
+                <p class="mb-0"><b>Địa chỉ</b>: ' . $address . '</p>
+            </td>
+            <td class="text-left">' . $receiver . '</td>
             <td class="position-relative">' . $selectStatus . '</td>
+            <td class="text-left">' . $details . '</td>
+            <td>' . number_format($totalPriceList) . 'đ</td>
+          
             <td>' . $date . '</td>
-            <td>' . $btnDelete . '</td>
+            <td>' . $btnDetail . '</td>
 
         </tr>
         ';
@@ -81,17 +76,14 @@ if (!empty($this->items)) {
         <table class="table align-middle text-center table-bordered table-hover">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="check-all-cid"></th>
-                    <th>ID</th>
-                    <th>UserName</th>
-                    <th>Book Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                    <th>Picture</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Action</th>
+                    <th style="width: 3%">Mã đơn hàng</th>
+                    <th style="width: 20%" class="text-left">Thông tin người đặt</th>
+                    <th style="width: 20%">Thông tin người nhận</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                    <th>Tổng tiền</th>
+                    <th>Ngày đặt</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody class="list-cart ">
