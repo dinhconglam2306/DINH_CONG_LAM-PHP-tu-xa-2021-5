@@ -16,9 +16,9 @@ define('URL_PUBLIC', URL_ROOT . 'public' . DS);
 define('URL_UPLOAD', URL_PUBLIC . 'files' . DS);
 define('URL_TEMPLATE', URL_PUBLIC . 'template' . DS);
 
-define('DEFAULT_MODULE', 'backend');
+define('DEFAULT_MODULE', 'frontend');
 define('DEFAULT_CONTROLLER', 'index');
-define('DEFAULT_ACTION', 'login');
+define('DEFAULT_ACTION', 'index');
 
 // ====================== DATABASE ===========================
 define('DB_HOST', 'localhost');

@@ -56,8 +56,8 @@ if (!empty($this->listOrderHistory)) {
             </tr>
             ', $link, $picture, $valueB, number_format($bookPrice), $bookQuantity, number_format($totalBookPrice));
         }
-
-        $linkCheckStatus = URL::createLink('frontend', 'user', 'checkStatusOrder', ['id' => $orderID]);
+        
+        $linkCheckStatus = URL::createLink('frontend', 'user', 'checkStatusOrder', ['id' => $orderID],'check-status-order-'.$orderID . '.html');
         @$xhtmlOrderHistoryList .= '
         <div class="card">
         <div class="card-header">

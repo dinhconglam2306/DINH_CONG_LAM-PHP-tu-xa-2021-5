@@ -6,13 +6,18 @@ $inputHiddenController     = FormBackend::input('hidden', 'controller', $this->a
 $inputHiddenAction         = FormBackend::input('hidden', 'action', $this->arrParam['action']);
 
 
-$arrValueOrderStatus = ['default' => ' -Select Status Order- ', 'not-handle' => 'Đang chờ xử lý', 'processing' => 'Đang xử lý', 'not-delivery' => 'Đang chuẩn bị sách', 'delivery' => 'Đang giao hàng', 'delivered' => 'Đã giao hàng'];
+$arrValueOrderStatus = ['default' => ' -Select Status Order- ', 'not-handle' => 'Đang chờ xử lý', 'processing' => 'Đã tiếp nhận', 'not-delivery' => 'Đang chuẩn bị sách', 'delivery' => 'Đang giao hàng', 'delivered' => 'Đã nhận'];
 $selectBoxOrderStatus = FormBackend::selectBox('status', $arrValueOrderStatus, @$this->arrParam['status'], '', 'slb-order-status');
 
 
-$formOrderStatus = $inputHiddenModule . $inputHiddenController . $inputHiddenAction . $selectBoxOrderStatus;
+$inputHidden = $inputHiddenModule . $inputHiddenController . $inputHiddenAction;
 ?>
 
 <form action="" method="GET" id="select-order-status">
-    <?= $formOrderStatus ?>
+    <?php
+    if (URL_FRIENDLY == false) {
+        echo   $inputHidden;
+    }
+    ?>
+    <?= $selectBoxOrderStatus ?>
 </form>

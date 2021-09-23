@@ -85,6 +85,10 @@ class URL
         $replaceSpecial = '';
         $value = preg_replace($charaterSpecial, $replaceSpecial, $value);
 
+        $charaterPlus = '#(\+)#imsU';
+        $replaceSPlus = '_';
+        $value = preg_replace($charaterPlus, $replaceSPlus, $value);
+
 
         return $value;
     }

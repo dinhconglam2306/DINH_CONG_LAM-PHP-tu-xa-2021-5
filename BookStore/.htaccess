@@ -12,7 +12,6 @@ RewriteRule		category.html 		                    index.php?module=frontend&contr
 RewriteRule		my-account.html 	                    index.php?module=frontend&controller=user&action=index
 RewriteRule		cart.html 	                            index.php?module=frontend&controller=user&action=cart
 RewriteRule		change-password.html 	                index.php?module=frontend&controller=user&action=changePw
-RewriteRule		history.html 	                        index.php?module=frontend&controller=user&action=orderHistory
 
 
 #RewriteRule		([A-Za-z0-9_-]+)-([a-z0-9]+)\.html 		index.php?module=frontend&controller=book&action=list&category_id=$2
@@ -21,3 +20,10 @@ RewriteRule		([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)-([0-9]+)-([0-9]+)\.html 		index.p
 
 
 RewriteRule		([A-Za-z0-9_-]+)-([a-z0-9]+)\.html(.*) 		index.php?module=frontend&controller=book&action=list&category_id=$2$3 [QSA]
+
+
+RewriteRule		([A-Za-z0-9_-]+)-([A-Za-z0-9]+).html 		index.php?module=frontend&controller=user&action=checkStatusOrder&id=$2 [QSA]
+
+
+
+RewriteRule		history.html(.*) 		index.php?module=frontend&controller=user&action=orderHistory$1 [QSA]

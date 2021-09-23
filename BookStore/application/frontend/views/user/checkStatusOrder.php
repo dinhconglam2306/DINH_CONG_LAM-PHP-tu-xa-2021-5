@@ -75,7 +75,7 @@ foreach ($orderStatus as $key => $value) {
             </div>
             <div class="row d-flex icon-content"> <img class="icon" src="<?= $this->_dirImg ?>dang-xu-ly-1.png">
                 <div class="d-flex flex-column">
-                    <p class="font-weight-bold">Đang<br>xử lý</p>
+                    <p class="font-weight-bold">Đã<br>tiếp nhận</p>
                 </div>
             </div>
             <div class="row d-flex icon-content"> <img class="icon" src="<?= $this->_dirImg ?>dang-chuan-bi.png">

@@ -98,7 +98,7 @@ class BookModel extends Model
 			$query[] = "SELECT `b`.`name`,`b`.`category_id`,`b`.`id`,`b`.`price`,`b`.`description`,`b`.`picture`,`b`.`sale_off`,`c`.`name` AS `category_name`";
 			$query[] = "FROM `{$this->table}`  AS `b`LEFT JOIN `" . TBL_CATEGORY . "` AS `c` ON `b`.`category_id` = `c`.`id`";
 			$query[] = "WHERE `b`.`category_id` = $categoryID";
-			$query[] = "AND `b`.`id` <> $bookID ORDER BY `b`.`ordering` ASC LIMIT 0,6";
+			$query[] = "AND `b`.`id` <> $bookID AND `b`.`status` ='active' ORDER BY `b`.`ordering` ASC LIMIT 0,6";
 
 			$query = implode(' ', $query);
 			$result  = $this->fetchAll($query);
